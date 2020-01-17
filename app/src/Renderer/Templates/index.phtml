@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>info</title>
+
+    <style>
+<?php require_once 'app.css'; ?>
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>What is my ip address?</h1>
+    </header>
+    <main>
+        <h2>Your Connection</h2>
+        <ul>
+            <li>
+                <label class="title">IP Address</label>
+                <span><?php echo $i['ip']; ?></span>
+            </li>
+            <li>
+                <label class="title">Remote Host</label>
+                <span><?php echo $i['host']; ?></span>
+            </li>
+            <li>
+                <label class="title">Port</label>
+                <span><?php echo $i['port']; ?></span>
+            </li>
+            <li>
+                <label class="title">ASN</label>
+                <span><?php echo $i['asn']; ?></span>
+            </li>
+            <li>
+                <label class="title">Country</label>
+                <span><?php echo $i['country']; ?></span>
+            </li>
+            <li>
+                <label class="title">City</label>
+                <span><?php echo $i['city']; ?></span>
+            </li>
+            <li>
+                <label class="title">Location</label>
+                <span><?php echo $i['location']; ?></span>
+            </li>
+            <li>
+                <label class="title">Time Zone</label>
+                <span><?php echo $i['timezone']; ?></span>
+            </li>
+            <li>
+                <label class="title">User Agent</label>
+                <span><?php echo $i['user-agent']; ?></span>
+            </li>
+            <li>
+                <label class="title">Accept</label>
+                <span><?php echo $i['accept']; ?></span>
+            </li>
+            <li>
+                <label class="title">Accept Language</label>
+                <span><?php echo $i['accept-language']; ?></span>
+            </li>
+            <li>
+                <label class="title">Accept Encoding</label>
+                <span><?php echo $i['accept-encoding']; ?></span>
+            </li>
+            <li>
+                <label class="title">Method</label>
+                <span><?php echo $i['method']; ?></span>
+            </li>
+            <li>
+                <label class="title">Referer</label>
+                <span><?php echo $i['referer']; ?></span>
+            </li>
+            <li>
+                <label class="title">X-Forwarded-For</label>
+                <span><?php echo $i['x-forwarded-for']; ?></span>
+            </li>
+        </ul>
+    </main>
+</body>
+
+</html>

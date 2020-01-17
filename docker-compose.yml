@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  web:
+    image: php:7-apache
+    volumes:
+      - ./docker/rewrite.load:/etc/apache2/mods-enabled/rewrite.load:ro
+      - .:/var/www:ro
+    ports:
+      - 5757:80
