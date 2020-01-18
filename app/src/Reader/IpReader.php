@@ -2,30 +2,35 @@
 
 namespace IfConfig\Reader;
 
+use IfConfig\Types\Info;
+
 class IpReader
 {
-    private array $info;
+    private Info $info;
 
-    function __construct(array $headers)
+    function __construct(array $headers, array $params)
     {
-        $ip = $this->readIp($headers);
-        $this->info = [
-            'ip' => $ip,
-            'host' => gethostbyaddr($ip),
-            'port' => @$headers['REMOTE_PORT'],
-            'user-agent' => @$headers['HTTP_USER_AGENT'],
-            'accept' => @$headers['HTTP_ACCEPT'],
-            'accept-language' => @$headers['HTTP_ACCEPT_LANGUAGE'],
-            'accept-encoding' => @$headers['HTTP_ACCEPT_ENCODING'],
-            'cache-control' => @$headers['HTTP_CACHE_CONTROL'],
-            'method' => @$headers['REQUEST_METHOD'],
-            'referer' => @$headers['HTTP_REFERER'],
-            'x-forwarded-for' => @$headers['HTTP_X_FORWARDED_FOR'],
-        ];
+        $this->info = new Info();
+        $ip = $this->readIp($headers, $params);
+
+        $this->info->setIp($ip);
+        $this->info->setHost(gethostbyaddr($ip));
+        $this->info->setPort(@$headers['REMOTE_PORT']);
+        $this->info->setUserAgent(@$headers['HTTP_USER_AGENT']);
+        $this->info->setAccept(@$headers['HTTP_ACCEPT']);
+        $this->info->setAcceptLanguage(@$headers['HTTP_ACCEPT_LANGUAGE']);
+        $this->info->setAcceptEncoding(@$headers['HTTP_ACCEPT_ENCODING']);
+        $this->info->setCacheControl(@$headers['HTTP_CACHE_CONTROL']);
+        $this->info->setMethod(@$headers['REQUEST_METHOD']);
+        $this->info->setReferer(@$headers['HTTP_REFERER']);
+        $this->info->setXForwardedFor(@$headers['HTTP_X_FORWARDED_FOR']);
     }
 
-    private function readIp(array $headers)
+    private function readIp(array $headers, $params): string
     {
+        if ($params['ip'] && filter_var($params['ip'], FILTER_VALIDATE_IP)) {
+            return $params['ip'];
+        }
         if (isset($headers['HTTP_X_REAL_IP']) && filter_var($headers['HTTP_X_REAL_IP'], FILTER_VALIDATE_IP)) {
             return $headers['HTTP_X_REAL_IP'];
         }
@@ -41,7 +46,7 @@ class IpReader
         return $headers['REMOTE_ADDR'];
     }
 
-    public function getInfo()
+    public function getInfo(): Info
     {
         return $this->info;
     }

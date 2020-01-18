@@ -15,12 +15,17 @@ class Country
         $this->isoCode = $isoCode;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function __toString()
+    public function getIsoCode(): string
+    {
+        return $this->isoCode;
+    }
+
+    public function __toString(): string
     {
         return $this->name;
     }

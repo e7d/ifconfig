@@ -2,14 +2,9 @@
 
 namespace IfConfig\Renderer;
 
+use IfConfig\Types\Info;
+
 abstract class AbstractRenderer
 {
-    protected $info;
-
-    function __construct($info)
-    {
-        $this->info = $info;
-    }
-
-    abstract public function render(): void;
+    abstract public function render(Info $info): void;
 }

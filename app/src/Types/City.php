@@ -18,16 +18,19 @@ class City
         $this->subdivisions = $subdivisions;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name .
             ($this->postalCode
                 ? ' (' . $this->postalCode . ')'
-                : '');
+                : '')
+            . array_reduce($this->subdivisions, function($stack, $item) {
+                return $stack . ', ' . $item['name'];
+            }, '');
     }
 }

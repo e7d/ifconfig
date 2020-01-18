@@ -11,45 +11,36 @@ use IfConfig\Renderer\JsonRenderer;
 use IfConfig\Renderer\TextRenderer;
 use IfConfig\Renderer\XmlRenderer;
 use IfConfig\Renderer\YamlRenderer;
+use IfConfig\Types\Info;
 
 class Application
 {
-    private IpReader $ipReader;
-    private AsnReader $asnReader;
-    private LocationReader $locationReader;
-
     function __construct()
     {
         $headers = $_SERVER;
-        $this->info = $this->getInfo($headers);
-        $this->render($headers);
+        $params = array_merge($_GET, $_POST);
+
+        $this->render($headers, $params);
     }
 
-    public function getInfo(array $headers): array
+    public function getInfo(array $headers, array $params): Info
     {
-        if (!empty($_GET['ip'])) $headers['REMOTE_ADDR'] = $_GET['ip'];
-        $this->ipReader = new IpReader($headers);
-        $this->asnReader = new AsnReader($headers);
-        $this->locationReader = new LocationReader($headers);
+        $ipReader = new IpReader($headers, $params);
+        $info = $ipReader->getInfo();
 
-        return array_merge(
-            $this->ipReader->getInfo(),
-            ['asn' => $this->asnReader->getAsn()],
-            [
-                'country' => $this->locationReader->getCountry(),
-                'city' => $this->locationReader->getCity(),
-                'location' => $this->locationReader->getLocation(),
-                'timezone' => $this->locationReader->getTimezone(),
-            ]
-        );
+        $asnReader = new AsnReader($info->getIp());
+        $info->setAsn($asnReader->getAsn());
+
+        $locationReader = new LocationReader($info->getIp());
+        $info->setCountry($locationReader->getCountry());
+        $info->setCity($locationReader->getCity());
+        $info->setLocation($locationReader->getLocation());
+        $info->setTimezone($locationReader->getTimezone());
+
+        return $info;
     }
 
-    private function getCurlRenderer()
-    {
-        return new TextRenderer($this->info, 'ip');
-    }
-
-    private function getRendererForHeaders($headers)
+    private function getRendererForHeaders(array $headers)
     {
         foreach (explode(';', $headers['HTTP_ACCEPT']) as $acceptEntry) {
             foreach (explode(',', $acceptEntry) as $acceptHeader) {
@@ -62,44 +53,44 @@ class Application
                     case 'text/json':
                     case 'text/x-javascript':
                     case 'text/x-json':
-                        return new JsonRenderer($this->info);
+                        return new JsonRenderer();
                     case 'text/plain':
-                        return new TextRenderer($this->info);
+                        return new TextRenderer();
                     case 'application/xml':
                     case 'text/xml':
-                        return new XmlRenderer($this->info);
+                        return new XmlRenderer();
                     case 'application/yaml':
                     case 'application/x-yaml':
                     case 'text/yaml':
                     case 'text/x-yaml':
-                        return new YamlRenderer($this->info);
+                        return new YamlRenderer();
                     case 'text/html':
-                        return new HtmlRenderer($this->info);
+                        return new HtmlRenderer();
                 }
             }
         }
-        return new HtmlRenderer($this->info);
+        return new HtmlRenderer();
     }
 
     private function getRenderer(array $headers, string $path, bool $isCurl): AbstractRenderer
     {
         switch ($path) {
             case 'all.json':
-                return new JsonRenderer($this->info);
+                return new JsonRenderer();
             case 'all.txt':
-                return new TextRenderer($this->info);
+                return new TextRenderer();
             case 'all.xml':
-                return new XmlRenderer($this->info);
+                return new XmlRenderer();
             case 'all.yaml':
             case 'all.yml':
-                return new YamlRenderer($this->info);
+                return new YamlRenderer();
             case '':
                 return $isCurl
-                    ? $this->getCurlRenderer()
+                    ? new TextRenderer('ip')
                     : $this->getRendererForHeaders($headers);
             default:
-                if (array_key_exists($path, $this->info)) {
-                    return new TextRenderer($this->info, $path);
+                if (in_array($path, Info::FIELDS)) {
+                    return new TextRenderer($path);
                 }
                 http_response_code(404);
                 if (!$isCurl) print '404 Not Found';
@@ -107,23 +98,24 @@ class Application
         }
     }
 
-    private function getPath(): string
+    private function getPath(array $headers): string
     {
-        return str_replace('/', '', $_SERVER['REDIRECT_URL']);
+        return str_replace('/', '', $headers['REDIRECT_URL']);
     }
 
-    private function isCurl(): string
+    private function isCurl(array $headers): string
     {
-        return strrpos($this->info['user-agent'], 'curl') !== false;
+        return strrpos($headers['HTTP_USER_AGENT'], 'curl') !== false;
     }
 
-    private function render(array $headers): void
+    private function render(array $headers, array $params): void
     {
-        $this->renderer = $this->getRenderer(
+        $renderer = $this->getRenderer(
             $headers,
-            $this->getPath(),
-            $this->isCurl()
+            $this->getPath($headers),
+            $this->isCurl($headers)
         );
-        $this->renderer->render();
+        $info = $this->getInfo($headers, $params);
+        $renderer->render($info);
     }
 }

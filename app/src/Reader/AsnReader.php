@@ -11,17 +11,17 @@ class AsnReader
 {
     private ?ASN $asn = null;
 
-    function __construct(array $headers)
+    function __construct(string $ip)
     {
         $this->reader = new Reader(__DIR__ . '/../../resources/GeoLite2-ASN.mmdb');
         try {
-            $record = $this->reader->asn($headers['REMOTE_ADDR']);
+            $record = $this->reader->asn($ip);
         } catch (Exception $e) {
         }
         $this->setAsn($record);
     }
 
-    private function setAsn(?AsnModel $record)
+    private function setAsn(?AsnModel $record): void
     {
         $this->asn = !is_null($record)
             ? new ASN(

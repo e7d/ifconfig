@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>info</title>
+    <title>ifconfig</title>
 
     <style>
 <?php require_once 'app.css'; ?>
@@ -22,6 +22,10 @@
             <li>
                 <label class="title">IP Address</label>
                 <span><?php echo $i['ip']; ?></span>
+            </li>
+            <li>
+                <label class="title">X-Forwarded-For</label>
+                <span><?php echo $i['x-forwarded-for']; ?></span>
             </li>
             <li>
                 <label class="title">Remote Host</label>
@@ -74,10 +78,6 @@
             <li>
                 <label class="title">Referer</label>
                 <span><?php echo $i['referer']; ?></span>
-            </li>
-            <li>
-                <label class="title">X-Forwarded-For</label>
-                <span><?php echo $i['x-forwarded-for']; ?></span>
             </li>
         </ul>
     </main>

@@ -18,7 +18,7 @@ class ASN
         $this->network = $network;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'AS' . $this->number . ' ' . $this->org . ' (' . $this->network . ')';
     }

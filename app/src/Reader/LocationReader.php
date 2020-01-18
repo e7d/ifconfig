@@ -4,7 +4,6 @@ namespace IfConfig\Reader;
 
 use Exception;
 use GeoIp2\Database\Reader;
-use GeoIp2\Model\City as CityModel;
 use GeoIp2\Record\City as CityRecord;
 use GeoIp2\Record\Country as CountryRecord;
 use GeoIp2\Record\Location as LocationRecord;
@@ -20,11 +19,11 @@ class LocationReader
     private ?Location $location = null;
     private ?string $timezone = null;
 
-    function __construct(array $headers)
+    function __construct(string $ip)
     {
         $reader = new Reader(__DIR__ . '/../../resources/GeoLite2-City.mmdb');
         try {
-            $record = $reader->city($headers['REMOTE_ADDR']);
+            $record = $reader->city($ip);
         } catch (Exception $e) {
             return;
         }
@@ -34,7 +33,7 @@ class LocationReader
         $this->setTimezone($record->location);
     }
 
-    private function setCountry(?CountryRecord $countryRecord)
+    private function setCountry(?CountryRecord $countryRecord): void
     {
         $this->country = new Country(
             $countryRecord->name,
