@@ -1,7 +1,7 @@
 FROM composer AS build
 COPY app /app
 WORKDIR /app
-RUN ls -lah && composer install \
+RUN composer install \
  && composer dump-autoload
 
 FROM php:7-apache
