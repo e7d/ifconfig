@@ -2,11 +2,11 @@
 
 namespace IfConfig\Types;
 
-class ASN
+class ASN extends AbstractType
 {
-    private int $number;
-    private string $org;
-    private string $network;
+    protected int $number;
+    protected string $org;
+    protected string $network;
 
     function __construct(
         int $number,

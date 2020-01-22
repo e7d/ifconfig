@@ -2,16 +2,15 @@
 
 namespace IfConfig\Types;
 
-class Location
+class Location extends AbstractType
 {
-    private float $latitude;
-    private float $longitude;
+    protected float $latitude;
+    protected float $longitude;
 
     function __construct(
         float $latitude,
         float $longitude
-    )
-    {
+    ) {
         $this->latitude = $latitude;
         $this->longitude = $longitude;
     }

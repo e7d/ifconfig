@@ -2,11 +2,11 @@
 
 namespace IfConfig\Types;
 
-class City
+class City extends AbstractType
 {
-    private string $name;
-    private string $postalCode;
-    private array $subdivisions;
+    protected string $name;
+    protected string $postalCode;
+    protected array $subdivisions;
 
     function __construct(
         ?string $name,
@@ -29,7 +29,7 @@ class City
             ($this->postalCode
                 ? ' (' . $this->postalCode . ')'
                 : '')
-            . array_reduce($this->subdivisions, function($stack, $item) {
+            . array_reduce($this->subdivisions, function ($stack, $item) {
                 return $stack . ', ' . $item['name'];
             }, '');
     }

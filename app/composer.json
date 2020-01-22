@@ -1,9 +1,14 @@
 {
-    "autoload": {
-        "classmap": ["src/"]
-    },
-    "require": {
-        "geoip2/geoip2": "^2.10",
-        "symfony/yaml": "^5.0"
-    }
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  },
+  "require": {
+    "geoip2/geoip2": "^2.10",
+    "symfony/yaml": "^5.0"
+  },
+  "scripts": {
+    "setup": "composer install && composer dump-autoload"
+  }
 }

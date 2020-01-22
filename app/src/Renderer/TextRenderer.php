@@ -18,11 +18,11 @@ class TextRenderer extends AbstractRenderer
         header('Content-Type: text/plain');
 
         if (!is_null($this->key)) {
-            print $info->toArray()[$this->key];
+            print $info->toArray(false)[$this->key];
             exit;
         }
 
-        array_walk($info->toArray(), function ($value, $key) {
+        array_walk($info->toArray(false), function ($value, $key) {
             print $key . ': ' . $value . PHP_EOL;
         });
     }

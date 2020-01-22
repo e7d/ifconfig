@@ -4,33 +4,47 @@ namespace IfConfig\Reader;
 
 use IfConfig\Types\Info;
 
-class IpReader
+class InfoReader
 {
     private Info $info;
 
     function __construct(array $headers, array $params)
     {
         $this->info = new Info();
-        $ip = $this->readIp($headers, $params);
+        list($ip, $host) = $this->readParams($params) ?? $this->readHeaders($headers);
 
         $this->info->setIp($ip);
-        $this->info->setHost(gethostbyaddr($ip));
+        $this->info->setHost($host);
         $this->info->setPort(@$headers['REMOTE_PORT']);
-        $this->info->setUserAgent(@$headers['HTTP_USER_AGENT']);
-        $this->info->setAccept(@$headers['HTTP_ACCEPT']);
-        $this->info->setAcceptLanguage(@$headers['HTTP_ACCEPT_LANGUAGE']);
-        $this->info->setAcceptEncoding(@$headers['HTTP_ACCEPT_ENCODING']);
-        $this->info->setCacheControl(@$headers['HTTP_CACHE_CONTROL']);
+        $this->info->setHeaders(getallheaders());
         $this->info->setMethod(@$headers['REQUEST_METHOD']);
         $this->info->setReferer(@$headers['HTTP_REFERER']);
         $this->info->setXForwardedFor(@$headers['HTTP_X_FORWARDED_FOR']);
     }
 
-    private function readIp(array $headers, $params): string
+    private function readParams(array $params): ?array
     {
-        if ($params['ip'] && filter_var($params['ip'], FILTER_VALIDATE_IP)) {
-            return $params['ip'];
+        if ($params['host']) {
+            $ip = gethostbyname($params['host']);
+            if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+                $ip = 'Could not resolve ' . $params['host'];
+            }
+            return [$ip, $params['host']];
         }
+        if ($params['ip'] && filter_var($params['ip'], FILTER_VALIDATE_IP)) {
+            return [$params['ip'], gethostbyaddr($params['ip'])];
+        }
+        return null;
+    }
+
+    private function readHeaders(array $headers): array
+    {
+        $ip = $this->readIpFromHeaders($headers);
+        return [$ip, gethostbyaddr($ip)];
+    }
+
+    private function readIpFromHeaders(array $headers): string
+    {
         if (isset($headers['HTTP_X_REAL_IP']) && filter_var($headers['HTTP_X_REAL_IP'], FILTER_VALIDATE_IP)) {
             return $headers['HTTP_X_REAL_IP'];
         }
@@ -40,9 +54,6 @@ class IpReader
         if (isset($headers['HTTP_CLIENT_IP']) && filter_var($headers['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP)) {
             return $headers['HTTP_CLIENT_IP'];
         }
-        // if (isset($headers['HTTP_X_FORWARDED_FOR']) && filter_var($headers['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP)) {
-        //     return $headers['HTTP_X_FORWARDED_FOR'];
-        // }
         return $headers['REMOTE_ADDR'];
     }
 

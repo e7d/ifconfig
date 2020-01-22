@@ -2,17 +2,14 @@
 
 namespace IfConfig\Types;
 
-class Info
+class Info extends AbstractType
 {
     const FIELDS = [
         'ip',
         'host',
         'port',
         'user-agent',
-        'accept',
-        'accept-language',
-        'accept-encoding',
-        'cache-control',
+        'headers',
         'method',
         'referer',
         'x-forwarded-for',
@@ -23,22 +20,18 @@ class Info
         'timezone'
     ];
 
-    private string $ip;
-    private ?string $host;
-    private int $port;
-    private string $userAgent;
-    private string $accept;
-    private ?string $acceptLanguage;
-    private ?string $acceptEncoding;
-    private ?string $cacheControl;
-    private string $method;
-    private ?string $referer;
-    private ?string $xForwardedFor;
-    private ?ASN $asn;
-    private ?City $city;
-    private ?Country $country;
-    private ?Location $location;
-    private ?string $timezone;
+    protected string $ip;
+    protected ?string $host;
+    protected int $port;
+    protected array $headers;
+    protected string $method;
+    protected ?string $referer;
+    protected ?string $xForwardedFor;
+    protected ?ASN $asn;
+    protected ?City $city;
+    protected ?Country $country;
+    protected ?Location $location;
+    protected ?string $timezone;
 
     public function getIp(): string
     {
@@ -70,54 +63,14 @@ class Info
         $this->port = $port;
     }
 
-    public function getUserAgent(): string
+    public function getHeaders(): array
     {
-        return $this->userAgent;
+        return $this->headers;
     }
 
-    public function setUserAgent(string $userAgent): void
+    public function setHeaders(array $headers): void
     {
-        $this->userAgent = $userAgent;
-    }
-
-    public function getAccept(): string
-    {
-        return $this->accept;
-    }
-
-    public function setAccept(string $accept): void
-    {
-        $this->accept = $accept;
-    }
-
-    public function getAcceptLanguage(): ?string
-    {
-        return $this->acceptLanguage;
-    }
-
-    public function setAcceptLanguage(?string $acceptLanguage): void
-    {
-        $this->acceptLanguage = $acceptLanguage;
-    }
-
-    public function getAcceptEncoding(): ?string
-    {
-        return $this->acceptEncoding;
-    }
-
-    public function setAcceptEncoding(?string $acceptEncoding): void
-    {
-        $this->acceptEncoding = $acceptEncoding;
-    }
-
-    public function getCacheControl(): ?string
-    {
-        return $this->cacheControl;
-    }
-
-    public function setCacheControl(?string $cacheControl): void
-    {
-        $this->cacheControl = $cacheControl;
+        $this->headers = $headers;
     }
 
     public function getMethod(): string
@@ -198,14 +151,5 @@ class Info
     public function setTimezone(?string $timezone): void
     {
         $this->timezone = $timezone;
-    }
-
-    public function toArray(): array
-    {
-        $array = [];
-        foreach ($this as $key => $value) {
-            $array[$key] = $value;
-        }
-        return $array;
     }
 }

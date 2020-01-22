@@ -2,19 +2,35 @@
 
 namespace IfConfig\Renderer;
 
+use DOMDocument;
+use DOMNode;
 use IfConfig\Types\Info;
-use SimpleXMLElement;
-use stdClass;
 
 class XmlRenderer extends AbstractRenderer
 {
     public function render(Info $info): void
     {
         header('Content-Type: text/xml');
-        $xml = new SimpleXMLElement('<ifconfig/>');
-        foreach ($info->toArray() as $key => $value) {
-            $xml->addChild($key, $value);
+        $document = new DOMDocument("1.0");
+        $document->appendChild(
+            $this->getRecursiveNodes($info->toArray(), $document, $document->createElement("ifconfig"))
+        );
+
+        print $document->saveXML();
+    }
+
+    private function getRecursiveNodes(array $data, DOMDocument $document, DOMNode $node): DOMNode
+    {
+        foreach ($data as $key => $value) {
+            if (\is_int(($key))) continue;
+            $childNode = $document->createElement($key);
+            if (is_array($value)) {
+                $node->appendChild($this->getRecursiveNodes($value, $document, $childNode));
+                continue;
+            }
+            $childNode->appendChild($document->createTextNode($value));
+            $node->appendChild($childNode);
         }
-        print $xml->asXML();
+        return $node;
     }
 }

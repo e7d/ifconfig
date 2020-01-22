@@ -3,7 +3,7 @@
 namespace IfConfig;
 
 use IfConfig\Reader\AsnReader;
-use IfConfig\Reader\IpReader;
+use IfConfig\Reader\InfoReader;
 use IfConfig\Reader\LocationReader;
 use IfConfig\Renderer\AbstractRenderer;
 use IfConfig\Renderer\HtmlRenderer;
@@ -25,8 +25,8 @@ class Application
 
     public function getInfo(array $headers, array $params): Info
     {
-        $ipReader = new IpReader($headers, $params);
-        $info = $ipReader->getInfo();
+        $infoReader = new InfoReader($headers, $params);
+        $info = $infoReader->getInfo();
 
         $asnReader = new AsnReader($info->getIp());
         $info->setAsn($asnReader->getAsn());

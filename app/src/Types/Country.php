@@ -2,10 +2,10 @@
 
 namespace IfConfig\Types;
 
-class Country
+class Country extends AbstractType
 {
-    private string $name;
-    private string $isoCode;
+    protected string $name;
+    protected string $isoCode;
 
     function __construct(
         string $name,
