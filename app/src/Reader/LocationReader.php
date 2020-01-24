@@ -21,7 +21,7 @@ class LocationReader
 
     function __construct(string $ip)
     {
-        $reader = new Reader(__DIR__ . '/../../resources/GeoLite2-City.mmdb');
+        $reader = new Reader(__DIR__ . '/../../resources/GeoLite2-City_20200121.mmdb');
         try {
             $record = $reader->city($ip);
         } catch (Exception $e) {
