@@ -15,8 +15,8 @@ RUN apk add -U wget \
 
 FROM php:7-apache
 COPY --from=build /build/app /var/www/app
-COPY --from=databases /data/GeoLite2-ASN.mmdb /var/www/app/src/Reader/Databases
-COPY --from=databases /data/GeoLite2-City.mmdb /var/www/app/src/Reader/Databases
+COPY --from=databases /data/GeoLite2-ASN.mmdb /var/www/app/src/Reader/Databases/
+COPY --from=databases /data/GeoLite2-City.mmdb /var/www/app/src/Reader/Databases/
 COPY --from=build /build/vendor /var/www/vendor
 COPY html /var/www/html
 RUN docker-php-ext-install opcache \
