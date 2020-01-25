@@ -12,7 +12,7 @@
   },
   "scripts": {
     "benchmark": "gb -c 100 -n 100000 -z -k http://localhost:5757",
-    "build:docker": "test -f .env && . ./.env && docker build --build-arg MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY -t ifconfig .",
+    "build:docker": "./hooks/build",
     "setup": "composer install && composer dump-autoload"
   }
 }

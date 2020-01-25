@@ -6,7 +6,6 @@ RUN composer install \
 
 FROM alpine AS databases
 ARG MAXMIND_LICENSE_KEY
-ENV MAXMIND_LICENSE_KEY $MAXMIND_LICENSE_KEY
 WORKDIR /data
 RUN echo MAXMIND_LICENSE_KEY: $MAXMIND_LICENSE_KEY \
     && apk add -U wget \

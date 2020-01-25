@@ -1,0 +1,15 @@
+#!/bin/bash
+if [ -f ".env" ]; then
+    . ./.env
+fi
+if [ -z $MAXMIND_LICENSE_KEY ]; then
+    echo "\$MAXMIND_LICENSE_KEY must be set."
+    exit 1
+fi
+if [ -z $DOCKERFILE_PATH ]; then
+    DOCKERFILE_PATH=Dockerfile
+fi
+if [ -z $IMAGE_NAME ]; then
+    IMAGE_NAME="e7db/ifconfig"
+fi
+docker build --build-arg MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY -f $DOCKERFILE_PATH -t $IMAGE_NAME .
