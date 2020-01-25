@@ -1,10 +1,8 @@
 <?php
 
-namespace IfConfig\Renderer;
+namespace IfConfig\Renderer\ContentType;
 
-use IfConfig\Types\Info;
-
-class TextRenderer extends AbstractRenderer
+class TextRenderer extends ContentTypeRenderer
 {
     private ?string $key;
 
@@ -13,16 +11,16 @@ class TextRenderer extends AbstractRenderer
         $this->key = $key;
     }
 
-    public function render(Info $info): void
+    public function render(): void
     {
         header('Content-Type: text/plain');
 
         if (!is_null($this->key)) {
-            print $info->toArray(false)[$this->key];
+            print $this->info->toArray(false)[$this->key];
             exit;
         }
 
-        array_walk($info->toArray(false), function ($value, $key) {
+        array_walk($this->info->toArray(false), function ($value, $key) {
             print $key . ': ' . $value . PHP_EOL;
         });
     }

@@ -27,6 +27,6 @@ class Country extends AbstractType
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->name . ' (' . $this->isoCode . ')';
     }
 }

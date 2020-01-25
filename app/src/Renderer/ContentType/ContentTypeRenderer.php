@@ -1,20 +1,21 @@
 <?php
 
-namespace IfConfig\Renderer;
+namespace IfConfig\Renderer\ContentType;
 
+use IfConfig\Renderer\RendererInterface;
 use IfConfig\Types\Info;
 use IfConfig\Types\Location;
 
-class HtmlRenderer extends AbstractRenderer
+abstract class ContentTypeRenderer implements RendererInterface
 {
-    public function render(Info $info): void
+    protected ?Info $info;
+
+    public function setInfo(Info $info)
     {
-        global $i;
-        $i = $this->getInfoAsArray($info);
-        require_once __DIR__ . '/Templates/index.phtml';
+        $this->info = $info;
     }
 
-    private function getInfoAsArray(Info $info): array
+    protected function getInfoAsArray(Info $info): array
     {
         $i = $info->toArray(false);
         $i['location'] = $this->getLocationString($info->getLocation());
@@ -28,4 +29,6 @@ class HtmlRenderer extends AbstractRenderer
         $coordinates = $location->getLatitude() . ',' . $location->getLongitude();
         return '<a href="https://www.google.com/maps/@' . $coordinates . ',10z" target="_blank">' . $coordinates . '</a>';
     }
+
+    abstract public function render(): void;
 }

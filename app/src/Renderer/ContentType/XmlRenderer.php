@@ -1,19 +1,18 @@
 <?php
 
-namespace IfConfig\Renderer;
+namespace IfConfig\Renderer\ContentType;
 
 use DOMDocument;
 use DOMNode;
-use IfConfig\Types\Info;
 
-class XmlRenderer extends AbstractRenderer
+class XmlRenderer extends ContentTypeRenderer
 {
-    public function render(Info $info): void
+    public function render(): void
     {
         header('Content-Type: text/xml');
         $document = new DOMDocument("1.0");
         $document->appendChild(
-            $this->getRecursiveNodes($info->toArray(), $document, $document->createElement("ifconfig"))
+            $this->getRecursiveNodes($this->info->toArray(), $document, $document->createElement("ifconfig"))
         );
 
         print $document->saveXML();

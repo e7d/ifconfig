@@ -8,11 +8,9 @@ class Info extends AbstractType
         'ip',
         'host',
         'port',
-        'user-agent',
         'headers',
         'method',
         'referer',
-        'x-forwarded-for',
         'asn',
         'country',
         'city',
@@ -21,17 +19,16 @@ class Info extends AbstractType
     ];
 
     protected string $ip;
-    protected ?string $host;
+    protected ?string $host = null;
     protected int $port;
     protected array $headers;
     protected string $method;
-    protected ?string $referer;
-    protected ?string $xForwardedFor;
-    protected ?ASN $asn;
-    protected ?City $city;
-    protected ?Country $country;
-    protected ?Location $location;
-    protected ?string $timezone;
+    protected ?string $referer = null;
+    protected ?ASN $asn = null;
+    protected ?City $city = null;
+    protected ?Country $country = null;
+    protected ?Location $location = null;
+    protected ?string $timezone = null;
 
     public function getIp(): string
     {
