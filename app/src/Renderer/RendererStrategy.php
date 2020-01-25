@@ -13,27 +13,22 @@ use IfConfig\Types\Info;
 
 class RendererStrategy
 {
-    public function getRenderer(array $headers, string $path, bool $isCurl): ContentTypeRenderer
-    {
-        return $this->getRendererFromPath($headers, $path, $isCurl);
-    }
-
-    private function getRendererFromPath(array $headers, string $path, bool $isCurl): ContentTypeRenderer
+    public function getRenderer(string $acceptHeader, string $path, bool $isCurl): ContentTypeRenderer
     {
         switch ($path) {
-            case 'all.json':
+            case 'json':
                 return new JsonRenderer();
-            case 'all.txt':
+            case 'txt':
                 return new TextRenderer();
-            case 'all.xml':
+            case 'xml':
                 return new XmlRenderer();
-            case 'all.yaml':
-            case 'all.yml':
+            case 'yaml':
+            case 'yml':
                 return new YamlRenderer();
             case '':
                 return $isCurl
                     ? new TextRenderer('ip')
-                    : $this->getRendererForHeaders($headers);
+                    : $this->getRendererForHeaders($acceptHeader);
             default:
                 if (in_array($path, Info::FIELDS)) {
                     return new TextRenderer($path);
@@ -42,9 +37,9 @@ class RendererStrategy
         }
     }
 
-    private function getRendererForHeaders(array $headers): ContentTypeRenderer
+    private function getRendererForHeaders(string $acceptHeader): ContentTypeRenderer
     {
-        foreach (explode(';', $headers['HTTP_ACCEPT']) as $acceptEntry) {
+        foreach (explode(';', $acceptHeader) as $acceptEntry) {
             foreach (explode(',', $acceptEntry) as $acceptHeader) {
                 switch ($acceptHeader) {
                     case 'application/javascript':

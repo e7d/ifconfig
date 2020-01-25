@@ -10,6 +10,7 @@ use IfConfig\Renderer\Error\RenderError;
 use IfConfig\Renderer\RendererInterface;
 use IfConfig\Renderer\RendererStrategy;
 use IfConfig\Types\Info;
+use Utils\HeadersService;
 
 class Application
 {
@@ -26,7 +27,7 @@ class Application
         $renderer->render();
     }
 
-    public function getInfo(array $headers, array $params): Info
+    public function getAllInfo(array $headers, array $params): Info
     {
         $infoReader = new InfoReader($headers, $params);
         $info = $infoReader->getInfo();
@@ -43,25 +44,15 @@ class Application
         return $info;
     }
 
-    private function getPath(array $headers): string
-    {
-        return str_replace('/', '', $headers['REDIRECT_URL']);
-    }
-
-    private function isCurl(array $headers): string
-    {
-        return strrpos($headers['HTTP_USER_AGENT'], 'curl') !== false;
-    }
-
     private function getRenderer(array $headers, array $params): RendererInterface
     {
         try {
             $renderer = $this->rendererStrategy->getRenderer(
-                $headers,
-                $this->getPath($headers),
-                $this->isCurl($headers)
+                HeadersService::getAcceptHeader($headers),
+                HeadersService::getPath($headers),
+                HeadersService::isCurl($headers)
             );
-            $renderer->setInfo($this->getInfo($headers, $params));
+            $renderer->setInfo($this->getAllInfo($headers, $params));
         } catch (RenderError $e) {
             $renderer = new ErrorRenderer($e);
         }
