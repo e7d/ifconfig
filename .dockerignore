@@ -1,1 +1,3 @@
-app/vendor
+.git
+app/src/Reader/Databases/*.mmdb
+vendor

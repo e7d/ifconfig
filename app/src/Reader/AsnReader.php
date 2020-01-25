@@ -13,10 +13,11 @@ class AsnReader
 
     function __construct(string $ip)
     {
-        $this->reader = new Reader(__DIR__ . '/../../resources/GeoLite2-ASN_20200121.mmdb');
         try {
+            $this->reader = new Reader(__DIR__ . '/Databases/GeoLite2-ASN.mmdb');
             $record = $this->reader->asn($ip);
         } catch (Exception $e) {
+            return;
         }
         $this->setAsn($record);
     }
