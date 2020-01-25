@@ -6,6 +6,7 @@ RUN composer install \
 
 FROM alpine AS databases
 ARG MAXMIND_LICENSE_KEY
+ENV MAXMIND_LICENSE_KEY $MAXMIND_LICENSE_KEY
 WORKDIR /data
 RUN apk add -U wget \
     && wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-ASN&date=20200121&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz \

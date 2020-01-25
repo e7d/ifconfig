@@ -10,6 +10,6 @@
   },
   "scripts": {
     "setup": "composer install && composer dump-autoload",
-    "build:docker": ""
+    "build:docker": "test -f .env && . ./.env && docker build --build-arg MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY -t ifconfig ."
   }
 }
