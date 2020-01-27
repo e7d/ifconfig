@@ -16,10 +16,9 @@ class InfoReader
         $this->info->setIp($ip);
         $this->info->setHost($host);
         $this->info->setPort(@$headers['REMOTE_PORT']);
-        $this->info->setHeaders(getallheaders());
         $this->info->setMethod(@$headers['REQUEST_METHOD']);
         $this->info->setReferer(@$headers['HTTP_REFERER']);
-        $this->info->setXForwardedFor(@$headers['HTTP_X_FORWARDED_FOR']);
+        $this->info->setHeaders(getallheaders());
     }
 
     private function readParams(array $params): ?array
