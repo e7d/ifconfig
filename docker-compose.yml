@@ -4,6 +4,7 @@ services:
   web:
     image: php:7-apache
     volumes:
+      - ./docker/headers.load:/etc/apache2/mods-enabled/headers.load:ro
       - ./docker/rewrite.load:/etc/apache2/mods-enabled/rewrite.load:ro
       - .:/var/www:ro
     ports:

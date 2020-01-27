@@ -20,5 +20,5 @@ COPY --from=databases /data/GeoLite2-City.mmdb /var/www/app/src/Reader/Databases
 COPY --from=build /build/vendor /var/www/vendor
 COPY html /var/www/html
 RUN docker-php-ext-install opcache \
-    && ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load
+    && a2enmod headers rewrite
 EXPOSE 80
