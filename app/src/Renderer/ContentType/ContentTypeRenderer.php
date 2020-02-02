@@ -10,7 +10,7 @@ abstract class ContentTypeRenderer implements RendererInterface
 {
     protected ?Info $info;
 
-    public function setInfo(Info $info)
+    public function setInfo(Info $info): void
     {
         $this->info = $info;
     }
@@ -27,7 +27,7 @@ abstract class ContentTypeRenderer implements RendererInterface
     {
         if (!$location) return '';
         $coordinates = $location->getLatitude() . ',' . $location->getLongitude();
-        return '<a href="https://www.google.com/maps/@' . $coordinates . ',10z" target="_blank">' . $coordinates . '</a>';
+        return '<a href="https://www.google.com/maps/@' . $coordinates . ',12z" target="_blank">' . $coordinates . '</a>';
     }
 
     abstract public function render(): void;
