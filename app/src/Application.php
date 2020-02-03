@@ -37,7 +37,6 @@ class Application
 
         $locationReader = new LocationReader($info->getIp());
         $info->setLocation($locationReader->getLocation());
-        $info->setTimezone($locationReader->getTimezone());
         $info->setCountry($locationReader->getCountry());
         $info->setCity($locationReader->getCity());
 

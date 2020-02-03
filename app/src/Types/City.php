@@ -9,12 +9,12 @@ class City extends AbstractType
     protected array $subdivisions;
 
     function __construct(
-        ?string $name,
-        ?string $postalCode,
+        string $name,
+        string $postalCode,
         array $subdivisions
     ) {
-        $this->name = $name ?? '';
-        $this->postalCode = $postalCode ?? '';
+        $this->name = $name;
+        $this->postalCode = $postalCode;
         $this->subdivisions = $subdivisions;
     }
 

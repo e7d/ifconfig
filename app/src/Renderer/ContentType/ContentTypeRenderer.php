@@ -8,7 +8,7 @@ use IfConfig\Types\Location;
 
 abstract class ContentTypeRenderer implements RendererInterface
 {
-    protected ?Info $info;
+    protected Info $info;
 
     public function setInfo(Info $info): void
     {
@@ -19,7 +19,8 @@ abstract class ContentTypeRenderer implements RendererInterface
     {
         $i = $info->toArray(false);
         $i['location'] = $this->getLocationString($info->getLocation());
-        $i['headers'] = \str_replace('; ', ';<br>', $i['headers']);
+        $i['timezone'] = $info->getLocation()->getTimeZone();
+        $i['headers'] = \preg_replace('/; ([a-zA-Z-]+:)/', ';<br>\\1', $i['headers']);
         return $i;
     }
 

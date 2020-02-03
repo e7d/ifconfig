@@ -19,7 +19,7 @@ class Info extends AbstractType
     ];
 
     protected string $ip;
-    protected ?string $host = null;
+    protected string $host;
     protected int $port;
     protected array $headers;
     protected string $method;
@@ -28,7 +28,6 @@ class Info extends AbstractType
     protected ?City $city = null;
     protected ?Country $country = null;
     protected ?Location $location = null;
-    protected ?string $timezone = null;
 
     public function getIp(): string
     {

@@ -11,13 +11,13 @@ use GeoIp2\Record\Postal as PostalRecord;
 use IfConfig\Types\City;
 use IfConfig\Types\Country;
 use IfConfig\Types\Location;
+use IfConfig\Types\Subdivision;
 
 class LocationReader
 {
     private ?Country $country = null;
     private ?City $city = null;
     private ?Location $location = null;
-    private ?string $timezone = null;
 
     function __construct(string $ip)
     {
@@ -30,15 +30,16 @@ class LocationReader
         $this->setCountry($record->country);
         $this->setCity($record->city, $record->postal, $record->subdivisions);
         $this->setLocation($record->location);
-        $this->setTimezone($record->location);
     }
 
-    private function setCountry(?CountryRecord $countryRecord): void
+    private function setCountry(CountryRecord $countryRecord): void
     {
-        $this->country = new Country(
-            $countryRecord->name,
-            $countryRecord->isoCode
-        );
+        $this->country = is_null($countryRecord->name)
+            ? null
+            : new Country(
+                $countryRecord->name,
+                $countryRecord->isoCode
+            );
     }
 
     public function getCountry(): ?Country
@@ -46,19 +47,21 @@ class LocationReader
         return $this->country;
     }
 
-    private function setCity(?CityRecord $cityRecord, ?PostalRecord $postalRecord, array $subdivisionsRecord)
+    private function setCity(CityRecord $cityRecord, PostalRecord $postalRecord, array $subdivisionsRecord)
     {
-        $this->city = new City(
-            $cityRecord->name,
-            $postalRecord->code,
-            array_reduce($subdivisionsRecord, function ($subdivisions, $subdivision) {
-                $subdivisions[] = [
-                    'name' => $subdivision->name,
-                    'iso-code' => $subdivision->isoCode,
-                ];
-                return $subdivisions;
-            }, [])
-        );
+        $this->city = is_null($cityRecord->name) && is_null($postalRecord->code) && empty($subdivisionsRecord)
+            ? null
+            : new City(
+                $cityRecord->name,
+                $postalRecord->code,
+                array_reduce($subdivisionsRecord, function ($subdivisions, $subdivision) {
+                    $subdivisions[] = [
+                        'name' => $subdivision->name,
+                        'iso-code' => $subdivision->isoCode,
+                    ];
+                    return $subdivisions;
+                }, [])
+            );
     }
 
     public function getCity(): ?City
@@ -69,23 +72,15 @@ class LocationReader
     private function setLocation(?LocationRecord $locationRecord)
     {
         $this->location = new Location(
+            $locationRecord->accuracyRadius,
             $locationRecord->latitude,
-            $locationRecord->longitude
+            $locationRecord->longitude,
+            $locationRecord->timeZone
         );
     }
 
     public function getLocation(): ?Location
     {
         return $this->location;
-    }
-
-    private function setTimezone(?LocationRecord $locationRecord)
-    {
-        $this->timezone = $locationRecord->timeZone ?? '';
-    }
-
-    public function getTimezone(): ?string
-    {
-        return $this->timezone;
     }
 }
