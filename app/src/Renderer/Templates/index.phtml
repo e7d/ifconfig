@@ -8,60 +8,129 @@
     <title>ifconfig</title>
 
     <style>
-        <?php require_once 'app.css'; ?>
+        body {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Ubuntu", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 11pt;
+            max-width: 970px;
+            margin: auto;
+            padding: 8px;
+        }
+
+        h1 {
+            border-bottom: 1px solid #ddd;
+        }
+
+        main {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h2 {
+            margin: 0;
+            padding: 16px 8px;
+            background-color: whitesmoke;
+            border: transparent;
+            font-weight: normal;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        li {
+            border-top: 1px solid #ddd;
+            display: flex;
+        }
+
+        li.advanced {
+            display: none;
+        }
+
+        li>* {
+            padding: 8px;
+            overflow: auto;
+        }
+
+        @media (max-width: 640px) {
+            li {
+                flex-direction: column;
+            }
+
+            li>* {
+                padding: 8px;
+                overflow: auto;
+            }
+
+            li label {
+                padding-bottom: 4px;
+            }
+
+            li span {
+                padding-top: 0;
+            }
+        }
+
+        label {
+            font-weight: bold;
+            display: inline-block;
+            min-width: 140px;
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>What is my ip address?</h1>
+        <h1>Connnection information</h1>
     </header>
     <main>
         <h2>Your Connection</h2>
         <ul>
             <li>
-                <label class="title">IP Address</label>
+                <label>IP Address</label>
                 <span><?php echo $i['ip']; ?></span>
             </li>
             <li>
-                <label class="title">Remote Host</label>
+                <label>Remote Host</label>
                 <span><?php echo $i['host']; ?></span>
             </li>
             <li>
-                <label class="title">Port</label>
-                <span><?php echo $i['port']; ?></span>
-            </li>
-            <li>
-                <label class="title">ASN</label>
+                <label>ASN</label>
                 <span><?php echo $i['asn']; ?></span>
             </li>
             <li>
-                <label class="title">Country</label>
+                <label>Country</label>
                 <span><?php echo $i['country']; ?></span>
             </li>
             <li>
-                <label class="title">City</label>
+                <label>City</label>
                 <span><?php echo $i['city']; ?></span>
             </li>
             <li>
-                <label class="title">Location</label>
-                <span><?php echo $i['location']; ?></span>
+                <label>Coordinates</label>
+                <span><?php echo $i['coordinates']; ?></span>
             </li>
             <li>
-                <label class="title">Time Zone</label>
+                <label>Time Zone</label>
                 <span><?php echo $i['timezone']; ?></span>
             </li>
             <li>
-                <label class="title">Headers</label>
-                <span><?php echo $i['headers']; ?></span>
+                <label>Port</label>
+                <span><?php echo $i['port']; ?></span>
             </li>
             <li>
-                <label class="title">Method</label>
+                <label>Method</label>
                 <span><?php echo $i['method']; ?></span>
             </li>
             <li>
-                <label class="title">Referer</label>
+                <label>Referer</label>
                 <span><?php echo $i['referer']; ?></span>
+            </li>
+            <li>
+                <label>Headers</label>
+                <span><?php echo $i['headers']; ?></span>
             </li>
         </ul>
     </main>
