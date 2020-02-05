@@ -20,14 +20,14 @@ class Info extends AbstractType
 
     protected string $ip;
     protected string $host;
-    protected int $port;
-    protected array $headers;
-    protected string $method;
-    protected ?string $referer = null;
     protected ?ASN $asn = null;
     protected ?City $city = null;
     protected ?Country $country = null;
     protected ?Location $location = null;
+    protected int $port;
+    protected string $method;
+    protected ?string $referer = null;
+    protected array $headers;
 
     public function getIp(): string
     {

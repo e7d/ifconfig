@@ -55,10 +55,10 @@ class LocationReader
                 $cityRecord->name,
                 $postalRecord->code,
                 array_reduce($subdivisionsRecord, function ($subdivisions, $subdivision) {
-                    $subdivisions[] = [
-                        'name' => $subdivision->name,
-                        'iso-code' => $subdivision->isoCode,
-                    ];
+                    $subdivisions[] = new Subdivision(
+                        $subdivision->name,
+                        $subdivision->isoCode,
+                    );
                     return $subdivisions;
                 }, [])
             );

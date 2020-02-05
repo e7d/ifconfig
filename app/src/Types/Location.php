@@ -4,13 +4,13 @@ namespace IfConfig\Types;
 
 class Location extends AbstractType
 {
-    protected float $accuracyRadius;
+    protected int $accuracyRadius;
     protected float $latitude;
     protected float $longitude;
     protected string $timeZone;
 
     function __construct(
-        float $accuracyRadius,
+        int $accuracyRadius,
         float $latitude,
         float $longitude,
         string $timeZone
@@ -43,6 +43,6 @@ class Location extends AbstractType
 
     public function __toString(): string
     {
-        return $this->latitude . ',' . $this->longitude;
+        return $this->latitude . ', ' . $this->longitude . ' (' . $this->timeZone . ')';
     }
 }
