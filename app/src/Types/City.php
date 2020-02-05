@@ -29,8 +29,8 @@ class City extends AbstractType
             ($this->postalCode
                 ? ' (' . $this->postalCode . ')'
                 : '')
-            . array_reduce($this->subdivisions, function ($stack, $item) {
-                return $stack . ', ' . $item['name'];
+            . array_reduce(array_reverse($this->subdivisions), function ($stack, $item) {
+                return $stack . ', ' . $item;
             }, '');
     }
 }
