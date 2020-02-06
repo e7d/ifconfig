@@ -47,9 +47,9 @@ class Application
     {
         try {
             $renderer = $this->rendererStrategy->getRenderer(
+                HeadersService::isCli($headers),
                 HeadersService::getAcceptHeader($headers),
-                HeadersService::getPath($headers),
-                HeadersService::isCurl($headers)
+                HeadersService::getPath($headers)
             );
             $renderer->setInfo($this->getAllInfo($headers, $params));
         } catch (RenderError $e) {

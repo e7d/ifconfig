@@ -13,9 +13,11 @@ use IfConfig\Types\Info;
 
 class RendererStrategy
 {
-    public function getRenderer(string $acceptHeader, string $path, bool $isCurl): ContentTypeRenderer
+    public function getRenderer(bool $isCli, string $acceptHeader, string $path): ContentTypeRenderer
     {
         switch ($path) {
+            case 'html':
+                return new HtmlRenderer();
             case 'json':
                 return new JsonRenderer();
             case 'txt':
@@ -26,19 +28,19 @@ class RendererStrategy
             case 'yml':
                 return new YamlRenderer();
             case '':
-                return $isCurl
-                    ? new TextRenderer('ip')
-                    : $this->getRendererForHeaders($acceptHeader);
+                return $this->getRendererForHeaders($isCli, $acceptHeader);
             default:
                 if (in_array($path, Info::FIELDS)) {
                     return new TextRenderer($path);
                 }
-                throw new RenderError($isCurl ? '' : '404 Not Found', 404);
+                throw new RenderError($isCli ? '' : '404 Not Found', 404);
         }
     }
 
-    private function getRendererForHeaders(string $acceptHeader): ContentTypeRenderer
+
+    private function getRendererForHeaders(bool $isCli, string $acceptHeader): ContentTypeRenderer
     {
+        if ($isCli) return new TextRenderer();
         foreach (explode(';', $acceptHeader) as $acceptEntry) {
             foreach (explode(',', $acceptEntry) as $acceptHeader) {
                 switch ($acceptHeader) {
@@ -51,6 +53,7 @@ class RendererStrategy
                     case 'text/x-javascript':
                     case 'text/x-json':
                         return new JsonRenderer();
+                    case '*/*':
                     case 'text/plain':
                         return new TextRenderer();
                     case 'application/xml':
@@ -61,6 +64,7 @@ class RendererStrategy
                     case 'text/yaml':
                     case 'text/x-yaml':
                         return new YamlRenderer();
+                    case 'application/xhtml+xml':
                     case 'text/html':
                         return new HtmlRenderer();
                 }
