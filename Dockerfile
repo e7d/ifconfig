@@ -7,9 +7,27 @@ RUN composer install \
 FROM node AS build-html
 WORKDIR /build
 COPY . /build/
-RUN npx html-minifier --html5 --collapse-whitespace --remove-tag-whitespace --remove-comments --remove-optional-tags \
-    --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype \
-    --minify-css true --minify-js true -o app/src/Renderer/Templates/index.phtml -- app/src/Renderer/Templates/index.phtml
+RUN npx html-minifier --html5 \
+    --collapse-boolean-attributes \
+    --collapse-inline-tag-whitespace \
+    --collapse-whitespace \
+    --decode-entities \
+    --minify-css true \
+    --minify-js true \
+    --minify-urls \
+    --remove-attribute-quotes \
+    --remove-comments \
+    --remove-empty-attributes \
+    --remove-empty-elements \
+    --remove-optional-tags \
+    --remove-redundant-attributes \
+    --remove-script-type-attributes \
+    --remove-style-link-type-attributes \
+    --remove-tag-whitespace \
+    --sort-attributes \
+    --sort-class-name \
+    --use-short-doctype \
+    -o app/src/Renderer/Templates/index.phtml -- app/src/Renderer/Templates/index.phtml
 
 FROM alpine AS databases
 ARG MAXMIND_LICENSE_KEY
