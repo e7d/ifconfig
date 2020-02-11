@@ -3,6 +3,8 @@ version: "3"
 services:
   web:
     image: php:7-apache
+    environment:
+      - mode=DEBUG
     volumes:
       - ./docker/headers.load:/etc/apache2/mods-enabled/headers.load:ro
       - ./docker/rewrite.load:/etc/apache2/mods-enabled/rewrite.load:ro
