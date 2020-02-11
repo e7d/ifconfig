@@ -2,23 +2,20 @@
 
 namespace IfConfig\Types;
 
+use GeoIp2\Record\Location as RecordLocation;
+
 class Location extends AbstractType
 {
-    protected int $accuracyRadius;
-    protected float $latitude;
-    protected float $longitude;
-    protected string $timeZone;
+    protected ?int $accuracyRadius;
+    protected ?float $latitude;
+    protected ?float $longitude;
+    protected ?string $timeZone;
 
-    function __construct(
-        int $accuracyRadius,
-        float $latitude,
-        float $longitude,
-        string $timeZone
-    ) {
-        $this->accuracyRadius = $accuracyRadius;
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
-        $this->timeZone = $timeZone;
+    function __construct(RecordLocation $locationRecord) {
+        $this->accuracyRadius = $locationRecord->accuracyRadius ?? null;
+        $this->latitude = $locationRecord->latitude ?? null;
+        $this->longitude = $locationRecord->longitude ?? null;
+        $this->timeZone = $locationRecord->timeZone ?? null;
     }
 
     public function getAccuracyRadius(): float

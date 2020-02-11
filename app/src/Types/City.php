@@ -2,20 +2,23 @@
 
 namespace IfConfig\Types;
 
+use GeoIp2\Record\City as RecordCity;
+use GeoIp2\Record\Postal as RecordPostal;
+
 class City extends AbstractType
 {
-    protected string $name;
-    protected string $postalCode;
+    protected ?string $name;
+    protected ?string $postalCode;
     protected array $subdivisions;
 
     function __construct(
-        string $name,
-        string $postalCode,
-        array $subdivisions
+        RecordCity $cityRecord,
+        RecordPostal $postalRecord,
+        array $subdivisions = []
     ) {
-        $this->name = $name;
-        $this->postalCode = $postalCode;
-        $this->subdivisions = $subdivisions;
+        $this->name = $cityRecord->name ?? null;
+        $this->postalCode = $postalRecord->code ?? null;
+        $this->subdivisions = $subdivisions ?? [];
     }
 
     public function getName(): string

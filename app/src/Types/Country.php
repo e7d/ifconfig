@@ -2,17 +2,16 @@
 
 namespace IfConfig\Types;
 
+use GeoIp2\Record\Country as RecordCountry;
+
 class Country extends AbstractType
 {
-    protected string $name;
-    protected string $isoCode;
+    protected ?string $name;
+    protected ?string $isoCode;
 
-    function __construct(
-        string $name,
-        string $isoCode
-    ) {
-        $this->name = $name;
-        $this->isoCode = $isoCode;
+    function __construct(RecordCountry $countryRecord) {
+        $this->name = $countryRecord->name ?? null;
+        $this->isoCode = $countryRecord->isoCode ?? null;
     }
 
     public function getName(): string

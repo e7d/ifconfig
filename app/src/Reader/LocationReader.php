@@ -34,12 +34,7 @@ class LocationReader
 
     private function setCountry(CountryRecord $countryRecord): void
     {
-        $this->country = is_null($countryRecord->name)
-            ? null
-            : new Country(
-                $countryRecord->name,
-                $countryRecord->isoCode
-            );
+        $this->country = new Country($countryRecord);
     }
 
     public function getCountry(): ?Country
@@ -49,19 +44,17 @@ class LocationReader
 
     private function setCity(CityRecord $cityRecord, PostalRecord $postalRecord, array $subdivisionsRecord)
     {
-        $this->city = is_null($cityRecord->name) && is_null($postalRecord->code) && empty($subdivisionsRecord)
-            ? null
-            : new City(
-                $cityRecord->name,
-                $postalRecord->code,
-                array_reduce($subdivisionsRecord, function ($subdivisions, $subdivision) {
-                    $subdivisions[] = new Subdivision(
-                        $subdivision->name,
-                        $subdivision->isoCode,
-                    );
-                    return $subdivisions;
-                }, [])
-            );
+        $this->city = new City(
+            $cityRecord,
+            $postalRecord,
+            array_reduce($subdivisionsRecord, function ($subdivisions, $subdivision) {
+                $subdivisions[] = new Subdivision(
+                    $subdivision->name,
+                    $subdivision->isoCode,
+                );
+                return $subdivisions;
+            }, [])
+        );
     }
 
     public function getCity(): ?City
@@ -69,14 +62,9 @@ class LocationReader
         return $this->city;
     }
 
-    private function setLocation(?LocationRecord $locationRecord)
+    private function setLocation(LocationRecord $locationRecord)
     {
-        $this->location = new Location(
-            $locationRecord->accuracyRadius,
-            $locationRecord->latitude,
-            $locationRecord->longitude,
-            $locationRecord->timeZone
-        );
+        $this->location = new Location($locationRecord);
     }
 
     public function getLocation(): ?Location
