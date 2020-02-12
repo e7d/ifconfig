@@ -7,6 +7,16 @@ use IfConfig\Types\Location;
 
 class HtmlRenderer extends ContentTypeRenderer
 {
+    private function arrayToString(array $array): string
+    {
+        return implode(
+            '<br>',
+            array_map(function ($key, $value) {
+                return "$key: $value;";
+            }, array_keys($array), $array)
+        );
+    }
+
     private function getInfoAsArray(Info $info): array
     {
         $i = $info->toArray(false);
@@ -15,7 +25,7 @@ class HtmlRenderer extends ContentTypeRenderer
             $i['coordinates'] = $this->getLocationString($location);
             $i['timezone'] = $location->getTimeZone();
         }
-        $i['headers'] = preg_replace('/; ([a-zA-Z-]+:)/', ';<br>\\1', $i['headers']);
+        $i['headers'] = $this->arrayToString($i['headers']);
         return $i;
     }
 
