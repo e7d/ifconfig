@@ -7,7 +7,6 @@ use IfConfig\Types\Location;
 
 class HtmlRenderer extends ContentTypeRenderer
 {
-
     private function getInfoAsArray(Info $info): array
     {
         $i = $info->toArray(false);
@@ -22,8 +21,8 @@ class HtmlRenderer extends ContentTypeRenderer
 
     private function getLocationString(Location $location): string
     {
-        $coordinates = $location->getLatitude() . ',' . $location->getLongitude();
-        return '<a href="https://www.google.com/maps/place/' . $coordinates . '" target="_blank">' . $coordinates . '</a>';
+        $coordinates = $location->getLatitude() . ', ' . $location->getLongitude();
+        return '<a href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude() . '&mlon=' . $location->getLongitude() . '" target="_blank">' . $coordinates . '</a>';
     }
 
     public function render(): void
