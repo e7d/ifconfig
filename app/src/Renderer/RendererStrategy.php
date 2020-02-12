@@ -40,7 +40,6 @@ class RendererStrategy
 
     private function getRendererForHeaders(bool $isCli, string $acceptHeader): ContentTypeRenderer
     {
-        if ($isCli) return new TextRenderer();
         foreach (explode(';', $acceptHeader) as $acceptEntry) {
             foreach (explode(',', $acceptEntry) as $acceptHeader) {
                 switch ($acceptHeader) {
@@ -52,8 +51,8 @@ class RendererStrategy
                     case 'text/json':
                     case 'text/x-javascript':
                     case 'text/x-json':
-                        return new JsonRenderer();
                     case '*/*':
+                        return new JsonRenderer();
                     case 'text/plain':
                         return new TextRenderer();
                     case 'application/xml':
@@ -70,6 +69,6 @@ class RendererStrategy
                 }
             }
         }
-        return new HtmlRenderer();
+        return $isCli ? new JsonRenderer() : new HtmlRenderer();
     }
 }
