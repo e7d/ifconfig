@@ -11,7 +11,7 @@ class City extends AbstractType
     function __construct(
         RecordCity $cityRecord
     ) {
-        $this->name = $cityRecord->name ?? null;
+        $this->name = $cityRecord->name ?? '';
     }
 
     public function __toString(): string

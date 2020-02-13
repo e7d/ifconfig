@@ -30,7 +30,7 @@ class RendererStrategy
             case '':
                 return $this->getRendererForHeaders($isCli, $acceptHeader);
             default:
-                if (in_array($path, Info::FIELDS)) {
+                if (Info::hasField($path)) {
                     return new TextRenderer($path);
                 }
                 throw new RenderError($isCli ? '' : '404 Not Found', 404);

@@ -35,6 +35,7 @@ class LocationReader
         $this->setPostal($record->postal);
         $this->setSubdivisions($record->subdivisions);
         $this->setLocation($record->location);
+        $this->setTimezone($record->location);
     }
 
     private function setCountry(CountryRecord $countryRecord): void
@@ -91,5 +92,15 @@ class LocationReader
     public function getLocation(): ?Location
     {
         return $this->location;
+    }
+
+    private function setTimezone(LocationRecord $locationRecord)
+    {
+        $this->timezone = $locationRecord->timeZone;
+    }
+
+    public function getTimezone(): ?string
+    {
+        return $this->timezone;
     }
 }

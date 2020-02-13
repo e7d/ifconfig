@@ -17,8 +17,9 @@ class HtmlRenderer extends ContentTypeRenderer
         );
     }
 
-    private function getLocationString(Location $location): string
+    private function getLocationString(?Location $location): string
     {
+        if (is_null($location)) return '';
         $coordinates = $location->getLatitude() . ', ' . $location->getLongitude();
         return '<a href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude() . '&mlon=' . $location->getLongitude() . '" target="_blank">' . $coordinates . '</a>';
     }

@@ -9,18 +9,16 @@ class Location extends AbstractType
     protected ?int $accuracyRadius;
     protected ?float $latitude;
     protected ?float $longitude;
-    protected ?string $timeZone;
 
     function __construct(RecordLocation $locationRecord) {
         $this->accuracyRadius = $locationRecord->accuracyRadius ?? null;
         $this->latitude = $locationRecord->latitude ?? null;
         $this->longitude = $locationRecord->longitude ?? null;
-        $this->timeZone = $locationRecord->timeZone ?? null;
     }
 
     public function __toString(): string
     {
-        return $this->latitude . ', ' . $this->longitude . ' (' . $this->timeZone . ')';
+        return $this->latitude . ', ' . $this->longitude;
     }
 
     public function getAccuracyRadius(): float
@@ -36,10 +34,5 @@ class Location extends AbstractType
     public function getLongitude(): float
     {
         return $this->longitude;
-    }
-
-    public function getTimeZone(): string
-    {
-        return $this->timeZone;
     }
 }

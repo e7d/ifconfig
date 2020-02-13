@@ -41,6 +41,7 @@ class Application
         $info->setPostal($locationReader->getPostal());
         $info->setSubdivisions($locationReader->getSubdivisions());
         $info->setLocation($locationReader->getLocation());
+        $info->setTimezone($locationReader->getTimezone());
 
         return $info;
     }

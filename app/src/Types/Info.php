@@ -4,20 +4,6 @@ namespace IfConfig\Types;
 
 class Info extends AbstractType
 {
-    const FIELDS = [
-        'ip',
-        'host',
-        'port',
-        'headers',
-        'method',
-        'referer',
-        'asn',
-        'country',
-        'city',
-        'location',
-        'timezone'
-    ];
-
     protected string $ip;
     protected string $host;
     protected ?ASN $asn = null;
@@ -26,10 +12,23 @@ class Info extends AbstractType
     protected ?Postal $postal = null;
     protected array $subdivisions = [];
     protected ?Location $location = null;
+    protected ?string $timezone = null;
     protected int $port;
     protected string $method;
     protected ?string $referer = null;
     protected array $headers;
+
+    public static function hasField(string $field): bool
+    {
+        return property_exists(self::class, $field);
+    }
+
+    public function get(string $field)
+    {
+        return property_exists($this, $field)
+            ? $this->$field
+            : null;
+    }
 
     public function getIp(): string
     {
@@ -109,6 +108,16 @@ class Info extends AbstractType
     public function setLocation(?Location $location): void
     {
         $this->location = $location;
+    }
+
+    public function getTimezone(): ?string
+    {
+        return $this->timezone;
+    }
+
+    public function setTimezone(?string $timezone): void
+    {
+        $this->timezone = $timezone;
     }
 
     public function getPort(): int
