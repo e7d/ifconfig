@@ -36,9 +36,11 @@ class Application
         $info->setAsn($asnReader->getAsn());
 
         $locationReader = new LocationReader($info->getIp());
-        $info->setLocation($locationReader->getLocation());
         $info->setCountry($locationReader->getCountry());
         $info->setCity($locationReader->getCity());
+        $info->setPostal($locationReader->getPostal());
+        $info->setSubdivisions($locationReader->getSubdivisions());
+        $info->setLocation($locationReader->getLocation());
 
         return $info;
     }

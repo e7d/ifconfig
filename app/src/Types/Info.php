@@ -23,6 +23,8 @@ class Info extends AbstractType
     protected ?ASN $asn = null;
     protected ?Country $country = null;
     protected ?City $city = null;
+    protected ?Postal $postal = null;
+    protected array $subdivisions = [];
     protected ?Location $location = null;
     protected int $port;
     protected string $method;
@@ -49,6 +51,66 @@ class Info extends AbstractType
         $this->host = $host;
     }
 
+    public function getAsn(): ?ASN
+    {
+        return $this->asn;
+    }
+
+    public function setAsn(?ASN $asn): void
+    {
+        $this->asn = $asn;
+    }
+
+    public function getCountry(): ?Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Country $country): void
+    {
+        $this->country = $country;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): void
+    {
+        $this->city = $city;
+    }
+
+    public function getPostal(): ?Postal
+    {
+        return $this->postal;
+    }
+
+    public function setPostal(?Postal $postal): void
+    {
+        $this->postal = $postal;
+    }
+
+    public function getSubdivisions(): array
+    {
+        return $this->subdivisions;
+    }
+
+    public function setSubdivisions(array $subdivisions = []): void
+    {
+        $this->subdivisions = $subdivisions;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): void
+    {
+        $this->location = $location;
+    }
+
     public function getPort(): int
     {
         return $this->port;
@@ -57,16 +119,6 @@ class Info extends AbstractType
     public function setPort(int $port): void
     {
         $this->port = $port;
-    }
-
-    public function getHeaders(): array
-    {
-        return $this->headers;
-    }
-
-    public function setHeaders(array $headers): void
-    {
-        $this->headers = $headers;
     }
 
     public function getMethod(): string
@@ -89,63 +141,13 @@ class Info extends AbstractType
         $this->referer = $referer;
     }
 
-    public function getXForwardedFor(): ?string
+    public function getHeaders(): array
     {
-        return $this->xForwardedFor;
+        return $this->headers;
     }
 
-    public function setXForwardedFor(?string $xForwardedFor): void
+    public function setHeaders(array $headers): void
     {
-        $this->xForwardedFor = $xForwardedFor;
-    }
-
-    public function getAsn(): ?ASN
-    {
-        return $this->asn;
-    }
-
-    public function setAsn(?ASN $asn): void
-    {
-        $this->asn = $asn;
-    }
-
-    public function getCity(): ?City
-    {
-        return $this->city;
-    }
-
-    public function setCity(?City $city): void
-    {
-        $this->city = $city;
-    }
-
-    public function getCountry(): ?Country
-    {
-        return $this->country;
-    }
-
-    public function setCountry(?Country $country): void
-    {
-        $this->country = $country;
-    }
-
-    public function getLocation(): ?Location
-    {
-        return $this->location;
-    }
-
-    public function setLocation(?Location $location): void
-    {
-        $this->location = $location;
-    }
-
-    public function getTimezone(): ?string
-    {
-        return $this->timezone;
-    }
-
-    public function setTimezone(?string $timezone): void
-    {
-        $this->timezone = $timezone;
+        $this->headers = $headers;
     }
 }

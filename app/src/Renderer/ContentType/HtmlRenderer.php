@@ -3,9 +3,20 @@
 namespace IfConfig\Renderer\ContentType;
 
 use IfConfig\Types\Location;
+use IfConfig\Types\Subdivision;
 
 class HtmlRenderer extends ContentTypeRenderer
 {
+    private function getSubdivionsString(array $subdivisions): string
+    {
+        return implode(
+            '<br>',
+            array_map(function (Subdivision $subdivision) {
+                return $subdivision->getName() . ' (' . $subdivision->getIsoCode() . ')';
+            }, $subdivisions)
+        );
+    }
+
     private function getLocationString(Location $location): string
     {
         $coordinates = $location->getLatitude() . ', ' . $location->getLongitude();

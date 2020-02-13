@@ -104,6 +104,14 @@
                 <span><?php echo $this->info->getCity(); ?></span>
             </li>
             <li>
+                <label>Postal</label>
+                <span><?php echo $this->info->getPostal(); ?></span>
+            </li>
+            <li>
+                <label>Subdivisions</label>
+                <span><?php echo $this->getSubdivionsString($this->info->getSubdivisions()); ?></span>
+            </li>
+            <li>
                 <label>Coordinates</label>
                 <span><?php echo $this->getLocationString($this->info->getLocation()); ?></span>
             </li>
