@@ -21,11 +21,6 @@ class City extends AbstractType
         $this->subdivisions = $subdivisions ?? [];
     }
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
     public function __toString(): string
     {
         return $this->name .
@@ -35,5 +30,20 @@ class City extends AbstractType
             . array_reduce(array_reverse($this->subdivisions), function ($stack, $item) {
                 return $stack . ', ' . $item;
             }, '');
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getPostalCode(): string
+    {
+        return $this->postalCode;
+    }
+
+    public function getSubdivisions(): array
+    {
+        return $this->subdivisions;
     }
 }

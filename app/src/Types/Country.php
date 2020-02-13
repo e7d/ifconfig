@@ -14,6 +14,11 @@ class Country extends AbstractType
         $this->isoCode = $countryRecord->isoCode ?? null;
     }
 
+    public function __toString(): string
+    {
+        return $this->name . ' (' . $this->isoCode . ')';
+    }
+
     public function getName(): string
     {
         return $this->name;
@@ -22,10 +27,5 @@ class Country extends AbstractType
     public function getIsoCode(): string
     {
         return $this->isoCode;
-    }
-
-    public function __toString(): string
-    {
-        return $this->name . ' (' . $this->isoCode . ')';
     }
 }

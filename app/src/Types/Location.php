@@ -18,6 +18,11 @@ class Location extends AbstractType
         $this->timeZone = $locationRecord->timeZone ?? null;
     }
 
+    public function __toString(): string
+    {
+        return $this->latitude . ', ' . $this->longitude . ' (' . $this->timeZone . ')';
+    }
+
     public function getAccuracyRadius(): float
     {
         return $this->accuracyRadius;
@@ -36,10 +41,5 @@ class Location extends AbstractType
     public function getTimeZone(): string
     {
         return $this->timeZone;
-    }
-
-    public function __toString(): string
-    {
-        return $this->latitude . ', ' . $this->longitude . ' (' . $this->timeZone . ')';
     }
 }

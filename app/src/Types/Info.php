@@ -21,8 +21,8 @@ class Info extends AbstractType
     protected string $ip;
     protected string $host;
     protected ?ASN $asn = null;
-    protected ?City $city = null;
     protected ?Country $country = null;
+    protected ?City $city = null;
     protected ?Location $location = null;
     protected int $port;
     protected string $method;

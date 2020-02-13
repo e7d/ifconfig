@@ -22,4 +22,19 @@ class ASN extends AbstractType
     {
         return 'AS' . $this->number . ' ' . $this->org . ' (' . $this->network . ')';
     }
+
+    public function getNumber(): int
+    {
+        return $this->number;
+    }
+
+    public function getOrg(): string
+    {
+        return $this->org;
+    }
+
+    public function getNetwork(): string
+    {
+        return $this->network;
+    }
 }
