@@ -3,6 +3,7 @@
 namespace IfConfig\Renderer;
 
 use IfConfig\Renderer\ContentType\ContentTypeRenderer;
+use IfConfig\Renderer\ContentType\FileRenderer;
 use IfConfig\Renderer\ContentType\HtmlRenderer;
 use IfConfig\Renderer\ContentType\JsonRenderer;
 use IfConfig\Renderer\ContentType\TextRenderer;
@@ -32,6 +33,9 @@ class RendererStrategy
             default:
                 if (Info::hasField($path)) {
                     return new TextRenderer($path);
+                }
+                if (file_exists($path)) {
+                    return new FileRenderer($path);
                 }
                 throw new RenderError($isCli ? '' : '404 Not Found', 404);
         }
