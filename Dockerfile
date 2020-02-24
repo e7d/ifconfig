@@ -33,9 +33,9 @@ FROM alpine AS databases
 ARG MAXMIND_LICENSE_KEY
 WORKDIR /data
 RUN apk add -U wget \
-    && wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-ASN&date=20200121&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz \
+    && wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-ASN&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz \
     && mv GeoLite2-ASN_*/GeoLite2-ASN.mmdb . \
-    && wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&date=20200121&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz \
+    && wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz \
     && mv GeoLite2-City_*/GeoLite2-City.mmdb .
 
 FROM php:7-apache
