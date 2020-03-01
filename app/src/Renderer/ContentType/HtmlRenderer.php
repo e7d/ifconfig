@@ -21,7 +21,7 @@ class HtmlRenderer extends ContentTypeRenderer
     {
         if (is_null($location)) return '';
         $coordinates = $location->getLatitude() . ', ' . $location->getLongitude();
-        return '<a href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude() . '&mlon=' . $location->getLongitude() . '" target="_blank">' . $coordinates . '</a>';
+        return '<a rel="noreferrer" href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude() . '&mlon=' . $location->getLongitude() . '" target="_blank">' . $coordinates . '</a>';
     }
 
     private function getHeadersString(array $array): string
