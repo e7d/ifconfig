@@ -27,7 +27,12 @@ RUN npx html-minifier --html5 \
     --sort-attributes \
     --sort-class-name \
     --use-short-doctype \
-    -o app/src/Renderer/Templates/index.phtml -- app/src/Renderer/Templates/index.phtml
+    -o app/src/Renderer/Templates/index.min.phtml -- app/src/Renderer/Templates/index.phtml \
+    && npx uglifycss \
+    html/style.css >html/style.min.css \
+    && CKSUM=$(cksum html/style.min.css | cut -d' ' -f 1) \
+    && mv html/style.min.css html/style.${CKSUM}.css \
+    && sed -i "s/style\.css/style.${CKSUM}.css/g" app/src/Renderer/Templates/index.min.phtml
 
 FROM alpine AS databases
 ARG MAXMIND_LICENSE_KEY
@@ -39,12 +44,14 @@ RUN apk add -U wget \
     && mv GeoLite2-City_*/GeoLite2-City.mmdb .
 
 FROM php:7-apache
+RUN docker-php-ext-install opcache \
+    && a2enmod headers expires rewrite
+COPY docker/expires.conf /etc/apache2/conf-enabled/expires.conf
+COPY html /var/www/html
 COPY --from=build /build/app /var/www/app
 COPY --from=build /build/vendor /var/www/vendor
-COPY --from=build-html /build/app/src/Renderer/Templates/index.phtml /var/www/app/src/Renderer/Templates/index.phtml
+COPY --from=build-html /build/app/src/Renderer/Templates/index.min.phtml /var/www/app/src/Renderer/Templates/index.phtml
+COPY --from=build-html /build/html/style.*.css /var/www/html/
 COPY --from=databases /data/GeoLite2-ASN.mmdb /var/www/app/src/Reader/Databases/
 COPY --from=databases /data/GeoLite2-City.mmdb /var/www/app/src/Reader/Databases/
-COPY html /var/www/html
-RUN docker-php-ext-install opcache \
-    && a2enmod headers rewrite
 EXPOSE 80

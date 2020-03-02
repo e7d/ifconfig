@@ -6,6 +6,8 @@ services:
     environment:
       - mode=DEBUG
     volumes:
+      - ./docker/expires.conf:/etc/apache2/conf-enabled/expires.conf:ro
+      - ./docker/expires.load:/etc/apache2/mods-enabled/expires.load:ro
       - ./docker/headers.load:/etc/apache2/mods-enabled/headers.load:ro
       - ./docker/rewrite.load:/etc/apache2/mods-enabled/rewrite.load:ro
       - .:/var/www:ro
