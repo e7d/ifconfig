@@ -14,8 +14,8 @@ class HeadersService
         return $headers['HTTP_ACCEPT'] ?? '';
     }
 
-    public static function getPath(array $headers): string
+    public static function getPath(array $headers): array
     {
-        return str_replace('/', '', $headers['REDIRECT_URL']);
+        return explode('/', substr($headers['REDIRECT_URL'], 1));
     }
 }

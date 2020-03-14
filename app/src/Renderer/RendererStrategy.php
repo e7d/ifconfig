@@ -14,31 +14,44 @@ use IfConfig\Types\Info;
 
 class RendererStrategy
 {
-    public function getRenderer(bool $isCli, string $acceptHeader, string $path): ContentTypeRenderer
-    {
-        switch ($path) {
+    public function getRenderer(
+        bool $isCli,
+        string $acceptHeader,
+        array $path,
+        Info $info
+    ): ContentTypeRenderer {
+        switch ($path[0]) {
             case 'html':
-                return new HtmlRenderer();
+                $renderer = new HtmlRenderer();
+                break;
             case 'json':
-                return new JsonRenderer();
+                $renderer = new JsonRenderer();
+            break;
+            case 'text':
             case 'txt':
-                return new TextRenderer();
+                $renderer = new TextRenderer();
+                break;
             case 'xml':
-                return new XmlRenderer();
+                $renderer = new XmlRenderer();
+                break;
             case 'yaml':
             case 'yml':
-                return new YamlRenderer();
+                $renderer = new YamlRenderer();
+                break;
             case '':
-                return $this->getRendererForHeaders($isCli, $acceptHeader);
+                $renderer = $this->getRendererForHeaders($isCli, $acceptHeader);
+                break;
             default:
-                if (Info::hasField($path)) {
-                    return new TextRenderer($path);
+                if ($field = $info->getField($path)) {
+                    return new TextRenderer($field);
                 }
-                if (file_exists($path)) {
-                    return new FileRenderer($path);
+                if (file_exists(implode('/', $path))) {
+                    $renderer = new FileRenderer(implode('/', $path));
                 }
                 throw new RenderError($isCli ? '' : '404 Not Found', 404);
         }
+        $renderer->setInfo($info);
+        return $renderer;
     }
 
 

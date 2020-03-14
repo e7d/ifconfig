@@ -4,19 +4,19 @@ namespace IfConfig\Renderer\ContentType;
 
 class TextRenderer extends ContentTypeRenderer
 {
-    private ?string $key;
+    private ?string $text;
 
-    function __construct(?string $key = null)
+    function __construct(?string $text = null)
     {
-        $this->key = $key;
+        $this->text = $text;
     }
 
     public function render(): void
     {
         header('Content-Type: text/plain');
 
-        if (!is_null($this->key)) {
-            print $this->info->toArray(false)[$this->key];
+        if (!is_null($this->text)) {
+            print $this->text;
             exit;
         }
 

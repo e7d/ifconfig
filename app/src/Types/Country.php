@@ -9,6 +9,7 @@ class Country extends AbstractType
 {
     protected ?string $name;
     protected ?string $isoCode;
+    protected ?string $flag;
 
     function __construct(RecordCountry $countryRecord)
     {

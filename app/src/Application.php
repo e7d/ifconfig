@@ -52,9 +52,9 @@ class Application
             $renderer = $this->rendererStrategy->getRenderer(
                 HeadersService::isCli($headers),
                 HeadersService::getAcceptHeader($headers),
-                HeadersService::getPath($headers)
+                HeadersService::getPath($headers),
+                $this->getAllInfo($headers, $params)
             );
-            $renderer->setInfo($this->getAllInfo($headers, $params));
         } catch (RenderError $e) {
             $renderer = new ErrorRenderer($e);
         }

@@ -4,6 +4,16 @@ namespace IfConfig\Types;
 
 abstract class AbstractType
 {
+    public function get(string $field)
+    {
+        return $this->has($field) ? $this->$field : null;
+    }
+
+    public function has(string $field)
+    {
+        return property_exists($this, $field);
+    }
+
     private function getRecursiveValue($value, bool $objectAsArray = false)
     {
         return $value instanceof AbstractType
