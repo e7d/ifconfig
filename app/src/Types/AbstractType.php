@@ -4,6 +4,17 @@ namespace IfConfig\Types;
 
 abstract class AbstractType
 {
+    public function getPath(array $path)
+    {
+        if (!$this->has($path[0])) {
+            return false;
+        }
+        $value = $this->get($path[0]);
+        return ($value instanceof AbstractType)
+            ? $value->getPath(array_slice($path, 1))
+            : (is_null($value) ? 'NULL' : $value);
+    }
+
     public function get(string $field)
     {
         return $this->has($field) ? $this->$field : null;

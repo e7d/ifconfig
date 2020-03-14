@@ -26,7 +26,7 @@ class RendererStrategy
                 break;
             case 'json':
                 $renderer = new JsonRenderer();
-            break;
+                break;
             case 'text':
             case 'txt':
                 $renderer = new TextRenderer();
@@ -42,7 +42,7 @@ class RendererStrategy
                 $renderer = $this->getRendererForHeaders($isCli, $acceptHeader);
                 break;
             default:
-                if ($field = $info->getField($path)) {
+                if ($field = $info->getPath($path)) {
                     return new TextRenderer($field);
                 }
                 if (file_exists(implode('/', $path))) {

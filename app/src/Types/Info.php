@@ -18,23 +18,6 @@ class Info extends AbstractType
     protected ?string $referer = null;
     protected array $headers;
 
-    public function getField(array $path)
-    {
-        $obj = $this;
-        while ($field = array_shift($path)) {
-            if (empty($obj)) return false;
-            if (is_array($obj)) {
-                if (!\array_key_exists($field, $obj)) return false;
-                $obj = $obj[$field];
-            }
-            if ($obj instanceof AbstractType) {
-                if (!$obj->has($field)) return false;
-                $obj = $obj->get($field);
-            }
-        }
-        return is_array($obj) ? \implode('; ', $obj) : $obj;
-    }
-
     public function getIp(): string
     {
         return $this->ip;
