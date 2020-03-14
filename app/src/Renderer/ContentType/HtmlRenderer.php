@@ -26,12 +26,7 @@ class HtmlRenderer extends ContentTypeRenderer
 
     private function getHeadersString(array $array): string
     {
-        return implode(
-            '<br>',
-            array_map(function ($key, $value) {
-                return "$key: $value;";
-            }, array_keys($array), $array)
-        );
+        return implode('<br>', $array);
     }
 
     public function render(): void
