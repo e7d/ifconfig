@@ -8,7 +8,8 @@ class Postal extends AbstractType
 {
     protected ?string $code;
 
-    function __construct(RecordPostal $postalRecord) {
+    function __construct(RecordPostal $postalRecord)
+    {
         $this->code = $postalRecord->code ?? '';
     }
 

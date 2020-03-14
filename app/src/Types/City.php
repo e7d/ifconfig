@@ -8,9 +8,8 @@ class City extends AbstractType
 {
     protected ?string $name;
 
-    function __construct(
-        RecordCity $cityRecord
-    ) {
+    function __construct(RecordCity $cityRecord)
+    {
         $this->name = $cityRecord->name ?? '';
     }
 
