@@ -21,7 +21,7 @@ class TextRenderer extends ContentTypeRenderer
         }
 
         array_walk($this->info->toArray(false), function ($value, $key) {
-            print $key . ': ' . $value . PHP_EOL;
+            print $key . ': ' . (is_array($value) ? implode('; ', $value) : $value) . PHP_EOL;
         });
     }
 }

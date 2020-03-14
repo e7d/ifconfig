@@ -162,6 +162,8 @@ class Info extends AbstractType
 
     public function setHeaders(array $headers): void
     {
-        $this->headers = $headers;
+        $this->headers = array_map(function($name, $value) {
+            return new Header($name, $value);
+        }, array_keys($headers), $headers);
     }
 }
