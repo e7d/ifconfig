@@ -4,8 +4,24 @@ namespace IfConfig\Types;
 
 use ArrayObject;
 
-class Headers extends ArrayObject
+class Headers
 {
+    private ArrayObject $headers;
+
+    function __construct(array $headers)
+    {
+        $this->headers = new ArrayObject($headers);
+    }
+
+    public function get(string $key) {
+        return $this->headers[$key];
+    }
+
+    public function getArrayCopy(): array
+    {
+        return $this->headers->getArrayCopy();
+    }
+
     public function __toString()
     {
         $headersArr = $this->getArrayCopy();
