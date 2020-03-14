@@ -6,13 +6,11 @@ abstract class AbstractType
 {
     public function getPath(array $path)
     {
-        if (!$this->has($path[0])) {
-            return false;
-        }
+        if (!$this->has($path[0])) return false;
         $value = $this->get($path[0]);
-        return ($value instanceof AbstractType)
-            ? $value->getPath(array_slice($path, 1))
-            : (is_null($value) ? 'NULL' : $value);
+        if ($value instanceof AbstractType) return $value->getPath(array_slice($path, 1));
+        if ($value instanceof Headers) return $path[1] ? $value[$path[1]] : $value;
+        return is_null($value) ? 'NULL' : $value;
     }
 
     public function get(string $field)
@@ -25,33 +23,28 @@ abstract class AbstractType
         return property_exists($this, $field);
     }
 
-    private function getRecursiveValue($value, bool $objectAsArray = false)
+    private function expandValue($value, bool $objectAsArray = false)
     {
         return $value instanceof AbstractType
-            ? $this->arrayObjectToArray($value, true, $objectAsArray)
+            ? $this->iterableToArray($value, true, $objectAsArray)
             : (is_array($value) && $objectAsArray
-                ? $this->arrayObjectToArray($value)
-                : $value);
+                ? $this->iterableToArray($value)
+                : ($value instanceof Headers ? $value->getArrayCopy() : $value));
     }
 
-    private function getValue($value, bool $recursive, bool $objectAsArray = false)
-    {
-        return $recursive
-            ? $this->getRecursiveValue($value, $objectAsArray)
-            : $value;
-    }
-
-    private function arrayObjectToArray($object, bool $recursive = true, bool $objectAsArray = false)
+    private function iterableToArray($object, bool $recursive = true, bool $objectAsArray = false)
     {
         $array = [];
         foreach ($object as $key => $value) {
-            $array[$key] = $this->getValue($value, $recursive, $objectAsArray);
+            $array[$key] = $recursive
+                ? $this->expandValue($value, $objectAsArray)
+                : $value;
         }
         return $array;
     }
 
     public function toArray(bool $recursive = true, bool $objectAsArray = false): array
     {
-        return $this->arrayObjectToArray($this, $recursive, $objectAsArray);
+        return $this->iterableToArray($this, $recursive, $objectAsArray);
     }
 }

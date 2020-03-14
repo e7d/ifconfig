@@ -16,7 +16,7 @@ class Info extends AbstractType
     protected int $port;
     protected string $method;
     protected ?string $referer = null;
-    protected array $headers;
+    protected Headers $headers;
 
     public function getIp(): string
     {
@@ -138,15 +138,13 @@ class Info extends AbstractType
         $this->referer = $referer;
     }
 
-    public function getHeaders(): array
+    public function getHeaders(): Headers
     {
         return $this->headers;
     }
 
     public function setHeaders(array $headers): void
     {
-        $this->headers = array_map(function($name, $value) {
-            return new Header($name, $value);
-        }, array_keys($headers), $headers);
+        $this->headers = new Headers($headers);
     }
 }
