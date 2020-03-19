@@ -35,11 +35,13 @@ class RequestService
         $path = explode('/', substr($headers['REDIRECT_URL'], 1));
         if (filter_var($path[0], FILTER_VALIDATE_IP)) {
             $ip = array_shift($path);
-            return [$path, null, $ip];
+            return [$path, gethostbyaddr($ip), $ip];
         }
         if (filter_var($path[0], FILTER_VALIDATE_DOMAIN)) {
-            $host = array_shift($path);
-            return [$path, $host, null];
+            $ip = gethostbyname($path[0]);
+            return filter_var($ip, FILTER_VALIDATE_IP)
+                ? [array_slice($path, 1), $path[0], $ip]
+                : [$path, null, null];
         }
         return [$path, null, null];
     }

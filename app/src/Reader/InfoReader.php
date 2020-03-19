@@ -14,8 +14,8 @@ class InfoReader
         $this->info = new Info();
         list($ip, $host) =
             $this->readOptions($options)
-            ?? $this->readParams($options->getHeaders())
-            ?? $this->readHeaders($options->getParams());
+            ?? $this->readParams($options->getParams())
+            ?? $this->readHeaders($options->getHeaders());
 
         $this->info->setIp($ip);
         $this->info->setHost($host);
@@ -27,13 +27,9 @@ class InfoReader
 
     private function readOptions(RendererOptions $options): ?array
     {
-        if (!is_null($options->getIp())) {
-            return [$options->getIp(), gethostbyaddr($options->getIp())];
-        }
-        if (!is_null($options->getHost())) {
-            return [gethostbyname($options->getHost()), $options->getHost()];
-        }
-        return null;
+        return (!is_null($options->getIp()) && !is_null($options->getHost()))
+            ? [$options->getIp(), $options->getHost()]
+            : null;
     }
 
     private function readParams(array $params): ?array
@@ -41,7 +37,7 @@ class InfoReader
         if ($params['ip'] && filter_var($params['ip'], FILTER_VALIDATE_IP)) {
             return [$params['ip'], gethostbyaddr($params['ip'])];
         }
-        if ($params['host'] && filter_var($params['ip'], FILTER_VALIDATE_DOMAIN)) {
+        if ($params['host'] && filter_var($params['host'], FILTER_VALIDATE_DOMAIN)) {
             $ip = gethostbyname($params['host']);
             if (!filter_var($ip, FILTER_VALIDATE_IP)) {
                 $ip = 'Could not resolve ' . $params['host'];
