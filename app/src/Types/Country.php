@@ -3,19 +3,20 @@
 namespace IfConfig\Types;
 
 use GeoIp2\Record\Country as RecordCountry;
-use Utils\EmojiFlag;
 
 class Country extends AbstractType
 {
-    protected ?string $name;
+    protected ?Flag $flag;
     protected ?string $isoCode;
-    protected ?string $flag;
+    protected ?string $name;
 
     function __construct(RecordCountry $countryRecord)
     {
-        $this->name = $countryRecord->name ?? null;
+        if (!empty($countryRecord->isoCode)) {
+            $this->flag = new Flag($countryRecord->isoCode);
+        }
         $this->isoCode = $countryRecord->isoCode ?? null;
-        $this->flag = EmojiFlag::convert($this->isoCode);
+        $this->name = $countryRecord->name ?? null;
     }
 
     public function __toString(): string
@@ -23,13 +24,18 @@ class Country extends AbstractType
         return $this->flag . ' ' . $this->name . ' (' . $this->isoCode . ')';
     }
 
-    public function getName(): string
+    public function getFlag(): ?Flag
     {
-        return $this->name;
+        return $this->flag;
     }
 
-    public function getIsoCode(): string
+    public function getIsoCode(): ?string
     {
         return $this->isoCode;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 }

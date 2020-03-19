@@ -2,12 +2,23 @@
 
 namespace IfConfig\Renderer\ContentType;
 
+use IfConfig\Types\Country;
 use IfConfig\Types\Headers;
 use IfConfig\Types\Location;
 use IfConfig\Types\Subdivision;
 
 class HtmlRenderer extends ContentTypeRenderer
 {
+    private function getCountryString(?Country $country): string
+    {
+        return $country ?
+            (!is_null($country->getFlag())
+                ? '<img src="data:image/gif;base64,' . $country->getFlag()->getImage() . '" title="' . $country->getIsoCode() . '"> '
+                : '')
+            . $country->getName() . ' (' . $country->getIsoCode() . ')'
+            : '';
+    }
+
     private function getSubdivionsString(array $subdivisions): string
     {
         return implode(

@@ -38,13 +38,14 @@ class EmojiFlag
         'ap' => 'un'
     ];
 
-    public static function convert(string $code): string
+    public static function convert(string $code): ?string
     {
-        return self::code2unicode(strtolower(
+        $flag = self::code2unicode(strtolower(
             array_key_exists($code, self::REPLACEMENT)
                 ? self::REPLACEMENT[$code]
                 : $code
         ));
+        return empty($flag) ? null : $flag;
     }
 
     private static function code2unicode(string $code): string
