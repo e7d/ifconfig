@@ -15,12 +15,10 @@ use IfConfig\Types\Info;
 class RendererStrategy
 {
     public function getRenderer(
-        bool $isCli,
-        string $acceptHeader,
-        array $path,
+        RendererOptions $options,
         Info $info
     ): ContentTypeRenderer {
-        switch ($path[0]) {
+        switch ($options->getPath()[0]) {
             case 'html':
                 $renderer = new HtmlRenderer();
                 break;
@@ -39,16 +37,16 @@ class RendererStrategy
                 $renderer = new YamlRenderer();
                 break;
             case '':
-                $renderer = $this->getRendererForHeaders($isCli, $acceptHeader);
+                $renderer = $this->getRendererForHeaders($options->isCli(), $options->getAcceptHeader());
                 break;
             default:
-                if ($field = $info->getPath($path)) {
+                if ($field = $info->getPath($options->getPath())) {
                     return new TextRenderer($field);
                 }
-                if (file_exists(implode('/', $path))) {
-                    $renderer = new FileRenderer(implode('/', $path));
+                if (file_exists(implode('/', $options->getPath()))) {
+                    $renderer = new FileRenderer(implode('/', $options->getPath()));
                 }
-                throw new RenderError($isCli ? '' : '404 Not Found', 404);
+                throw new RenderError($options->isCli() ? '' : '404 Not Found', 404);
         }
         $renderer->setInfo($info);
         return $renderer;

@@ -2,36 +2,51 @@
 
 namespace IfConfig\Reader;
 
+use IfConfig\Renderer\RendererOptions;
 use IfConfig\Types\Info;
 
 class InfoReader
 {
     private Info $info;
 
-    function __construct(array $headers, array $params)
+    function __construct(RendererOptions $options)
     {
         $this->info = new Info();
-        list($ip, $host) = $this->readParams($params) ?? $this->readHeaders($headers);
+        list($ip, $host) =
+            $this->readOptions($options)
+            ?? $this->readParams($options->getHeaders())
+            ?? $this->readHeaders($options->getParams());
 
         $this->info->setIp($ip);
         $this->info->setHost($host);
-        $this->info->setPort(@$headers['REMOTE_PORT']);
-        $this->info->setMethod(@$headers['REQUEST_METHOD']);
-        $this->info->setReferer(@$headers['HTTP_REFERER']);
+        $this->info->setPort(@$options->getHeaders()['REMOTE_PORT']);
+        $this->info->setMethod(@$options->getHeaders()['REQUEST_METHOD']);
+        $this->info->setReferer(@$options->getHeaders()['HTTP_REFERER']);
         $this->info->setHeaders(getallheaders());
+    }
+
+    private function readOptions(RendererOptions $options): ?array
+    {
+        if (!is_null($options->getIp())) {
+            return [$options->getIp(), gethostbyaddr($options->getIp())];
+        }
+        if (!is_null($options->getHost())) {
+            return [gethostbyname($options->getHost()), $options->getHost()];
+        }
+        return null;
     }
 
     private function readParams(array $params): ?array
     {
-        if ($params['host']) {
+        if ($params['ip'] && filter_var($params['ip'], FILTER_VALIDATE_IP)) {
+            return [$params['ip'], gethostbyaddr($params['ip'])];
+        }
+        if ($params['host'] && filter_var($params['ip'], FILTER_VALIDATE_DOMAIN)) {
             $ip = gethostbyname($params['host']);
             if (!filter_var($ip, FILTER_VALIDATE_IP)) {
                 $ip = 'Could not resolve ' . $params['host'];
             }
             return [$ip, $params['host']];
-        }
-        if ($params['ip'] && filter_var($params['ip'], FILTER_VALIDATE_IP)) {
-            return [$params['ip'], gethostbyaddr($params['ip'])];
         }
         return null;
     }

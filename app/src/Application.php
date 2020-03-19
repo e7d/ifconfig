@@ -8,9 +8,10 @@ use IfConfig\Reader\LocationReader;
 use IfConfig\Renderer\Error\ErrorRenderer;
 use IfConfig\Renderer\Error\RenderError;
 use IfConfig\Renderer\RendererInterface;
+use IfConfig\Renderer\RendererOptions;
 use IfConfig\Renderer\RendererStrategy;
 use IfConfig\Types\Info;
-use Utils\HeadersService;
+use Utils\RequestService;
 
 class Application
 {
@@ -27,9 +28,9 @@ class Application
         $renderer->render();
     }
 
-    public function getAllInfo(array $headers, array $params): Info
+    public function getAllInfo(RendererOptions $options): Info
     {
-        $infoReader = new InfoReader($headers, $params);
+        $infoReader = new InfoReader($options);
         $info = $infoReader->getInfo();
 
         $asnReader = new AsnReader($info->getIp());
@@ -49,11 +50,10 @@ class Application
     private function getRenderer(array $headers, array $params): RendererInterface
     {
         try {
+            $options = RequestService::parse($headers, $params);
             $renderer = $this->rendererStrategy->getRenderer(
-                HeadersService::isCli($headers),
-                HeadersService::getAcceptHeader($headers),
-                HeadersService::getPath($headers),
-                $this->getAllInfo($headers, $params)
+                $options,
+                $this->getAllInfo($options)
             );
         } catch (RenderError $e) {
             $renderer = new ErrorRenderer($e);
