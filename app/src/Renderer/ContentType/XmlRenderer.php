@@ -38,7 +38,7 @@ class XmlRenderer extends ContentTypeRenderer
 
     public function render(): void
     {
-        header('Content-Type: text/xml');
+        header('Content-Type: text/xml; charset=UTF-8');
 
         $document = new DOMDocument("1.0");
         $document->appendChild(

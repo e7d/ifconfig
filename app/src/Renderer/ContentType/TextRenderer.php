@@ -13,7 +13,7 @@ class TextRenderer extends ContentTypeRenderer
 
     public function render(): void
     {
-        header('Content-Type: text/plain');
+        header('Content-Type: text/plain; charset=UTF-8');
 
         if (!is_null($this->text)) {
             print $this->text;

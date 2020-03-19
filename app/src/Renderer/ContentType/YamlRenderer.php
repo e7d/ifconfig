@@ -8,7 +8,7 @@ class YamlRenderer extends ContentTypeRenderer
 {
     public function render(): void
     {
-        header('Content-Type: text/plain');
+        header('Content-Type: text/yaml; charset=UTF-8');
 
         print Yaml::dump($this->info->toArray(true, true));
     }
