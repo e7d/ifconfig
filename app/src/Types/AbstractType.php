@@ -8,9 +8,9 @@ abstract class AbstractType
     {
         if (!$this->has($path[0])) return false;
         $value = $this->get($path[0]);
-        if ($value instanceof Headers) return $path[1] ? $value->get($path[1]) : $value;
+        if ($value instanceof AbstractStore) return $path[1] ? $value->get($path[1]) : (string) $value;
         if ($value instanceof AbstractType) return $path[1] ? $value->getPath(array_slice($path, 1)) : $value;
-        return is_null($value) ? 'NULL' : $value;
+        return is_null($value) ? '' : $value;
     }
 
     public function get(string $field)

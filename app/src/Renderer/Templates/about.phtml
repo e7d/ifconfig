@@ -1,0 +1,238 @@
+<?php
+$domain = $_SERVER["HTTP_HOST"];
+?>
+<link rel="stylesheet" href="/css/about.css">
+<main class="about">
+    <h2>About</h2>
+
+    <article>
+        <h3>Supported clients</h3>
+        <p>
+            Any HTTP compatible client is supported, including your browser, <a href="https://curl.haxx.se/" target="_blank">cURL</a>, <a href="https://httpie.org/" target="_blank">HTTPie</a>, <a href="https://www.gnu.org/software/wget/" target="_blank">GNU Wget</a> and <a href="https://www.freebsd.org/cgi/man.cgi?fetch(1)" target="_blank">FreeBSD fetch</a>.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>cURL</td>
+                    <td><span class="cmd">$ curl <?= $domain ?></span></td>
+                </tr>
+                <tr>
+                    <td>HTTPie</td>
+                    <td><span class="cmd">$ http -b <?= $domain ?></span></td>
+                </tr>
+                <tr>
+                    <td>GNU Wget</td>
+                    <td><span class="cmd">$ wget -qO- <?= $domain ?></span></td>
+                </tr>
+                <tr>
+                    <td>fetch</td>
+                    <td><span class="cmd">$ fetch -qo- <?= $domain ?></span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Output formats</h3>
+        <p>
+            Different output formats are supported: HTML, JSON, Text, XML and YAML.<br>
+            The response will use the first compatible output format listed in the "Accept" header, and JSON is always used as fallback.
+        </p>
+        <p>
+            The Output format can also be forced through URL:
+            <table>
+                <thead>
+                    <tr>
+                        <th>Format</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>HTML</td>
+                        <td><a href="//<?= $domain ?>/html"><?= $domain ?>/html</a></td>
+                    </tr>
+                    <tr>
+                        <td>JSON</td>
+                        <td><a href="//<?= $domain ?>/json"><?= $domain ?>/json</a></td>
+                    </tr>
+                    <tr>
+                        <td>Text</td>
+                        <td><a href="//<?= $domain ?>/text"><?= $domain ?>/text</a></td>
+                    </tr>
+                    <tr>
+                        <td>XML</td>
+                        <td><a href="//<?= $domain ?>/xml"><?= $domain ?>/xml</a></td>
+                    </tr>
+                    <tr>
+                        <td>YAML</td>
+                        <td><a href="//<?= $domain ?>/yaml"><?= $domain ?>/yaml</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </p>
+
+        <h3>Specific field query</h3>
+        <p>Every field visible in the JSON, XML and YAML format can be queried specifically.</p>
+        <p>
+            To do so, use the URL to query them, using a slashed syntax:
+            <table>
+                <thead>
+                    <tr>
+                        <th>Format</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>IP</td>
+                        <td><a href="//<?= $domain ?>/ip"><?= $domain ?>/ip</a></td>
+                    </tr>
+                    <tr>
+                        <td>Host name</td>
+                        <td><a href="//<?= $domain ?>/host"><?= $domain ?>/host</a></td>
+                    </tr>
+                    <tr>
+                        <td>ASN<sup id="ref-1" class="reference"><a href="#note-1">[1]</a></sup></td>
+                        <td><a href="//<?= $domain ?>/asn"><?= $domain ?>/asn</a></td>
+                    </tr>
+                    <tr>
+                        <td>Country</td>
+                        <td><a href="//<?= $domain ?>/country"><?= $domain ?>/country</a></td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td><a href="//<?= $domain ?>/city"><?= $domain ?>/city</a></td>
+                    </tr>
+                    <tr>
+                        <td>Postal code</td>
+                        <td><a href="//<?= $domain ?>/postal"><?= $domain ?>/postal</a></td>
+                    </tr>
+                    <tr>
+                        <td>Subdivisions<sup id="ref-2" class="reference"><a href="#note-2">[2]</a></sup></td>
+                        <td><a href="//<?= $domain ?>/subdivisions"><?= $domain ?>/subdivisions</a></td>
+                    </tr>
+                    <tr>
+                        <td>Coordinates</td>
+                        <td><a href="//<?= $domain ?>/location"><?= $domain ?>/location</a></td>
+                    </tr>
+                    <tr>
+                        <td>Time zone</td>
+                        <td><a href="//<?= $domain ?>/timezone"><?= $domain ?>/timezone</a></td>
+                    </tr>
+                    <tr>
+                        <td>Client port</td>
+                        <td><a href="//<?= $domain ?>/port"><?= $domain ?>/port</a></td>
+                    </tr>
+                    <tr>
+                        <td>HTTP method</td>
+                        <td><a href="//<?= $domain ?>/method"><?= $domain ?>/method</a></td>
+                    </tr>
+                    <tr>
+                        <td>HTTP referer</td>
+                        <td><a href="//<?= $domain ?>/referer"><?= $domain ?>/referer</a></td>
+                    </tr>
+                    <tr>
+                        <td>HTTP headers</td>
+                        <td><a href="//<?= $domain ?>/headers"><?= $domain ?>/headers</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </p>
+
+        <h3>External IP and host name</h3>
+        <p>
+            Any IP or host name can be checked, through various methods:
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>URL Path</td>
+                        <td><a href="//<?= $domain ?>/8.8.8.8"><?= $domain ?>/8.8.8.8</a></td>
+                    </tr>
+                    <tr>
+                        <td>GET Param</td>
+                        <td><a href="//<?= $domain ?>/?ip=8.8.8.8"><?= $domain ?>/?ip=8.8.8.8</a></td>
+                    </tr>
+                    <tr>
+                        <td>POST Param</td>
+                        <td>
+                            <form action="//<?= $domain ?>" method="POST">
+                                <input type="text" name="ip" value="8.8.8.8" readonly>
+                                <input type="submit">
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </p>
+
+        <h3>Query generator</h3>
+        <form name="query">
+            <div class="form-group">
+                <label for="host">IP or host name</label>
+                <input id="host" type="text" name="host">
+            </div>
+            <div class="form-group">
+                <label for="format">Output format</label>
+                <select id="format" name="format">
+                    <option value="">Auto</option>
+                    <option value="html">HTML</option>
+                    <option value="json">JSON</option>
+                    <option value="text">Text</option>
+                    <option value="xml">XML</option>
+                    <option value="yaml">YAML</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="field">Information field</label>
+                <select id="field" name="field">
+                    <option value="">All</option>
+                    <option value="ip">IP</option>
+                    <option value="host">Host name</option>
+                    <option value="asn">ASN</option>
+                    <option value="country">Country</option>
+                    <option value="city">City</option>
+                    <option value="postal">Postal code</option>
+                    <option value="subdivisions">Subdivisions</option>
+                    <option value="location">Coordinates</option>
+                    <option value="timezone">Time zone</option>
+                    <option value="port">Client port</option>
+                    <option value="method">HTTP method</option>
+                    <option value="referer">HTTP referer</option>
+                    <option value="headers">HTTP headers</option>
+                </select>
+            </div>
+            <div class="panel">
+                <a id="link"></a>
+            </div>
+        </form>
+
+        <h3>FAQ</h3>
+        <h4>Is using this service from automated scripts/tools permitted?</h4>
+        <p>Yes.</p>
+
+        <h4>Is IPv6 supported?</h4>
+        <p>Yes.</p>
+
+        <h4>Can I run my own service?</h4>
+        <p>Yes, the source code is available on <a href="https://github.com/e7d/ifconfig" target="_blank">GitHub</a></p>
+
+        <h3>References</h3>
+        <ol>
+            <li id="note-1"><a href="#ref-1">^</a> <a href="https://en.wikipedia.org/wiki/Autonomous_system_(Internet)" target="_blank">Autonomous system number</a></li>
+            <li id="note-2"><a href="#ref-2">^</a> <a href="https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country" target="_blank">Administrative subdivisions</a> are specific to each country and may or may not be specified.</li>
+        </ol>
+    </article>
+</main>
+
+<script src="js/query.js"></script>

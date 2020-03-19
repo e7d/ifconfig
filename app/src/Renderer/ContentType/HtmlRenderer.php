@@ -6,26 +6,34 @@ use IfConfig\Types\Country;
 use IfConfig\Types\Headers;
 use IfConfig\Types\Location;
 use IfConfig\Types\Subdivision;
+use IfConfig\Types\Subdivisions;
 
 class HtmlRenderer extends ContentTypeRenderer
 {
+    private string $page;
+
+    function __construct(string $page = 'info')
+    {
+        $this->page = $page;
+    }
+
     private function getCountryString(?Country $country): string
     {
         return $country ?
-            (!is_null($country->getFlag())
-                ? '<img src="data:image/gif;base64,' . $country->getFlag()->getImage() . '" title="' . $country->getIsoCode() . '"> '
-                : '')
+            (is_null($country->getFlag())
+                ? ''
+                : '<img src="data:image/gif;base64,' . $country->getFlag()->getImage() . '" title="' . $country->getIsoCode() . '"> ')
             . $country->getName() . ' (' . $country->getIsoCode() . ')'
             : '';
     }
 
-    private function getSubdivionsString(array $subdivisions): string
+    private function getSubdivionsString(Subdivisions $subdivisions): string
     {
         return implode(
             '<br>',
             array_map(function (Subdivision $subdivision) {
                 return $subdivision->getName() . ' (' . $subdivision->getIsoCode() . ')';
-            }, $subdivisions)
+            }, $subdivisions->getArrayCopy())
         );
     }
 
@@ -46,6 +54,6 @@ class HtmlRenderer extends ContentTypeRenderer
 
     public function render(): void
     {
-        require_once __DIR__ . '/../Templates/index.phtml';
+        require_once __DIR__ . "/../Templates/index.phtml";
     }
 }

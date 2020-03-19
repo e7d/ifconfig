@@ -24,13 +24,13 @@ class AsnReader
 
     private function setAsn(?AsnModel $record): void
     {
-        $this->asn = !is_null($record)
-            ? new ASN(
+        $this->asn = is_null($record)
+            ? null
+            : new ASN(
                 $record->autonomousSystemNumber,
                 $record->autonomousSystemOrganization,
                 $record->network
-            )
-            : null;
+            );
     }
 
     public function getAsn(): ?ASN

@@ -10,7 +10,7 @@ class Info extends AbstractType
     protected ?Country $country = null;
     protected ?City $city = null;
     protected ?Postal $postal = null;
-    protected array $subdivisions = [];
+    protected Subdivisions $subdivisions;
     protected ?Location $location = null;
     protected ?string $timezone = null;
     protected int $port;
@@ -78,14 +78,14 @@ class Info extends AbstractType
         $this->postal = $postal;
     }
 
-    public function getSubdivisions(): array
+    public function getSubdivisions(): Subdivisions
     {
         return $this->subdivisions;
     }
 
     public function setSubdivisions(array $subdivisions = []): void
     {
-        $this->subdivisions = $subdivisions;
+        $this->subdivisions = new Subdivisions($subdivisions);
     }
 
     public function getLocation(): ?Location

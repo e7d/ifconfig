@@ -23,6 +23,11 @@ class Flag extends AbstractType
             : null;
     }
 
+    public function __toString()
+    {
+        return $this->getEmoji();
+    }
+
     public function getEmoji(): ?string
     {
         return $this->emoji;

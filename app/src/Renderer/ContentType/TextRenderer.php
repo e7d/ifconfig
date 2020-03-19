@@ -15,13 +15,13 @@ class TextRenderer extends ContentTypeRenderer
     {
         header('Content-Type: text/plain; charset=UTF-8');
 
-        if (!is_null($this->text)) {
-            print $this->text;
+        if (is_null($this->text)) {
+            array_walk($this->info->toArray(false), function ($value, $key) {
+                print $key . ': ' . (is_array($value) ? implode('; ', $value) : $value) . PHP_EOL;
+            });
             exit;
         }
 
-        array_walk($this->info->toArray(false), function ($value, $key) {
-            print $key . ': ' . (is_array($value) ? implode('; ', $value) : $value) . PHP_EOL;
-        });
+        print empty($this->text) ? 'NULL' : $this->text;
     }
 }

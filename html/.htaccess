@@ -9,5 +9,5 @@
 	RewriteRule ^. index.php [NC,L]
 </IfModule>
 
-Header set Content-Security-Policy: "script-src 'none'; object-src 'none'; base-uri 'none';"
+Header set Content-Security-Policy: "object-src 'none'; base-uri 'none';"
 Header unset X-Powered-By

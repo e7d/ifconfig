@@ -1,0 +1,39 @@
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  border-top: 1px solid #ddd;
+  display: flex;
+}
+
+li > * {
+  overflow: auto;
+  padding: 8px;
+}
+
+label {
+  display: inline-block;
+  font-weight: bold;
+  min-width: 140px;
+}
+
+span:empty::after {
+  content: "-";
+}
+
+@media (max-width: 640px) {
+  li {
+    flex-direction: column;
+  }
+
+  label {
+    padding-bottom: 4px;
+  }
+
+  span {
+    padding-top: 0;
+  }
+}

@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="/css/info.css">
+<main class="info">
+    <h2>Your Connection</h2>
+    <ul>
+        <li>
+            <label>IP Address</label>
+            <span><?php echo $this->info->getIp(); ?></span>
+        </li>
+        <li>
+            <label>Remote Host</label>
+            <span><?php echo $this->info->getHost(); ?></span>
+        </li>
+        <li>
+            <label>ASN</label>
+            <span><?php echo $this->info->getAsn(); ?></span>
+        </li>
+        <li>
+            <label>Country</label>
+            <span><?php echo $this->getCountryString($this->info->getCountry()); ?></span>
+        </li>
+        <li>
+            <label>City</label>
+            <span><?php echo $this->info->getCity(); ?></span>
+        </li>
+        <li>
+            <label>Postal</label>
+            <span><?php echo $this->info->getPostal(); ?></span>
+        </li>
+        <li>
+            <label>Subdivisions</label>
+            <span><?php echo $this->getSubdivionsString($this->info->getSubdivisions()); ?></span>
+        </li>
+        <li>
+            <label>Coordinates</label>
+            <span><?php echo $this->getLocationString($this->info->getLocation()); ?></span>
+        </li>
+        <li>
+            <label>Time Zone</label>
+            <span><?php echo $this->info->getTimeZone(); ?></span>
+        </li>
+        <li>
+            <label>Port</label>
+            <span><?php echo $this->info->getPort(); ?></span>
+        </li>
+        <li>
+            <label>Method</label>
+            <span><?php echo $this->info->getMethod(); ?></span>
+        </li>
+        <li>
+            <label>Referer</label>
+            <span><?php echo $this->info->getReferer(); ?></span>
+        </li>
+        <li>
+            <label>Headers</label>
+            <span><?php echo $this->getHeadersHtml($this->info->getHeaders()); ?></span>
+        </li>
+    </ul>
+</main>

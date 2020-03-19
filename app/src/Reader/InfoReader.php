@@ -27,9 +27,9 @@ class InfoReader
 
     private function readOptions(RendererOptions $options): ?array
     {
-        return (!is_null($options->getIp()) && !is_null($options->getHost()))
-            ? [$options->getIp(), $options->getHost()]
-            : null;
+        return (is_null($options->getIp()) && is_null($options->getHost()))
+            ? null
+            : [$options->getIp(), $options->getHost()];
     }
 
     private function readParams(array $params): ?array

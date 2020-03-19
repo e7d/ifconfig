@@ -19,6 +19,9 @@ class RendererStrategy
         Info $info
     ): ContentTypeRenderer {
         switch ($options->getPath()[0]) {
+            case 'about':
+                $renderer = new HtmlRenderer('about');
+                break;
             case 'html':
                 $renderer = new HtmlRenderer();
                 break;
@@ -37,23 +40,24 @@ class RendererStrategy
                 $renderer = new YamlRenderer();
                 break;
             case '':
-                $renderer = $this->getRendererForHeaders($options->isCli(), $options->getAcceptHeader());
+                $renderer = $this->getRendererForHeaders($options->getAcceptHeader());
                 break;
             default:
-                if ($field = $info->getPath($options->getPath())) {
+                $field = $info->getPath($options->getPath());
+                if (is_string($field)) {
                     return new TextRenderer($field);
                 }
                 if (file_exists(implode('/', $options->getPath()))) {
                     $renderer = new FileRenderer(implode('/', $options->getPath()));
                 }
-                throw new RenderError($options->isCli() ? '' : '404 Not Found', 404);
+                throw new RenderError($options->getAcceptHeader());
         }
         $renderer->setInfo($info);
         return $renderer;
     }
 
 
-    private function getRendererForHeaders(bool $isCli, string $acceptHeader): ContentTypeRenderer
+    private function getRendererForHeaders(string $acceptHeader): ContentTypeRenderer
     {
         foreach (explode(';', $acceptHeader) as $acceptEntry) {
             foreach (explode(',', $acceptEntry) as $acceptHeader) {
@@ -84,6 +88,6 @@ class RendererStrategy
                 }
             }
         }
-        return $isCli ? new JsonRenderer() : new HtmlRenderer();
+        return new JsonRenderer();
     }
 }
