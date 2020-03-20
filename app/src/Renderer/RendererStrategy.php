@@ -44,7 +44,7 @@ class RendererStrategy
                 break;
             default:
                 $field = $info->getPath($options->getPath());
-                if (is_string($field)) {
+                if ($field !== false) {
                     return new TextRenderer($field);
                 }
                 if (file_exists(implode('/', $options->getPath()))) {
