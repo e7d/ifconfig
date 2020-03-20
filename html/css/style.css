@@ -9,6 +9,17 @@ body {
   padding: 8px;
 }
 
+a,
+a:visited {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
 h1 {
   border-bottom: 1px solid #ddd;
 }
@@ -24,4 +35,9 @@ h2 {
   font-weight: normal;
   margin: 0;
   padding: 16px 8px;
+}
+
+footer {
+  line-height: 32px;
+  text-align: center;
 }

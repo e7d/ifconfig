@@ -2,17 +2,6 @@ article {
   padding: 8px;
 }
 
-a,
-a:visited {
-  color: #007bff;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #0056b3;
-  text-decoration: underline;
-}
-
 a[target="_blank"] {
   background-position: center right;
   background-repeat: no-repeat;
