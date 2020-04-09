@@ -38,7 +38,7 @@ class RequestService
             return [$path, gethostbyaddr($ip), $ip];
         }
         if (filter_var($path[0], FILTER_VALIDATE_DOMAIN)) {
-            $ip = gethostbyname($path[0]);
+            $ip = DnsService::resolve($path[0]);
             return filter_var($ip, FILTER_VALIDATE_IP)
                 ? [array_slice($path, 1), $path[0], $ip]
                 : [$path, null, null];

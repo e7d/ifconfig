@@ -4,6 +4,7 @@ namespace IfConfig\Reader;
 
 use IfConfig\Renderer\RendererOptions;
 use IfConfig\Types\Info;
+use Utils\DnsService;
 
 class InfoReader
 {
@@ -38,7 +39,7 @@ class InfoReader
             return [$params['ip'], gethostbyaddr($params['ip'])];
         }
         if ($params['host'] && filter_var($params['host'], FILTER_VALIDATE_DOMAIN)) {
-            $ip = gethostbyname($params['host']);
+            $ip = DnsService::resolve($params['host']);
             if (!filter_var($ip, FILTER_VALIDATE_IP)) {
                 $ip = 'Could not resolve ' . $params['host'];
             }
