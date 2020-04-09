@@ -42,7 +42,11 @@ class XmlRenderer extends ContentTypeRenderer
 
         $document = new DOMDocument("1.0");
         $document->appendChild(
-            $this->getRecursiveNodes($this->info->toArray(), $document, $document->createElement("ifconfig"))
+            $this->getRecursiveNodes(
+                $this->field ? $this->info->getArray($this->field) : $this->info->toArray(),
+                $document,
+                $document->createElement("ifconfig")
+            )
         );
 
         print $document->saveXML();

@@ -18,6 +18,11 @@ class Info extends AbstractType
     protected ?string $referer = null;
     protected Headers $headers;
 
+    public static function getProperties(): array
+    {
+        return array_keys(get_class_vars(__CLASS__));
+    }
+
     public function getIp(): string
     {
         return $this->ip;

@@ -7,6 +7,6 @@ class JsonRenderer extends ContentTypeRenderer
     public function render(): void
     {
         header('Content-Type: application/json');
-        print json_encode($this->info->toArray());
+        print json_encode($this->field ? $this->info->getArray($this->field) : $this->info->toArray());
     }
 }

@@ -21,7 +21,7 @@ class Country extends AbstractType
 
     public function __toString(): string
     {
-        return $this->flag . ' ' . $this->name . ' (' . $this->isoCode . ')';
+        return $this->name . ' (' . $this->isoCode . ')';
     }
 
     public function getFlag(): ?Flag

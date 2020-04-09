@@ -13,38 +13,41 @@ abstract class AbstractType
         return is_null($value) ? '' : $value;
     }
 
-    public function get(string $field)
-    {
-        return $this->has($field) ? $this->$field : null;
-    }
-
     public function has(string $field)
     {
         return property_exists($this, $field);
     }
 
-    private function expandValue($value, bool $objectAsArray = false)
+    public function get(string $field)
     {
-        return $value instanceof AbstractType
-            ? $this->iterableToArray($value, true, $objectAsArray)
-            : (is_array($value) && $objectAsArray
-                ? $this->iterableToArray($value)
-                : ($value instanceof Headers ? $value->getArrayCopy() : $value));
+        return $this->has($field) ? $this->$field : null;
     }
 
-    private function iterableToArray($object, bool $recursive = true, bool $objectAsArray = false)
+    public function getArray(string $field): array
+    {
+        return $this->has($field) ? [$field => $this->expandValue($this->$field)] : null;
+    }
+
+    private function expandValue($value)
+    {
+        return $value instanceof AbstractType
+            ? $this->iterableToArray($value, true)
+            : ($value instanceof Headers ? $value->getArrayCopy() : $value);
+    }
+
+    private function iterableToArray($object, bool $recursive = true)
     {
         $array = [];
         foreach ($object as $key => $value) {
             $array[$key] = $recursive
-                ? $this->expandValue($value, $objectAsArray)
+                ? $this->expandValue($value)
                 : $value;
         }
         return $array;
     }
 
-    public function toArray(bool $recursive = true, bool $objectAsArray = false): array
+    public function toArray(bool $recursive = true): array
     {
-        return $this->iterableToArray($this, $recursive, $objectAsArray);
+        return $this->iterableToArray($this, $recursive);
     }
 }

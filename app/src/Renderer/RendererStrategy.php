@@ -3,7 +3,6 @@
 namespace IfConfig\Renderer;
 
 use IfConfig\Renderer\ContentType\ContentTypeRenderer;
-use IfConfig\Renderer\ContentType\FileRenderer;
 use IfConfig\Renderer\ContentType\HtmlRenderer;
 use IfConfig\Renderer\ContentType\JsonRenderer;
 use IfConfig\Renderer\ContentType\TextRenderer;
@@ -14,80 +13,44 @@ use IfConfig\Types\Info;
 
 class RendererStrategy
 {
+    public const PAGES = ['about'];
+    public const FORMATS = ['html', 'json', 'text', 'txt', 'xml', 'yaml', 'yml'];
+
     public function getRenderer(
         RendererOptions $options,
         Info $info
     ): ContentTypeRenderer {
-        switch ($options->getPath()[0]) {
+        if ($options->hasError()) {
+            throw new RenderError($options->getFormat());
+        }
+        switch ($options->getPage()) {
             case 'about':
-                $renderer = new HtmlRenderer('about');
+                return new HtmlRenderer('about');
                 break;
+        }
+        $field = $options->getField();
+        switch ($options->getFormat()) {
             case 'html':
-                $renderer = new HtmlRenderer();
+                $renderer = $field
+                    ? new TextRenderer($field)
+                    : new HtmlRenderer();
                 break;
             case 'json':
-                $renderer = new JsonRenderer();
+                $renderer = new JsonRenderer($field);
                 break;
             case 'text':
             case 'txt':
-                $renderer = new TextRenderer();
+                $renderer = new TextRenderer($field);
                 break;
             case 'xml':
-                $renderer = new XmlRenderer();
+                $renderer = new XmlRenderer($field);
                 break;
             case 'yaml':
             case 'yml':
-                $renderer = new YamlRenderer();
+                $renderer = new YamlRenderer($field);
                 break;
-            case '':
-                $renderer = $this->getRendererForHeaders($options->getAcceptHeader());
-                break;
-            default:
-                $field = $info->getPath($options->getPath());
-                if ($field !== false) {
-                    return new TextRenderer($field);
-                }
-                if (file_exists(implode('/', $options->getPath()))) {
-                    $renderer = new FileRenderer(implode('/', $options->getPath()));
-                }
-                throw new RenderError($options->getAcceptHeader());
         }
         $renderer->setInfo($info);
         return $renderer;
-    }
-
-
-    private function getRendererForHeaders(string $acceptHeader): ContentTypeRenderer
-    {
-        foreach (explode(';', $acceptHeader) as $acceptEntry) {
-            foreach (explode(',', $acceptEntry) as $acceptHeader) {
-                switch ($acceptHeader) {
-                    case 'application/javascript':
-                    case 'application/json':
-                    case 'application/x-javascript':
-                    case 'application/x-json':
-                    case 'text/javascript':
-                    case 'text/json':
-                    case 'text/x-javascript':
-                    case 'text/x-json':
-                    case '*/*':
-                        return new JsonRenderer();
-                    case 'text/plain':
-                        return new TextRenderer();
-                    case 'application/xml':
-                    case 'text/xml':
-                        return new XmlRenderer();
-                    case 'application/yaml':
-                    case 'application/x-yaml':
-                    case 'text/yaml':
-                    case 'text/x-yaml':
-                        return new YamlRenderer();
-                    case 'application/xhtml+xml':
-                    case 'text/html':
-                        return new HtmlRenderer();
-                }
-            }
-        }
-        return new JsonRenderer();
     }
 }

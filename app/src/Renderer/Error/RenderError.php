@@ -6,8 +6,8 @@ use Error;
 
 class RenderError extends Error
 {
-    function __construct(string $acceptHeader)
+    function __construct(string $format)
     {
-        parent::__construct(strripos($acceptHeader, 'text/html') !== false ? 'Not Found' : null, 404);
+        parent::__construct($format === 'html' ? 'Not Found' : null, 404);
     }
 }

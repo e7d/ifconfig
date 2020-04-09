@@ -9,26 +9,30 @@ class RendererOptions
 
     private string $acceptHeader;
     private bool $cli = false;
+    private bool $error = false;
+    private ?string $page = null;
+    private ?string $format = null;
+    private ?string $field = null;
     private ?string $host = null;
     private ?string $ip = null;
-    private array $path;
 
     function __construct(
         array $headers,
         array $params,
         string $acceptHeader,
         bool $cli,
-        ?string $host,
-        ?string $ip,
-        array $path
+        array $data
     ) {
         $this->headers = $headers;
         $this->params = $params;
         $this->cli = $cli;
         $this->acceptHeader = $acceptHeader;
-        $this->host = $host;
-        $this->ip = $ip;
-        $this->path = $path;
+        $this->error = $data['error'];
+        $this->page = $data['page'];
+        $this->format = $data['format'];
+        $this->field = $data['field'];
+        $this->ip = $data['ip'];
+        $this->host = $data['host'];
     }
 
     public function getHeaders(): array
@@ -51,9 +55,24 @@ class RendererOptions
         return $this->cli;
     }
 
-    public function getHost(): ?string
+    public function hasError(): bool
     {
-        return $this->host;
+        return $this->error;
+    }
+
+    public function getPage(): ?string
+    {
+        return $this->page;
+    }
+
+    public function getFormat(): ?string
+    {
+        return $this->format;
+    }
+
+    public function getField(): ?string
+    {
+        return $this->field;
     }
 
     public function getIp(): ?string
@@ -61,8 +80,8 @@ class RendererOptions
         return $this->ip;
     }
 
-    public function getPath(): array
+    public function getHost(): ?string
     {
-        return $this->path;
+        return $this->host;
     }
 }
