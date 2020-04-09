@@ -1,4 +1,8 @@
 <link rel="stylesheet" href="/css/info.css">
+<div class="force-ip">
+    <?php if (isset($_ENV['ipv4_host'])) { ?><span><a href="//<?php echo $_ENV['ipv4_host'] . $_SERVER['REQUEST_URI']; ?>">IPv4</a></span><?php } ?>
+    <?php if (isset($_ENV['ipv6_host'])) { ?><span><a href="//<?php echo $_ENV['ipv6_host'] . $_SERVER['REQUEST_URI']; ?>">IPv6</a></span><?php } ?>
+</div>
 <main class="info">
     <h2>Your Connection</h2>
     <ul>

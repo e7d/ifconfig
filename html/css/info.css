@@ -1,3 +1,14 @@
+.force-ip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 8px;
+}
+
+.force-ip span + span::before {
+  content: " - ";
+}
+
 ul {
   list-style-type: none;
   margin: 0;
