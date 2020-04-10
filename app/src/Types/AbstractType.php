@@ -28,26 +28,32 @@ abstract class AbstractType
         return $this->has($field) ? [$field => $this->expandValue($this->$field)] : null;
     }
 
-    private function expandValue($value)
+    private function expandValue($value, bool $objectAsArray = false)
     {
-        return $value instanceof AbstractType
-            ? $this->iterableToArray($value, true)
-            : ($value instanceof Headers ? $value->getArrayCopy() : $value);
+        if ($value instanceof AbstractType) {
+            return $this->iterableToArray($value, true);
+        }
+        if ($value instanceof AbstractStore) {
+            return $objectAsArray
+                ? $this->iterableToArray($value->getArrayCopy())
+                : $value->getArrayCopy();
+        }
+        return $value;
     }
 
-    private function iterableToArray($object, bool $recursive = true)
+    private function iterableToArray($object, bool $recursive = true, bool $objectAsArray = false)
     {
         $array = [];
         foreach ($object as $key => $value) {
             $array[$key] = $recursive
-                ? $this->expandValue($value)
+                ? $this->expandValue($value, $objectAsArray)
                 : $value;
         }
         return $array;
     }
 
-    public function toArray(bool $recursive = true): array
+    public function toArray(bool $recursive = true, bool $objectAsArray = false): array
     {
-        return $this->iterableToArray($this, $recursive);
+        return $this->iterableToArray($this, $recursive, $objectAsArray);
     }
 }
