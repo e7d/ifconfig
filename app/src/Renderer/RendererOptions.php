@@ -12,6 +12,7 @@ class RendererOptions
     private bool $error = false;
     private ?string $page = null;
     private ?string $format = null;
+    private array $path = [];
     private ?string $field = null;
     private ?string $host = null;
     private ?string $ip = null;
@@ -30,6 +31,7 @@ class RendererOptions
         $this->error = $data['error'];
         $this->page = $data['page'];
         $this->format = $data['format'];
+        $this->path = $data['path'];
         $this->field = $data['field'];
         $this->ip = $data['ip'];
         $this->host = $data['host'];
@@ -68,6 +70,11 @@ class RendererOptions
     public function getFormat(): ?string
     {
         return $this->format;
+    }
+
+    public function getPath(): array
+    {
+        return $this->path;
     }
 
     public function getField(): ?string

@@ -20,12 +20,11 @@ class RequestService
 
     private static function parseEntry(array $data, $entry): array
     {
+        if ($entry === '') return $data;
         if (in_array($entry, RendererStrategy::PAGES)) {
             $data['page'] = $entry;
         } else if (in_array($entry, RendererStrategy::FORMATS)) {
             $data['format'] = $entry;
-        } else if (in_array($entry, Info::getProperties())) {
-            $data['field'] = $entry;
         } else if (filter_var($entry, FILTER_VALIDATE_IP)) {
             $data['ip'] = $entry;
             $data['host'] = gethostbyaddr($entry);
@@ -35,8 +34,10 @@ class RequestService
                 $data['ip'] = $ip;
                 $data['host'] = $entry;
             } else {
-                $data['error'] = true;
+                $data['path'][] = $entry;
             }
+        } else {
+            $data['path'][] = $entry;
         }
         return $data;
     }
@@ -46,7 +47,7 @@ class RequestService
         $pathParts = explode('/', substr($uri, 1));
         return array_reduce($pathParts, function ($data, $part) {
             return self::parseEntry($data, $part);
-        }, []);
+        }, ['path' => []]);
     }
 
     private static function parseArray(array $array): array
@@ -107,10 +108,10 @@ class RequestService
 
     private static function parseHeaders(array $headers): array
     {
-        return [
-            ...self::parseArray($headers),
-            "format" => self::parseAcceptHeader($headers['HTTP_ACCEPT'])
-        ];
+        return array_merge(
+            self::parseArray($headers),
+            ["format" => self::parseAcceptHeader($headers['HTTP_ACCEPT'])]
+        );
     }
 
     public static function parse(array $headers, array $params): RendererOptions

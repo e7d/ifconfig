@@ -8,6 +8,7 @@ use Utils\DnsService;
 
 class InfoReader
 {
+    public const FIELDS = ['ip', 'host', 'port', 'method', 'referer', 'headers'];
     private Info $info;
 
     function __construct(RendererOptions $options)

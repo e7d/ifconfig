@@ -24,14 +24,24 @@ class Application
         $headers = $_SERVER;
         $params = array_merge($_GET, $_POST);
 
-        $renderer = $this->getRenderer($headers, $params);
+        try {
+            $options = RequestService::parse($headers, $params);
+            $info = $this->getInfo($options);
+            $renderer = $this->rendererStrategy->getRenderer($options, $info);
+        } catch (RenderError $e) {
+            $renderer = new ErrorRenderer($e);
+        }
         $renderer->render();
     }
 
-    public function getAllInfo(RendererOptions $options): Info
+    public function getInfo(RendererOptions $options): Info
     {
         $infoReader = new InfoReader($options);
         $info = $infoReader->getInfo();
+
+        if (in_array($options->getField(), InfoReader::FIELDS)) {
+            return $info;
+        }
 
         $asnReader = new AsnReader($info->getIp());
         $info->setAsn($asnReader->getAsn());
@@ -45,19 +55,5 @@ class Application
         $info->setTimezone($locationReader->getTimezone());
 
         return $info;
-    }
-
-    private function getRenderer(array $headers, array $params): RendererInterface
-    {
-        try {
-            $options = RequestService::parse($headers, $params);
-            $renderer = $this->rendererStrategy->getRenderer(
-                $options,
-                $this->getAllInfo($options)
-            );
-        } catch (RenderError $e) {
-            $renderer = new ErrorRenderer($e);
-        }
-        return $renderer;
     }
 }

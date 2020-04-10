@@ -9,6 +9,9 @@ use IfConfig\Renderer\ContentType\TextRenderer;
 use IfConfig\Renderer\ContentType\XmlRenderer;
 use IfConfig\Renderer\ContentType\YamlRenderer;
 use IfConfig\Renderer\Error\RenderError;
+use IfConfig\Types\AbstractStore;
+use IfConfig\Types\AbstractType;
+use IfConfig\Types\Field;
 use IfConfig\Types\Info;
 
 class RendererStrategy
@@ -16,25 +19,21 @@ class RendererStrategy
     public const PAGES = ['about'];
     public const FORMATS = ['html', 'json', 'text', 'txt', 'xml', 'yaml', 'yml'];
 
-    public function getRenderer(
-        RendererOptions $options,
-        Info $info
-    ): ContentTypeRenderer {
-        if ($options->hasError()) {
-            throw new RenderError($options->getFormat());
-        }
-        switch ($options->getPage()) {
-            case 'about':
-                return new HtmlRenderer('about');
-                break;
-        }
-        $field = $options->getField();
-        switch ($options->getFormat()) {
+    private function getField(Info $info, array $path, ?string $field): ?Field
+    {
+        if (!is_null($field)) $path = [$field];
+        return count($path) > 0
+            ? new Field(end($path), $info->getPath($path))
+            : null;
+    }
+
+    private function getDataRenderer(?string $format, Info $info, $field): ContentTypeRenderer
+    {
+        switch ($format) {
             case 'html':
-                $renderer = $field
-                    ? new TextRenderer($field)
-                    : new HtmlRenderer();
+                $renderer = new HtmlRenderer();
                 break;
+            default:
             case 'json':
                 $renderer = new JsonRenderer($field);
                 break;
@@ -52,5 +51,17 @@ class RendererStrategy
         }
         $renderer->setInfo($info);
         return $renderer;
+    }
+
+    public function getRenderer(RendererOptions $options, Info $info): ContentTypeRenderer
+    {
+        if ($options->getPage()) {
+            return new HtmlRenderer($options->getPage());
+        }
+        $field = $this->getField($info, $options->getPath(), $options->getField());
+        if ($field === false) {
+            throw new RenderError($options->getFormat());
+        }
+        return $this->getDataRenderer($options->getFormat(), $info, $field);
     }
 }

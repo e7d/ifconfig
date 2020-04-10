@@ -9,7 +9,6 @@ use ReflectionClass;
 
 class XmlRenderer extends ContentTypeRenderer
 {
-
     private function getNodeName($key, $value): string
     {
         if (is_object($value)) {
@@ -19,36 +18,35 @@ class XmlRenderer extends ContentTypeRenderer
         return $key;
     }
 
-    private function getRecursiveNodes(array $data, DOMDocument $document, DOMNode $node): DOMNode
+    private function getRecursiveNodes(DOMDocument $document, DOMNode $node, $data): DOMNode
     {
-        foreach ($data as $key => $value) {
-            $childNode = $document->createElement($this->getNodeName($key, $value));
-            if ($value instanceof JsonSerializable) {
-                $value = $value->jsonSerialize();
+        if (!is_array($data)) {
+            $node->appendChild($document->createTextNode($data));
+        } else {
+            foreach ($data as $key => $value) {
+                $childNode = $document->createElement($this->getNodeName($key, $value));
+                $node->appendChild($this->getRecursiveNodes(
+                    $document,
+                    $childNode,
+                    $value instanceof JsonSerializable ? $value->jsonSerialize() : $value
+                ));
             }
-            if (is_array($value)) {
-                $node->appendChild($this->getRecursiveNodes($value, $document, $childNode));
-                continue;
-            }
-            $childNode->appendChild($document->createTextNode($value));
-            $node->appendChild($childNode);
         }
         return $node;
     }
 
     public function render(): void
     {
+        $document = new DOMDocument('1.0');
         header('Content-Type: text/xml; charset=UTF-8');
-
-        $document = new DOMDocument("1.0");
+        $rootNode = $this->field ? $this->field->getName() : 'xml';
         $document->appendChild(
             $this->getRecursiveNodes(
-                $this->field ? $this->info->getArray($this->field) : $this->info->toArray(),
                 $document,
-                $document->createElement("ifconfig")
+                $document->createElement($rootNode),
+                $this->field ? $this->field->getValue() : $this->info->toArray()
             )
         );
-
         print $document->saveXML();
     }
 }

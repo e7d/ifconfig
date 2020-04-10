@@ -7,15 +7,13 @@ class TextRenderer extends ContentTypeRenderer
     public function render(): void
     {
         header('Content-Type: text/plain; charset=UTF-8');
-
-        if (is_null($this->field)) {
-            array_walk($this->info->toArray(false), function ($value, $field) {
+        $data = $this->field ? $this->field->getValue() : $this->info->toArray(false);
+        if (is_array($data)) {
+            array_walk($data, function ($value, $field) {
                 print $field . ': ' . (is_array($value) ? implode('; ', $value) : $value) . PHP_EOL;
             });
             exit;
         }
-
-        $value = $this->info->get($this->field);
-        print empty($value) ? 'NULL' : $value;
+        print empty($data) ? 'NULL' : $data;
     }
 }

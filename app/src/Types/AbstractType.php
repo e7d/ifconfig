@@ -8,8 +8,8 @@ abstract class AbstractType
     {
         if (!$this->has($path[0])) return false;
         $value = $this->get($path[0]);
-        if ($value instanceof AbstractStore) return $path[1] ? $value->get($path[1]) : (string) $value;
-        if ($value instanceof AbstractType) return $path[1] ? $value->getPath(array_slice($path, 1)) : $value;
+        if ($value instanceof AbstractStore) return isset($path[1]) ? $value->get($path[1]) : $value;
+        if ($value instanceof AbstractType) return isset($path[1]) ? $value->getPath(array_slice($path, 1)) : $value;
         return is_null($value) ? '' : $value;
     }
 
@@ -34,9 +34,7 @@ abstract class AbstractType
             return $this->iterableToArray($value, true);
         }
         if ($value instanceof AbstractStore) {
-            return $objectAsArray
-                ? $this->iterableToArray($value->getArrayCopy())
-                : $value->getArrayCopy();
+            return $value->getArrayCopy($objectAsArray);
         }
         return $value;
     }

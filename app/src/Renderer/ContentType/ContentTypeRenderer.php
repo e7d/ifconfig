@@ -3,14 +3,15 @@
 namespace IfConfig\Renderer\ContentType;
 
 use IfConfig\Renderer\RendererInterface;
+use IfConfig\Types\Field;
 use IfConfig\Types\Info;
 
 abstract class ContentTypeRenderer implements RendererInterface
 {
     protected Info $info;
-    protected ?string $field;
+    protected ?Field $field;
 
-    function __construct(?string $field = null)
+    function __construct(?Field $field = null)
     {
         $this->field = $field;
     }
