@@ -8,14 +8,15 @@ class RendererOptions
     private array $params;
 
     private string $acceptHeader;
-    private bool $cli = false;
-    private bool $error = false;
-    private ?string $page = null;
-    private ?string $format = null;
-    private array $path = [];
-    private ?string $field = null;
-    private ?string $host = null;
-    private ?string $ip = null;
+    private bool $cli;
+    private bool $error;
+    private ?string $page;
+    private bool $forcedFormat;
+    private ?string $format;
+    private array $path;
+    private ?string $field;
+    private ?string $host;
+    private ?string $ip;
 
     function __construct(
         array $headers,
@@ -30,6 +31,7 @@ class RendererOptions
         $this->acceptHeader = $acceptHeader;
         $this->error = $data['error'];
         $this->page = $data['page'];
+        $this->forcedFormat = $data['forcedFormat'] ?? false;
         $this->format = $data['format'];
         $this->path = $data['path'];
         $this->field = $data['field'];
@@ -65,6 +67,11 @@ class RendererOptions
     public function getPage(): ?string
     {
         return $this->page;
+    }
+
+    public function isForcedFormat(): bool
+    {
+        return $this->forcedFormat;
     }
 
     public function getFormat(): ?string

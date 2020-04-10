@@ -22,6 +22,14 @@ class Subdivision extends AbstractType implements JsonSerializable
         return $this->name . ' (' . $this->isoCode . ')';
     }
 
+    public function jsonSerialize()
+    {
+        return [
+            'name' => $this->name,
+            'isoCode' => $this->isoCode
+        ];
+    }
+
     public function getName(): string
     {
         return $this->name;
@@ -30,13 +38,5 @@ class Subdivision extends AbstractType implements JsonSerializable
     public function getIsoCode(): string
     {
         return $this->isoCode;
-    }
-
-    public function jsonSerialize()
-    {
-        return [
-            'name' => $this->name,
-            'isoCode' => $this->isoCode
-        ];
     }
 }

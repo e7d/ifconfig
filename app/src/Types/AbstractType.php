@@ -28,30 +28,33 @@ abstract class AbstractType
         return $this->has($field) ? [$field => $this->expandValue($this->$field)] : null;
     }
 
-    private function expandValue($value, bool $objectAsArray = false)
+    private function expandValue($value, bool $serialize = false)
     {
+        if ($value instanceof File) {
+            return $serialize ? $value->getBase64() : $value;
+        }
         if ($value instanceof AbstractType) {
             return $this->iterableToArray($value, true);
         }
         if ($value instanceof AbstractStore) {
-            return $value->getArrayCopy($objectAsArray);
+            return $value->getArrayCopy($serialize);
         }
         return $value;
     }
 
-    private function iterableToArray($object, bool $recursive = true, bool $objectAsArray = false)
+    private function iterableToArray($object, bool $recursive = true, bool $serialize = false)
     {
         $array = [];
         foreach ($object as $key => $value) {
             $array[$key] = $recursive
-                ? $this->expandValue($value, $objectAsArray)
+                ? $this->expandValue($value, $serialize)
                 : $value;
         }
         return $array;
     }
 
-    public function toArray(bool $recursive = true, bool $objectAsArray = false): array
+    public function toArray(bool $recursive = true, bool $serialize = false): array
     {
-        return $this->iterableToArray($this, $recursive, $objectAsArray);
+        return $this->iterableToArray($this, $recursive, $serialize);
     }
 }

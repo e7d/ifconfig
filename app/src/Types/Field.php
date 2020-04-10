@@ -27,13 +27,18 @@ class Field implements JsonSerializable
         return $this->name;
     }
 
-    public function getValue(bool $objectAsArray = false)
+    public function getValue(bool $serialize = false)
     {
-        return $this->value instanceof AbstractType
-            ? $this->value->toArray()
-            : ($this->value instanceof AbstractStore
-                ? $this->value->getArrayCopy($objectAsArray)
-                : $this->value);
+        switch (true) {
+            case $this->value instanceof AbstractType:
+                return $this->value->toArray();
+            case $this->value instanceof AbstractStore:
+                return $this->value->getArrayCopy($serialize);
+            case $this->value instanceof File:
+                return $serialize ? $this->value->getBase64() : $this->value;
+            default:
+                return $this->value;
+        }
     }
 
     public function jsonSerialize()

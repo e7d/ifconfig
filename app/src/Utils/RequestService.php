@@ -24,6 +24,7 @@ class RequestService
         if (in_array($entry, RendererStrategy::PAGES)) {
             $data['page'] = $entry;
         } else if (in_array($entry, RendererStrategy::FORMATS)) {
+            $data['forcedFormat'] = true;
             $data['format'] = $entry;
         } else if (filter_var($entry, FILTER_VALIDATE_IP)) {
             $data['ip'] = $entry;
@@ -55,7 +56,10 @@ class RequestService
         $data = [];
         array_walk($array, function ($value, $key) use (&$data) {
             if ($key === 'page' && in_array($value, RendererStrategy::PAGES)) $data['page'] = $value;
-            if ($key === 'format' && in_array($value, RendererStrategy::FORMATS)) $data['format'] = $value;
+            if ($key === 'format' && in_array($value, RendererStrategy::FORMATS)) {
+                $data['forcedFormat'] = true;
+                $data['format'] = $value;
+            }
             if ($key === 'field' && in_array($value, Info::getProperties())) $data['field'] = $value;
             if ($key === 'ip' && filter_var($value, FILTER_VALIDATE_IP)) {
                 $data['ip'] = $value;

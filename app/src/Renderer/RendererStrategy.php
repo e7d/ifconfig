@@ -3,15 +3,15 @@
 namespace IfConfig\Renderer;
 
 use IfConfig\Renderer\ContentType\ContentTypeRenderer;
+use IfConfig\Renderer\ContentType\FileRenderer;
 use IfConfig\Renderer\ContentType\HtmlRenderer;
 use IfConfig\Renderer\ContentType\JsonRenderer;
 use IfConfig\Renderer\ContentType\TextRenderer;
 use IfConfig\Renderer\ContentType\XmlRenderer;
 use IfConfig\Renderer\ContentType\YamlRenderer;
 use IfConfig\Renderer\Error\RenderError;
-use IfConfig\Types\AbstractStore;
-use IfConfig\Types\AbstractType;
 use IfConfig\Types\Field;
+use IfConfig\Types\File;
 use IfConfig\Types\Info;
 
 class RendererStrategy
@@ -27,9 +27,12 @@ class RendererStrategy
             : null;
     }
 
-    private function getDataRenderer(?string $format, Info $info, $field): ContentTypeRenderer
+    private function getDataRenderer(RendererOptions $options, Info $info, ?Field $field): ContentTypeRenderer
     {
-        switch ($format) {
+        if (isset($field) && $field->getValue() instanceof File && !$options->isForcedFormat()) {
+            return new FileRenderer($field);
+        }
+        switch ($options->getFormat()) {
             case 'html':
                 $renderer = new HtmlRenderer();
                 break;
@@ -62,6 +65,6 @@ class RendererStrategy
         if ($field === false) {
             throw new RenderError($options->getFormat());
         }
-        return $this->getDataRenderer($options->getFormat(), $info, $field);
+        return $this->getDataRenderer($options, $info, $field);
     }
 }

@@ -22,7 +22,7 @@ class HtmlRenderer extends ContentTypeRenderer
         return $country ?
             (is_null($country->getFlag())
                 ? ''
-                : '<img src="data:image/gif;base64,' . $country->getFlag()->getImage() . '" title="' . $country->getIsoCode() . '"> ')
+                : '<img src="data:image/gif;base64,' . $country->getFlag()->getImage()->getBase64() . '" title="' . $country->getIsoCode() . '"> ')
             . $country->getName() . ' (' . $country->getIsoCode() . ')'
             : '';
     }
