@@ -1,5 +1,5 @@
 # ifconfig
-Check your online information. Compatible with browsers and cURL. Output available in HTML, plain text, JSON, XML and YAML.
+Check your online information. Compatible with browsers and CLI clients like cURL. Output available in HTML, plain text, JSON, XML and YAML.
 
 ## Demo
 [ip.e7d.io](https://ip.e7d.io/)
@@ -19,9 +19,9 @@ composer run setup
 
 ### Download MaxMind free databases
 MaxMind GeoLite2 "ASN" (GeoLite2-ASN.mmdb) and "City" (GeoLite2-City.mmdb) databases must be downloaded in the `app/src/Reader/Databases/` folder of the application.  
-[Sign up](https://www.maxmind.com/en/geolite2/signup) with MaxMind for a GeoLite2 account  
-[Log in](https://www.maxmind.com/en/account/login) with your account and generate a new "license key"  
-Download and extract databases:
+- [Sign up](https://www.maxmind.com/en/geolite2/signup) with MaxMind for a GeoLite2 account  
+- [Log in](https://www.maxmind.com/en/account/login) with your account and got to "My License Key" to "Generate new license key"  
+- Download and extract databases:
 ```
 EXPORT MAXMIND_LICENSE_KEY="YOUR_LICENSE_KEY_HERE"
 cd /tmp

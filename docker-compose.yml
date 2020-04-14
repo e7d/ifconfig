@@ -5,6 +5,8 @@ services:
     image: php:7-apache
     environment:
       - mode=DEBUG
+      # - ipv4_host=ipv4.e7d.io
+      - ipv6_host=ipv6.e7d.io
     volumes:
       - ./docker/expires.conf:/etc/apache2/conf-enabled/expires.conf:ro
       - ./docker/expires.load:/etc/apache2/mods-enabled/expires.load:ro

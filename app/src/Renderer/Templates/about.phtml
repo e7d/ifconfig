@@ -1,7 +1,101 @@
 <?php
 $domain = $_SERVER["HTTP_HOST"];
 ?>
-<link rel="stylesheet" href="/css/about.css">
+<style>
+    article {
+        padding: 8px;
+    }
+
+    a[target="_blank"] {
+        background-position: center right;
+        background-repeat: no-repeat;
+        background-image: linear-gradient(transparent, transparent),
+            url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiID8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiPgoJPHBhdGggZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMzZjIiBkPSJNMS41IDQuNTE4aDUuOTgyVjEwLjVIMS41eiIgLz4KCTxwYXRoIGZpbGw9IiMzNmMiIGQ9Ik01Ljc2NSAxSDExdjUuMzlMOS40MjcgNy45MzdsLTEuMzEtMS4zMUw1LjM5MyA5LjM1bC0yLjY5LTIuNjg4IDIuODEtMi44MDhMNC4yIDIuNTQ0eiIgLz4KCTxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik05Ljk5NSAyLjAwNGwuMDIyIDQuODg1TDguMiA1LjA3IDUuMzIgNy45NSA0LjA5IDYuNzIzbDIuODgyLTIuODgtMS44NS0xLjg1MnoiIC8+Cjwvc3ZnPgo=);
+        padding-right: 13px;
+    }
+
+    *+h3 {
+        margin-top: 32px;
+    }
+
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 4px 8px;
+        height: 32px;
+        line-height: 32px;
+        border-top: 1px solid #dee2e6;
+    }
+
+    thead th {
+        vertical-align: bottom;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    th {
+        text-align: left;
+    }
+
+    tbody tr td:first-child {
+        max-width: 160px;
+    }
+
+    .cmd {
+        background-color: #222;
+        color: whitesmoke;
+        padding: 2px 4px;
+        margin: 2px;
+        font-family: monospace;
+        font-size: small;
+        border-radius: 4px;
+    }
+
+    input,
+    select {
+        margin-right: 8px;
+        padding: 8px;
+        background: white;
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+    }
+
+    input:focus,
+    input:active,
+    select:focus,
+    select:active {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    input[type="submit"] {
+        cursor: pointer;
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .form-group {
+        margin-bottom: 8px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .panel {
+        padding: 16px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+</style>
+
 <main class="about">
     <h2>About</h2>
 

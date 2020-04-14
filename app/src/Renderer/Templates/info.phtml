@@ -1,8 +1,65 @@
-<link rel="stylesheet" href="/css/info.css">
-<div class="force-ip">
-    <?php if (isset($_ENV['ipv4_host'])) { ?><span><a href="//<?php echo $_ENV['ipv4_host'] . $_SERVER['REQUEST_URI']; ?>">IPv4</a></span><?php } ?>
-    <?php if (isset($_ENV['ipv6_host'])) { ?><span><a href="//<?php echo $_ENV['ipv6_host'] . $_SERVER['REQUEST_URI']; ?>">IPv6</a></span><?php } ?>
-</div>
+<?php if (isset($_ENV['ipv4_host']) || isset($_ENV['ipv6_host'])) { ?>
+    <style>
+        .force-ip {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 8px;
+        }
+
+        .force-ip span+span::before {
+            content: " - ";
+        }
+    </style>
+<?php } ?>
+<style>
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        border-top: 1px solid #ddd;
+        display: flex;
+    }
+
+    li>* {
+        overflow: auto;
+        padding: 8px;
+    }
+
+    label {
+        display: inline-block;
+        font-weight: bold;
+        min-width: 140px;
+    }
+
+    span:empty::after {
+        content: "-";
+    }
+
+    @media (max-width: 640px) {
+        li {
+            flex-direction: column;
+        }
+
+        label {
+            padding-bottom: 4px;
+        }
+
+        span {
+            padding-top: 0;
+        }
+    }
+</style>
+
+<?php if (isset($_ENV['ipv4_host']) || isset($_ENV['ipv6_host'])) { ?>
+    <div class="force-ip">
+        <?php if (isset($_ENV['ipv4_host'])) { ?><span><a href="//<?php echo $_ENV['ipv4_host'] . $_SERVER['REQUEST_URI']; ?>">IPv4</a></span><?php } ?>
+        <?php if (isset($_ENV['ipv6_host'])) { ?><span><a href="//<?php echo $_ENV['ipv6_host'] . $_SERVER['REQUEST_URI']; ?>">IPv6</a></span><?php } ?>
+    </div>
+<?php } ?>
 <main class="info">
     <h2>Your Connection</h2>
     <ul>
