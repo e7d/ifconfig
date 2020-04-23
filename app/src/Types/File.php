@@ -4,7 +4,8 @@ namespace IfConfig\Types;
 
 use JsonSerializable;
 
-class File implements JsonSerializable {
+class File implements JsonSerializable
+{
     protected ?string $path;
     protected ?string $mimeType;
 
@@ -25,6 +26,11 @@ class File implements JsonSerializable {
         return $this->getBase64();
     }
 
+    public function getMimeType(): ?string
+    {
+        return $this->mimeType;
+    }
+
     public function getContents(): ?string
     {
         return $this->path ? file_get_contents($this->path) : null;
@@ -32,11 +38,8 @@ class File implements JsonSerializable {
 
     public function getBase64(): ?string
     {
-        return $this->path ? base64_encode($this->getContents()) : null;
-    }
-
-    public function getMimeType(): ?string
-    {
-        return $this->mimeType;
+        return $this->path
+            ? 'data:' . $this->getMimeType() . ';base64,' . base64_encode($this->getContents())
+            : null;
     }
 }
