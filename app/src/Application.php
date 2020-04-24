@@ -7,10 +7,10 @@ use IfConfig\Reader\InfoReader;
 use IfConfig\Reader\LocationReader;
 use IfConfig\Renderer\Error\ErrorRenderer;
 use IfConfig\Renderer\Error\RenderError;
-use IfConfig\Renderer\RendererInterface;
 use IfConfig\Renderer\RendererOptions;
 use IfConfig\Renderer\RendererStrategy;
 use IfConfig\Types\Info;
+use Utils\RateLimit;
 use Utils\RequestService;
 
 class Application
@@ -19,6 +19,8 @@ class Application
 
     function __construct()
     {
+        RateLimit::assert((int) $_ENV['rate_limit_interval']);
+
         $this->rendererStrategy = new RendererStrategy();
 
         $headers = $_SERVER;
