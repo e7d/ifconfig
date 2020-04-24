@@ -2,6 +2,9 @@
 
 namespace IfConfig\Renderer;
 
+use IfConfig\Reader\AsnReader;
+use IfConfig\Reader\InfoReader;
+use IfConfig\Reader\LocationReader;
 use IfConfig\Renderer\ContentType\ContentTypeRenderer;
 use IfConfig\Renderer\ContentType\FileRenderer;
 use IfConfig\Renderer\ContentType\HtmlRenderer;
@@ -13,6 +16,7 @@ use IfConfig\Renderer\Error\RenderError;
 use IfConfig\Types\Field;
 use IfConfig\Types\File;
 use IfConfig\Types\Info;
+use Utils\RateLimit;
 
 class RendererStrategy
 {
@@ -56,11 +60,37 @@ class RendererStrategy
         return $renderer;
     }
 
-    public function getRenderer(RendererOptions $options, Info $info): ContentTypeRenderer
+    public function getInfo(RendererOptions $options): Info
+    {
+        RateLimit::assert((int) $_ENV['rate_limit_interval']);
+
+        $infoReader = new InfoReader($options);
+        $info = $infoReader->getInfo();
+
+        if (in_array($options->getField(), InfoReader::FIELDS)) {
+            return $info;
+        }
+
+        $asnReader = new AsnReader($info->getIp());
+        $info->setAsn($asnReader->getAsn());
+
+        $locationReader = new LocationReader($info->getIp());
+        $info->setCountry($locationReader->getCountry());
+        $info->setCity($locationReader->getCity());
+        $info->setPostal($locationReader->getPostal());
+        $info->setSubdivisions($locationReader->getSubdivisions());
+        $info->setLocation($locationReader->getLocation());
+        $info->setTimezone($locationReader->getTimezone());
+
+        return $info;
+    }
+
+    public function getRenderer(RendererOptions $options): ContentTypeRenderer
     {
         if ($options->getPage()) {
             return new HtmlRenderer($options->getPage());
         }
+        $info = $this->getInfo($options);
         $field = $this->getField($info, $options->getPath(), $options->getField());
         if ($field === false) {
             throw new RenderError($options->getFormat());

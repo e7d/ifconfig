@@ -2,15 +2,9 @@
 
 namespace IfConfig;
 
-use IfConfig\Reader\AsnReader;
-use IfConfig\Reader\InfoReader;
-use IfConfig\Reader\LocationReader;
 use IfConfig\Renderer\Error\ErrorRenderer;
 use IfConfig\Renderer\Error\RenderError;
-use IfConfig\Renderer\RendererOptions;
 use IfConfig\Renderer\RendererStrategy;
-use IfConfig\Types\Info;
-use Utils\RateLimit;
 use Utils\RequestService;
 
 class Application
@@ -19,8 +13,6 @@ class Application
 
     function __construct()
     {
-        RateLimit::assert((int) $_ENV['rate_limit_interval']);
-
         $this->rendererStrategy = new RendererStrategy();
 
         $headers = $_SERVER;
@@ -28,34 +20,10 @@ class Application
 
         try {
             $options = RequestService::parse($headers, $params);
-            $info = $this->getInfo($options);
-            $renderer = $this->rendererStrategy->getRenderer($options, $info);
+            $renderer = $this->rendererStrategy->getRenderer($options);
         } catch (RenderError $e) {
             $renderer = new ErrorRenderer($e);
         }
         $renderer->render();
-    }
-
-    public function getInfo(RendererOptions $options): Info
-    {
-        $infoReader = new InfoReader($options);
-        $info = $infoReader->getInfo();
-
-        if (in_array($options->getField(), InfoReader::FIELDS)) {
-            return $info;
-        }
-
-        $asnReader = new AsnReader($info->getIp());
-        $info->setAsn($asnReader->getAsn());
-
-        $locationReader = new LocationReader($info->getIp());
-        $info->setCountry($locationReader->getCountry());
-        $info->setCity($locationReader->getCity());
-        $info->setPostal($locationReader->getPostal());
-        $info->setSubdivisions($locationReader->getSubdivisions());
-        $info->setLocation($locationReader->getLocation());
-        $info->setTimezone($locationReader->getTimezone());
-
-        return $info;
     }
 }
