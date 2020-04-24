@@ -7,9 +7,9 @@ services:
       dockerfile: ./dev.Dockerfile
     environment:
       - mode=DEBUG
-      - host_auto=ip.e7d.io
-      - host_ipv4=ipv4.e7d.io
-      - host_ipv6=ipv6.e7d.io
+      # - host_auto=auto.my.domain
+      # - host_ipv4=ipv4.my.domain
+      # - host_ipv6=ipv6.my.domain
       # - rate_limit_interval=3
     volumes:
       - .:/var/www:ro
