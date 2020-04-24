@@ -11,7 +11,7 @@
     "symfony/yaml": "^5.0"
   },
   "scripts": {
-    "benchmark": "gb -c 100 -n 100000 -z -k http://localhost:5757",
+    "benchmark": "ab -k -c 100 -n 100000 http://localhost:5757/",
     "build:docker": "./hooks/build",
     "setup": "composer install && composer dump-autoload"
   }
