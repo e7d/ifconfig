@@ -2,16 +2,16 @@ version: "3"
 
 services:
   web:
-    image: php:7-apache
+    build:
+      context: .
+      dockerfile: ./dev.Dockerfile
     environment:
       - mode=DEBUG
-      # - ipv4_host=ipv4.e7d.io
-      - ipv6_host=ipv6.e7d.io
+      - host_auto=ip.e7d.io
+      - host_ipv4=ipv4.e7d.io
+      - host_ipv6=ipv6.e7d.io
+      # - rate_limit_interval=3
     volumes:
-      - ./docker/expires.conf:/etc/apache2/conf-enabled/expires.conf:ro
-      - ./docker/expires.load:/etc/apache2/mods-enabled/expires.load:ro
-      - ./docker/headers.load:/etc/apache2/mods-enabled/headers.load:ro
-      - ./docker/rewrite.load:/etc/apache2/mods-enabled/rewrite.load:ro
       - .:/var/www:ro
     ports:
       - 5757:80
