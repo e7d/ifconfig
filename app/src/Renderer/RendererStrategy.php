@@ -38,7 +38,9 @@ class RendererStrategy
         }
         switch ($options->getFormat()) {
             case 'html':
-                $renderer = new HtmlRenderer();
+                $renderer = isset($field) && !$options->isForcedFormat()
+                    ? new TextRenderer($field)
+                    : new HtmlRenderer();
                 break;
             default:
             case 'json':
