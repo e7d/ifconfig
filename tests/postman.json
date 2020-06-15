@@ -1,0 +1,913 @@
+{
+	"info": {
+		"_postman_id": "b554e106-245f-440e-9d8c-b7c850ff1ace",
+		"name": "ifconfig",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Content-Type",
+			"item": [
+				{
+					"name": "HTML",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fc95ee28-b5fb-4e09-8f14-2f4c23565b5f",
+								"exec": [
+									"pm.test(\"Content-Type is text/html; charset=UTF-8\", function () {",
+									"    pm.response.to.be.header(\"Content-Type\", \"text/html; charset=UTF-8\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "text/html",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757"
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "JSON",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757"
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Text",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Content-Type is text/plain; charset=UTF-8\", function () {",
+									"    pm.response.to.be.header(\"Content-Type\", \"text/plain; charset=UTF-8\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "text/plain",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757"
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "XML",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Content-Type is text/xml; charset=UTF-8\", function () {",
+									"    pm.response.to.be.header(\"Content-Type\", \"text/xml; charset=UTF-8\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "text/xml",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757"
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "YAML",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Content-Type is text/yaml; charset=UTF-8\", function () {",
+									"    pm.response.to.be.header(\"Content-Type\", \"text/yaml; charset=UTF-8\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/x-yaml"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757"
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c72c192d-10cd-47d6-b300-d4c4e2e8d517",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4cbb03ba-1f1a-4f51-af2c-e1da1f30f4a3",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Fields",
+			"item": [
+				{
+					"name": "ip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is 1.0.0.1\", function () {",
+									"    pm.response.to.have.body(\"1.0.0.1\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "text/plain",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/ip",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"ip"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "host",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is one.one.one.one\", function () {",
+									"    pm.response.to.have.body(\"one.one.one.one\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/host",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"host"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "asn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is AS13335 CLOUDFLARENET (1.0.0.0/24)\", function () {",
+									"    pm.response.to.have.body(\"AS13335 CLOUDFLARENET (1.0.0.0/24)\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/asn",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"asn"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "country",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is Australia (AU)\", function () {",
+									"    pm.response.to.have.body(\"Australia (AU)\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/country",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"country"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "city",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is Adelaide\", function () {",
+									"    pm.response.to.have.body(\"Adelaide\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/city",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"city"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is 5000\", function () {",
+									"    pm.response.to.have.body(\"5000\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/postal",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"postal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "subdivisions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is South Australia (SA)\", function () {",
+									"    pm.response.to.have.body(\"South Australia (SA)\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/subdivisions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"subdivisions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is -34.9281, 138.5999\", function () {",
+									"    pm.response.to.have.body(\"-34.9281, 138.5999\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/location",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "timezone",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is Australia/Adelaide\", function () {",
+									"    pm.response.to.have.body(\"Australia/Adelaide\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/timezone",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"timezone"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "port",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is a number between 49152 and 65535\", function () {",
+									"    pm.expect(+pm.response.text()).to.be.within(49152, 65535);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/port",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"port"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "method",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is GET\", function () {",
+									"    pm.response.to.have.body(\"GET\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/method",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"method"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "referer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body is https://www.google.com/\", function () {",
+									"    pm.response.to.have.body(\"https://www.google.com/\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							},
+							{
+								"key": "Referer",
+								"value": "https://www.google.com/",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/referer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"referer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "headers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7af65c6d-c043-4d67-944d-26ed4daf9416",
+								"exec": [
+									"pm.test(\"Body contains User-Agent: Postman\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"User-Agent: Postman\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ba6e122-9d0c-4551-a414-cf236f560704",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "text/plain"
+							},
+							{
+								"key": "Referer",
+								"value": "https://www.google.com/",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5757/1.0.0.1/headers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5757",
+							"path": [
+								"1.0.0.1",
+								"headers"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"variable": [
+		{
+			"id": "02b8aa57-d61a-438e-ae79-1deee82b5933",
+			"key": "CLOUDFLARE_HOST",
+			"value": "one.one.one.one",
+			"type": "string"
+		},
+		{
+			"id": "cebafb30-0e36-452e-89e8-71245947a398",
+			"key": "CLOUDFLARE_IP",
+			"value": "1.1.1.1",
+			"type": "string"
+		},
+		{
+			"id": "d0dd199a-7205-4341-b181-3978fb9e5097",
+			"key": "GOOGLE_HOST",
+			"value": "dns.google",
+			"type": "string"
+		},
+		{
+			"id": "1c8cd66f-440d-4c54-9635-b79a48a489c4",
+			"key": "GOGOLE_IP",
+			"value": "8.8.8.8",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
