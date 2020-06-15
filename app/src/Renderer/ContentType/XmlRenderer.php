@@ -18,21 +18,28 @@ class XmlRenderer extends ContentTypeRenderer
         return $key;
     }
 
-    private function getRecursiveNodes(DOMDocument $document, DOMNode $node, $data): DOMNode
-    {
-        if (!is_array($data)) {
-            $node->appendChild($document->createTextNode($data));
-        } else {
-            foreach ($data as $key => $value) {
-                $childNode = $document->createElement($this->getNodeName($key, $value));
-                $node->appendChild($this->getRecursiveNodes(
-                    $document,
-                    $childNode,
-                    $value instanceof JsonSerializable ? $value->jsonSerialize() : $value
-                ));
-            }
+    private function appendChildNodes(DOMDocument $document, DOMNode $node, array $data): DOMNode {
+        foreach ($data as $key => $value) {
+            $childNode = $document->createElement($this->getNodeName($key, $value));
+            $node->appendChild($this->getRecursiveNodes(
+                $document,
+                $childNode,
+                $value instanceof JsonSerializable ? $value->jsonSerialize() : $value
+            ));
         }
         return $node;
+    }
+
+    private function appendTextNode(DOMDocument $document, DOMNode $node, $data): DOMNode {
+        $node->appendChild($document->createTextNode($data));
+        return $node;
+    }
+
+    private function getRecursiveNodes(DOMDocument $document, DOMNode $node, $data): DOMNode
+    {
+        return is_array($data)
+            ? $this->appendChildNodes($document, $node, $data)
+            : $this->appendTextNode($document, $node, $data);
     }
 
     public function render(): void
