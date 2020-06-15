@@ -7,6 +7,16 @@ Check your online information. Compatible with browsers and CLI clients like cUR
 ## Docker
 `docker run --name ifconfig -d -p 80:80 e7db/ifconfig`
 
+### Settings
+- show a link to ipv4+ipv6 domain: `-e host_auto=auto.my.domain`
+- show a link to ipv4-forced domain: `-e host_ipv4=ipv4.my.domain`
+- show a link to ipv6-forced domain: `-e host_ipv4=ipv6.my.domain`
+- rate limit interval (in seconds): `-e rate_limit_interval=10`
+  - 10 means a request is allowed every 10 seconds
+  - 0 means rate limiting is disabled
+- show the about page link at the bottom: `-e show_faq=true`
+- show the FAQ section on the about page: `-e show_about=true`
+
 ## Manual setup
 Requires a web server with PHP and a MaxMind license key.
 

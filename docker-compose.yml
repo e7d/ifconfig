@@ -11,6 +11,8 @@ services:
       # - host_ipv4=ipv4.my.domain
       # - host_ipv6=ipv6.my.domain
       # - rate_limit_interval=3
+      # - show_faq=true
+      # - show_about=true
     volumes:
       - .:/var/www:ro
     ports:

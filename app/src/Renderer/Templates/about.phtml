@@ -311,6 +311,7 @@ $domain = $_SERVER["HTTP_HOST"];
             </div>
         </form>
 
+<?php if (isset($_ENV['show_faq'])) { ?>
         <h3>FAQ</h3>
         <h4>Is using this service from automated scripts/tools permitted?</h4>
         <p>Yes.</p>
@@ -318,14 +319,22 @@ $domain = $_SERVER["HTTP_HOST"];
         <h4>Is IPv6 supported?</h4>
         <p>Yes.</p>
 
+        <h4>Is this service rate-limited?</h4>
+<?php if (isset($_ENV['rate_limit_interval'])) { ?>
+        <p>Yes. A request is accepted every <?= $_ENV['rate_limit_interval'] ?> seconds. In between requests will get a "429 Too Many Requests" error.
+<?php } else { ?>
+        <p>No.</p>
+<?php } ?>
+
         <h4>Can I run my own service?</h4>
-        <p>Yes, the source code is available on <a href="https://github.com/e7d/ifconfig" target="_blank">GitHub</a></p>
+        <p>Yes, the source code is available on <a href="https://github.com/e7d/ifconfig" target="_blank">GitHub</a>.</p>
 
         <h3>References</h3>
         <ol>
             <li id="note-1"><a href="#ref-1">^</a> <a href="https://en.wikipedia.org/wiki/Autonomous_system_(Internet)" target="_blank">Autonomous system number</a></li>
             <li id="note-2"><a href="#ref-2">^</a> <a href="https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country" target="_blank">Administrative subdivisions</a> are specific to each country and may or may not be specified.</li>
         </ol>
+<?php } ?>
     </article>
 </main>
 
