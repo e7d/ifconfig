@@ -2,8 +2,11 @@
 
 namespace IfConfig\Types;
 
+use DateTime;
+
 class Info extends AbstractType
 {
+    protected string $date;
     protected string $ip;
     protected string $host;
     protected ?ASN $asn = null;
@@ -17,6 +20,10 @@ class Info extends AbstractType
     protected string $method;
     protected ?string $referer = null;
     protected Headers $headers;
+
+    function __construct() {
+        $this->date = date('c');
+    }
 
     public static function getProperties(): array
     {
