@@ -238,43 +238,19 @@ $domain = $_SERVER["HTTP_HOST"];
             </table>
         </p>
 
-        <h3>External IP and host name</h3>
-        <p>
-            Any IP or host name can be checked, through various methods:
-            <table>
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>link</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>URL Path</td>
-                        <td><a href="//<?= $domain ?>/8.8.8.8"><?= $domain ?>/8.8.8.8</a></td>
-                    </tr>
-                    <tr>
-                        <td>GET Param</td>
-                        <td><a href="//<?= $domain ?>/?ip=8.8.8.8"><?= $domain ?>/?ip=8.8.8.8</a></td>
-                    </tr>
-                    <tr>
-                        <td>POST Param</td>
-                        <td>
-                            <form action="//<?= $domain ?>" method="POST">
-                                <input type="text" name="ip" value="8.8.8.8" readonly>
-                                <input type="submit">
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </p>
-
         <h3>Query generator</h3>
         <form name="query">
             <div class="form-group">
                 <label for="host">IP or host name</label>
                 <input id="host" type="text" name="host">
+            </div>
+            <div class="form-group">
+                <label for="method">Query method</label>
+                <select id="method" name="method">
+                    <option value="url">URL</option>
+                    <option value="get">GET params</option>
+                    <option value="post">POST params</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="format">Output format</label>
