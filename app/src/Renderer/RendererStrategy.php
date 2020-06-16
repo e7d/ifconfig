@@ -64,7 +64,7 @@ class RendererStrategy
 
     public function getInfo(RendererOptions $options): Info
     {
-        RateLimit::assert((int) $_ENV['rate_limit_interval']);
+        RateLimit::assert((int) $_ENV['RATE_LIMIT'], (int) $_ENV['RATE_LIMIT_INTERVAL']);
 
         $infoReader = new InfoReader($options);
         $info = $infoReader->getInfo();

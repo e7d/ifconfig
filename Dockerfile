@@ -18,6 +18,7 @@ RUN apk add -U wget \
     && mv GeoLite2-City_*/GeoLite2-City.mmdb .
 
 FROM php:7-apache
+ENV RATE_LIMIT_INTERVAL 1
 COPY ./docker /
 RUN docker-php-ext-install opcache \
     && a2enmod expires headers rewrite

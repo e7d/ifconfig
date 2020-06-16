@@ -7,12 +7,13 @@ services:
       dockerfile: ./dev.Dockerfile
     environment:
       - mode=DEBUG
-      # - host_auto=auto.my.domain
-      # - host_ipv4=ipv4.my.domain
-      # - host_ipv6=ipv6.my.domain
-      # - rate_limit_interval=3
-      # - show_faq=true
-      # - show_about=true
+      # - HOST_AUTO=auto.my.domain
+      # - HOST_IPV4=ipv4.my.domain
+      # - HOST_IPV6=ipv6.my.domain
+      # - RATE_LIMIT=10
+      # - RATE_LIMIT_INTERVAL=3
+      # - SHOW_FAQ=true
+      # - SHOW_ABOUT=true
     volumes:
       - .:/var/www:ro
     ports:
