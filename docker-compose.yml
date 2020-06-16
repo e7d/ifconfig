@@ -18,3 +18,5 @@ services:
       - .:/var/www:ro
     ports:
       - 5757:80
+  redis:
+    image: redis
