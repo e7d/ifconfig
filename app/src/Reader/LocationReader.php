@@ -4,6 +4,7 @@ namespace IfConfig\Reader;
 
 use Exception;
 use GeoIp2\Database\Reader;
+use GeoIp2\Exception\AddressNotFoundException;
 use GeoIp2\Record\Country as CountryRecord;
 use GeoIp2\Record\City as CityRecord;
 use GeoIp2\Record\Postal as PostalRecord;
@@ -27,7 +28,7 @@ class LocationReader
         try {
             $reader = new Reader(__DIR__ . '/Databases/GeoLite2-City.mmdb');
             $record = $reader->city($ip);
-        } catch (Exception $e) {
+        } catch (AddressNotFoundException $e) {
             return;
         }
         $this->setCountry($record->country);

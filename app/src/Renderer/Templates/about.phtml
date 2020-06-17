@@ -320,8 +320,8 @@ $domain = $_SERVER["HTTP_HOST"];
         <p>Yes.</p>
 
         <h4>Is this service rate-limited?</h4>
-<?php if (isset($_ENV['RATE_LIMIT_INTERVAL'])) { ?>
-        <p>Yes. A request is accepted every <?= $_ENV['RATE_LIMIT_INTERVAL'] ?> seconds. In between requests will get a "429 Too Many Requests" error.
+<?php if (isset($_ENV['RATE_LIMIT'])) { ?>
+        <p>Yes. <?= $_ENV['RATE_LIMIT'] ?> request<?= $_ENV['RATE_LIMIT'] !== 1 ? 's are' : ' is' ?> accepted every <?= $_ENV['RATE_LIMIT_INTERVAL'] ?> second<?= $_ENV['RATE_LIMIT_INTERVAL'] !== 1 ? 's' : '' ?>. In between requests will get a "429 Too Many Requests" error.
 <?php } else { ?>
         <p>No.</p>
 <?php } ?>

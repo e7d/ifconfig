@@ -14,7 +14,7 @@ services:
       # - RATE_LIMIT_INTERVAL=3
       # - SHOW_FAQ=true
       # - SHOW_ABOUT=true
-    volumes:
-      - .:/var/www:ro
     ports:
       - 5757:80
+    volumes:
+      - .:/var/www:ro
