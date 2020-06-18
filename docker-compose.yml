@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  web:
+  ifconfig:
     build:
       context: .
       dockerfile: ./dev.Dockerfile
@@ -16,5 +16,6 @@ services:
       # - SHOW_ABOUT=true
     ports:
       - 5757:80
+    # tmpfs: /tmpfs
     volumes:
       - .:/var/www:ro

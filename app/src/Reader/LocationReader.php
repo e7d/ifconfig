@@ -26,7 +26,7 @@ class LocationReader
     function __construct(string $ip)
     {
         try {
-            $reader = new Reader(__DIR__ . '/Databases/GeoLite2-City.mmdb');
+            $reader = new Reader($_ENV['DATABASE_DIR'] . '/GeoLite2-City.mmdb');
             $record = $reader->city($ip);
         } catch (AddressNotFoundException $e) {
             return;
