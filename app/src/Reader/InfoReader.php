@@ -36,10 +36,10 @@ class InfoReader
 
     private function readParams(array $params): ?array
     {
-        if ($params['ip'] && filter_var($params['ip'], FILTER_VALIDATE_IP)) {
+        if (isset($params['ip']) && filter_var($params['ip'], FILTER_VALIDATE_IP)) {
             return [$params['ip'], gethostbyaddr($params['ip'])];
         }
-        if ($params['host'] && filter_var($params['host'], FILTER_VALIDATE_DOMAIN)) {
+        if (isset($params['host']) && filter_var($params['host'], FILTER_VALIDATE_DOMAIN)) {
             $ip = DnsService::resolve($params['host']);
             if (!filter_var($ip, FILTER_VALIDATE_IP)) {
                 $ip = 'Could not resolve ' . $params['host'];

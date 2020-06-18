@@ -22,11 +22,12 @@ class LocationReader
     private ?Postal $postal = null;
     private array $subdivisions = [];
     private ?Location $location = null;
+    private ?string $timezone = null;
 
     function __construct(string $ip)
     {
         try {
-            $reader = new Reader($_ENV['DATABASE_DIR'] . '/GeoLite2-City.mmdb');
+            $reader = new Reader(getenv('DATABASE_DIR') . '/GeoLite2-City.mmdb');
             $record = $reader->city($ip);
         } catch (AddressNotFoundException $e) {
             return;

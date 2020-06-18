@@ -1,4 +1,4 @@
-<?php if (isset($_ENV['HOST_AUTO']) || isset($_ENV['HOST_IPV4']) || isset($_ENV['HOST_IPV6'])) { ?>
+<?php if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     <style>
         .force-ip {
             position: absolute;
@@ -54,11 +54,11 @@
     }
 </style>
 
-<?php if (isset($_ENV['HOST_AUTO']) || isset($_ENV['HOST_IPV4']) || isset($_ENV['HOST_IPV6'])) { ?>
+<?php if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     <div class="force-ip">
-        <?php if (isset($_ENV['HOST_AUTO'])) { ?><span><a href="//<?php echo $_ENV['HOST_AUTO'] . $_SERVER['REQUEST_URI']; ?>">Auto</a></span><?php } ?>
-        <?php if (isset($_ENV['HOST_IPV4'])) { ?><span><a href="//<?php echo $_ENV['HOST_IPV4'] . $_SERVER['REQUEST_URI']; ?>">IPv4</a></span><?php } ?>
-        <?php if (isset($_ENV['HOST_IPV6'])) { ?><span><a href="//<?php echo $_ENV['HOST_IPV6'] . $_SERVER['REQUEST_URI']; ?>">IPv6</a></span><?php } ?>
+        <?php if (getenv('HOST_AUTO')) { ?><span><a href="//<?php echo getenv('HOST_AUTO') . $_SERVER['REQUEST_URI']; ?>">Auto</a></span><?php } ?>
+        <?php if (getenv('HOST_IPV4')) { ?><span><a href="//<?php echo getenv('HOST_IPV4') . $_SERVER['REQUEST_URI']; ?>">IPv4</a></span><?php } ?>
+        <?php if (getenv('HOST_IPV6')) { ?><span><a href="//<?php echo getenv('HOST_IPV6') . $_SERVER['REQUEST_URI']; ?>">IPv6</a></span><?php } ?>
     </div>
 <?php } ?>
 <main class="info">

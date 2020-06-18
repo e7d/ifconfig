@@ -93,7 +93,7 @@ class RequestService
         return $data;
     }
 
-    private function parseAcceptHeader(string $acceptHeader): string
+    private static function parseAcceptHeader(string $acceptHeader): string
     {
         foreach (explode(';', $acceptHeader) as $acceptEntry) {
             foreach (explode(',', $acceptEntry) as $acceptHeader) {

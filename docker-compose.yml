@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: ./dev.Dockerfile
     environment:
-      - mode=DEBUG
+      - MODE=dev
       # - HOST_AUTO=auto.my.domain
       # - HOST_IPV4=ipv4.my.domain
       # - HOST_IPV6=ipv6.my.domain
@@ -16,6 +16,6 @@ services:
       # - SHOW_ABOUT=true
     ports:
       - 5757:80
-    # tmpfs: /tmpfs
+    tmpfs: /tmpfs
     volumes:
       - .:/var/www:ro
