@@ -287,7 +287,7 @@ $domain = $_SERVER["HTTP_HOST"];
             </div>
         </form>
 
-<?php if (isset($_ENV['show_faq'])) { ?>
+<?php if (getenv('SHOW_FAQ')) { ?>
         <h3>FAQ</h3>
         <h4>Is using this service from automated scripts/tools permitted?</h4>
         <p>Yes.</p>
@@ -296,8 +296,8 @@ $domain = $_SERVER["HTTP_HOST"];
         <p>Yes.</p>
 
         <h4>Is this service rate-limited?</h4>
-<?php if (isset($_ENV['rate_limit_interval'])) { ?>
-        <p>Yes. A request is accepted every <?= $_ENV['rate_limit_interval'] ?> seconds. In between requests will get a "429 Too Many Requests" error.
+<?php if (getenv('RATE_LIMIT')) { ?>
+        <p>Yes. <?= getenv('RATE_LIMIT') ?> request<?= getenv('RATE_LIMIT') !== 1 ? 's are' : ' is' ?> accepted every <?= getenv('RATE_LIMIT_INTERVAL') ?> second<?= getenv('RATE_LIMIT_INTERVAL') !== 1 ? 's' : '' ?>. In between requests will get a "429 Too Many Requests" error.
 <?php } else { ?>
         <p>No.</p>
 <?php } ?>

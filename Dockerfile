@@ -18,6 +18,8 @@ RUN apk add -U wget \
     && mv GeoLite2-City_*/GeoLite2-City.mmdb .
 
 FROM php:7-apache
+ENV DATABASE_DIR /var/www/app/src/Reader/Databases/
+ENV RATE_LIMIT_INTERVAL 1
 COPY ./docker /
 RUN docker-php-ext-install opcache \
     && a2enmod expires headers rewrite
@@ -27,3 +29,5 @@ COPY --from=build-html /build/app/src/Renderer/Templates /var/www/app/src/Render
 COPY --from=build-html /build/html /var/www/html
 COPY --from=databases /data/GeoLite2-ASN.mmdb /var/www/app/src/Reader/Databases/
 COPY --from=databases /data/GeoLite2-City.mmdb /var/www/app/src/Reader/Databases/
+ENTRYPOINT [ "/entrypoint.sh" ]
+CMD [ "apache2-foreground" ]
