@@ -12,8 +12,8 @@ services:
       # - HOST_IPV6=ipv6.my.domain
       # - RATE_LIMIT=10
       # - RATE_LIMIT_INTERVAL=3
-      # - SHOW_FAQ=true
-      # - SHOW_ABOUT=true
+      - SHOW_FAQ=true
+      - SHOW_ABOUT=true
     ports:
       - 5757:80
     tmpfs: /tmpfs
