@@ -311,21 +311,27 @@ $domain = $_SERVER["HTTP_HOST"];
             <p>Yes.</p>
 
             <h4>Is this service rate-limited?</h4>
-            <?php if (getenv('RATE_LIMIT')) { ?>
-                <p>Yes. <?= getenv('RATE_LIMIT') ?> request<?= getenv('RATE_LIMIT') !== 1 ? 's are' : ' is' ?> accepted every <?= getenv('RATE_LIMIT_INTERVAL') ?> second<?= getenv('RATE_LIMIT_INTERVAL') !== 1 ? 's' : '' ?>. In between requests will get a "429 Too Many Requests" error.
-                <?php } else { ?>
-                    <p>No.</p>
-                <?php } ?>
-
-                <h4>Can I run my own service?</h4>
-                <p>Yes, the source code is available on <a href="https://github.com/e7d/ifconfig" target="_blank">GitHub</a>.</p>
-
-                <h3>References</h3>
-                <ol>
-                    <li id="note-1"><a href="#ref-1">^</a> <a href="https://en.wikipedia.org/wiki/Autonomous_system_(Internet)" target="_blank">Autonomous system number</a></li>
-                    <li id="note-2"><a href="#ref-2">^</a> <a href="https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country" target="_blank">Administrative subdivisions</a> are specific to each country and may or may not be specified.</li>
-                </ol>
+            <?php if (getenv('RATE_LIMIT')) {
+                $rateLimit = (int) getenv('RATE_LIMIT');
+                $rateLimitInterval = (int) getenv('RATE_LIMIT_INTERVAL');
+            ?>
+                <p>
+                    Yes. <?= $rateLimit ?> request<?= $rateLimit !== 1 ? 's are' : ' is' ?> accepted every <?= $rateLimitInterval !== 1 ? $rateLimitInterval . ' seconds' : 'second' ?>.<br>
+                    In between requests will get a "<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429" target="_blank">429 Too Many Requests</a>" error, with a pair of <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After" target="_blank">Retry-After</a> headers indicating when the next query will succeed.
+                </p>
+            <?php } else { ?>
+                <p>No.</p>
             <?php } ?>
+
+            <h4>Can I run my own service?</h4>
+            <p>Yes, the source code is available on <a href="https://github.com/e7d/ifconfig" target="_blank">GitHub</a>.</p>
+
+            <h3>References</h3>
+            <ol>
+                <li id="note-1"><a href="#ref-1">^</a> <a href="https://en.wikipedia.org/wiki/Autonomous_system_(Internet)" target="_blank">Autonomous system number</a></li>
+                <li id="note-2"><a href="#ref-2">^</a> <a href="https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country" target="_blank">Administrative subdivisions</a> are specific to each country and may or may not be specified.</li>
+            </ol>
+        <?php } ?>
     </article>
 </main>
 
