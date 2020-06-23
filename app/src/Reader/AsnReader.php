@@ -14,7 +14,7 @@ class AsnReader
     function __construct(string $ip)
     {
         try {
-            $this->reader = new Reader(__DIR__ . '/Databases/GeoLite2-ASN.mmdb');
+            $this->reader = new Reader(getenv('DATABASE_DIR') . '/GeoLite2-ASN.mmdb');
             $record = $this->reader->asn($ip);
         } catch (Exception $e) {
             return;

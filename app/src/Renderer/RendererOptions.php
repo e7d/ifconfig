@@ -30,13 +30,13 @@ class RendererOptions
         $this->cli = $cli;
         $this->acceptHeader = $acceptHeader;
         $this->error = $data['error'];
-        $this->page = $data['page'];
+        $this->page = $data['page'] ?? null;
         $this->forcedFormat = $data['forcedFormat'] ?? false;
-        $this->format = $data['format'];
+        $this->format = $data['format'] ?? null;
         $this->path = $data['path'];
-        $this->field = $data['field'];
-        $this->ip = $data['ip'];
-        $this->host = $data['host'];
+        $this->field = $data['field'] ?? null;
+        $this->ip = $data['ip'] ?? null;
+        $this->host = $data['host'] ?? null;
     }
 
     public function getHeaders(): array

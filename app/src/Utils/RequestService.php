@@ -18,29 +18,46 @@ class RequestService
         return $headers['HTTP_ACCEPT'] ?? '';
     }
 
-    private static function parseEntry(array $data, $entry): array
+    private static function parseIP(array $data, string $ip): array
+    {
+        return array_merge($data, [
+            'ip' => $ip,
+            'host' => gethostbyaddr($ip)
+        ]);
+    }
+    private static function parseDomain(array $data, string $entry): array
+    {
+        $ip = DnsService::resolve($entry);
+        return array_merge(
+            $data,
+            filter_var($ip, FILTER_VALIDATE_IP)
+                ? [
+                    'ip' => $ip,
+                    'host' => $entry
+                ]
+                : ['path' => [$entry]]
+        );
+    }
+
+    private static function parseEntry(array $data, string $entry): array
     {
         if ($entry === '') return $data;
         if (in_array($entry, RendererStrategy::PAGES)) {
-            $data['page'] = $entry;
-        } else if (in_array($entry, RendererStrategy::FORMATS)) {
-            $data['forcedFormat'] = true;
-            $data['format'] = $entry;
-        } else if (filter_var($entry, FILTER_VALIDATE_IP)) {
-            $data['ip'] = $entry;
-            $data['host'] = gethostbyaddr($entry);
-        } else if (filter_var($entry, FILTER_VALIDATE_DOMAIN)) {
-            $ip = DnsService::resolve($entry);
-            if (filter_var($ip, FILTER_VALIDATE_IP)) {
-                $data['ip'] = $ip;
-                $data['host'] = $entry;
-            } else {
-                $data['path'][] = $entry;
-            }
-        } else {
-            $data['path'][] = $entry;
+            return array_merge($data, ['page' =>  $entry]);
         }
-        return $data;
+        if (in_array($entry, RendererStrategy::FORMATS)) {
+            return array_merge($data, [
+                'forcedFormat' => true,
+                'format' => $entry
+            ]);
+        }
+        if (filter_var($entry, FILTER_VALIDATE_IP)) {
+            return self::parseIP($data, $entry);
+        }
+        if (filter_var($entry, FILTER_VALIDATE_DOMAIN)) {
+            return self::parseDomain($data, $entry);
+        }
+        return array_merge($data, ['path' => [$entry]]);
     }
 
     private static function parseUri(string $uri): array
@@ -76,7 +93,7 @@ class RequestService
         return $data;
     }
 
-    private function parseAcceptHeader(string $acceptHeader): string
+    private static function parseAcceptHeader(string $acceptHeader): string
     {
         foreach (explode(';', $acceptHeader) as $acceptEntry) {
             foreach (explode(',', $acceptEntry) as $acceptHeader) {

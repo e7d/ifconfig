@@ -2,9 +2,8 @@
 
 namespace IfConfig\Reader;
 
-use Exception;
 use GeoIp2\Database\Reader;
-use GeoIp2\Model\City as ModelCity;
+use GeoIp2\Exception\AddressNotFoundException;
 use GeoIp2\Record\Country as CountryRecord;
 use GeoIp2\Record\City as CityRecord;
 use GeoIp2\Record\Postal as PostalRecord;
@@ -22,30 +21,14 @@ class LocationReader
     private ?Postal $postal = null;
     private array $subdivisions = [];
     private ?Location $location = null;
+    private ?string $timezone = null;
 
     function __construct(string $ip)
     {
         try {
-            // $start = microtime(true);
-
-            $redis = new \Redis();
-            $redis->connect('redis');
-            if ($redis->exists($ip)) {
-                $jsonRecord = $redis->get($ip);
-                $record = new ModelCity($jsonRecord);
-                // echo 'from REDIS' . PHP_EOL;
-            } else {
-                $reader = new Reader(__DIR__ . '/Databases/GeoLite2-City.mmdb');
-                $record = $reader->city($ip);
-                $jsonRecord = json_encode($record);
-                $redis->set($ip, $jsonRecord);
-                // echo 'from MMDB' . PHP_EOL;
-            }
-
-            // $end = microtime(true);
-            // var_dump($end - $start);
-            // die;
-        } catch (Exception $e) {
+            $reader = new Reader(getenv('DATABASE_DIR') . '/GeoLite2-City.mmdb');
+            $record = $reader->city($ip);
+        } catch (AddressNotFoundException $e) {
             return;
         }
         $this->setCountry($record->country);

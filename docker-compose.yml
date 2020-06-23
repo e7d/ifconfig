@@ -1,22 +1,23 @@
 version: "3"
 
 services:
-  web:
+  ifconfig:
     build:
       context: .
       dockerfile: ./dev.Dockerfile
     environment:
-      - mode=DEBUG
+      - MODE=dev
       # - HOST_AUTO=auto.my.domain
       # - HOST_IPV4=ipv4.my.domain
       # - HOST_IPV6=ipv6.my.domain
       # - RATE_LIMIT=10
       # - RATE_LIMIT_INTERVAL=3
-      # - SHOW_FAQ=true
-      # - SHOW_ABOUT=true
-    volumes:
-      - .:/var/www:ro
+      - SHOW_FAQ=true
+      - SHOW_ABOUT=true
     ports:
       - 5757:80
+    tmpfs: /tmpfs
+    volumes:
+      - .:/var/www:ro
   redis:
     image: redis

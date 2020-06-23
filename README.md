@@ -1,5 +1,6 @@
 # ifconfig
-Check your online information. Compatible with browsers and CLI clients like cURL. Output available in HTML, plain text, JSON, XML and YAML.
+Check your online information. Compatible with any HTTP compatible client is supported, including your browser, cURL, HTTPie, GNU Wget and FreeBSD fetch.  
+Output available in HTML, plain text, JSON, XML and YAML.
 
 ## Demo
 [ip.e7d.io](https://ip.e7d.io/)
@@ -7,18 +8,23 @@ Check your online information. Compatible with browsers and CLI clients like cUR
 ## Docker
 `docker run --name ifconfig -d -p 80:80 e7db/ifconfig`
 
-### Settings
-- show a link to ipv4+ipv6 domain: `-e HOST_AUTO=auto.my.domain`
-- show a link to ipv4-only domain: `-e HOST_IPV4=ipv4.my.domain`
-- show a link to ipv6-only domain: `-e HOST_IPV4=ipv6.my.domain`
-- rate limit interval (in seconds): `-e RATE_LIMIT_INTERVAL=10`
-  - 10 means a request is allowed every 10 seconds
-  - 0 means rate limiting is disabled
-- show the about page link at the bottom: `-e SHOW_ABOUT=true`
-- show the FAQ section on the about page: `-e SHOW_FAQ=true`
+### Optional settings
+- read database from memory instead of disk: `--mount type=tmpfs,destination=/tmpfs`
+  - greater read speed for an additional ~70 MB memory load
+  - requires Docker >=17.0.6
+- add a link to an ipv4+ipv6 domain: `-e HOST_AUTO=auto.my.domain`
+- add a link to an ipv4-only domain: `-e HOST_IPV4=ipv4.my.domain`
+- add a link to an ipv6-only domain: `-e HOST_IPV4=ipv6.my.domain`
+- rate limit (in number of requests): `-e RATE_LIMIT=10`
+  - disabled by default, using `RATE_LIMIT=0`
+- rate limit interval (in seconds): `-e RATE_LIMIT_INTERVAL=3`
+  - no action without a `RATE_LIMIT` > 0
+  - 1 second by default, using `RATE_LIMIT_INTERVAL=1`
+- display the footer link to the "about" page: `-e SHOW_ABOUT=true`
+- display the FAQ section on the "about" page: `-e SHOW_FAQ=true`
 
 ## Manual setup
-Requires a web server with PHP and a MaxMind license key.
+Requires a web server with PHP support and a MaxMind license key.
 
 ### Setup app
 ```shell

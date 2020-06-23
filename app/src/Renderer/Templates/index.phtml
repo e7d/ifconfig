@@ -61,7 +61,7 @@
         <h1>What is my IP information?</h1>
     </header>
     <?php require_once $this->page . '.phtml'; ?>
-<?php if (isset($_ENV['SHOW_ABOUT'])) { ?>
+<?php if (getenv('SHOW_ABOUT')) { ?>
     <footer>
         <a href="about">About</a>
     </footer>
