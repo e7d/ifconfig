@@ -25,5 +25,3 @@ services:
     image: redis
     volumes:
       - /var/run/redis:/var/run/redis
-# volumes:
-#   redis_run:

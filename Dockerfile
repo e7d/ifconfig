@@ -21,8 +21,11 @@ FROM php:7-apache
 ENV DATABASE_DIR /var/www/app/src/Reader/Databases/
 ENV RATE_LIMIT_INTERVAL 1
 COPY ./docker /
-RUN docker-php-ext-install opcache \
-    && a2enmod expires headers rewrite
+RUN a2enmod expires headers rewrite
+RUN docker-php-ext-install opcache
+RUN pecl install -o -f redis \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable redis
 COPY --from=build-dependencies /build/app /var/www/app
 COPY --from=build-dependencies /build/vendor /var/www/vendor
 COPY --from=build-html /build/app/src/Renderer/Templates /var/www/app/src/Renderer/Templates
