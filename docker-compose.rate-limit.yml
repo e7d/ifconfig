@@ -10,6 +10,8 @@ services:
       # - HOST_AUTO=auto.my.domain
       # - HOST_IPV4=ipv4.my.domain
       # - HOST_IPV6=ipv6.my.domain
+      - RATE_LIMIT=500
+      - RATE_LIMIT_INTERVAL=60
       - SHOW_FAQ=true
       - SHOW_ABOUT=true
     ports:
@@ -17,3 +19,11 @@ services:
     tmpfs: /tmpfs
     volumes:
       - .:/var/www:ro
+      - /var/run/redis:/var/run/redis
+  redis:
+    command: --unixsocket /var/run/redis/redis.sock --unixsocketperm 777
+    image: redis
+    volumes:
+      - /var/run/redis:/var/run/redis
+# volumes:
+#   redis_run:

@@ -16,7 +16,7 @@ use IfConfig\Renderer\Error\RenderError;
 use IfConfig\Types\Field;
 use IfConfig\Types\File;
 use IfConfig\Types\Info;
-use Utils\RateLimit;
+use Utils\IpReader;
 
 class RendererStrategy
 {
@@ -64,7 +64,7 @@ class RendererStrategy
 
     public function getInfo(RendererOptions $options): Info
     {
-        RateLimit::assert((int) getenv('RATE_LIMIT'), (int) getenv('RATE_LIMIT_INTERVAL'));
+        new RateLimiter(IpReader::read($options->getHeaders()));
 
         $infoReader = new InfoReader($options);
         $info = $infoReader->getInfo();

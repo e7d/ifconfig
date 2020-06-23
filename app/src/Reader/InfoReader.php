@@ -5,6 +5,7 @@ namespace IfConfig\Reader;
 use IfConfig\Renderer\RendererOptions;
 use IfConfig\Types\Info;
 use Utils\DnsService;
+use Utils\IpReader;
 
 class InfoReader
 {
@@ -51,22 +52,8 @@ class InfoReader
 
     private function readHeaders(array $headers): array
     {
-        $ip = $this->readIpFromHeaders($headers);
+        $ip = IpReader::read($headers);
         return [$ip, gethostbyaddr($ip)];
-    }
-
-    private function readIpFromHeaders(array $headers): string
-    {
-        if (isset($headers['HTTP_CF_CONNECTING_IP']) && filter_var($headers['HTTP_CF_CONNECTING_IP'], FILTER_VALIDATE_IP)) {
-            return $headers['HTTP_CF_CONNECTING_IP'];
-        }
-        if (isset($headers['HTTP_X_REAL_IP']) && filter_var($headers['HTTP_X_REAL_IP'], FILTER_VALIDATE_IP)) {
-            return $headers['HTTP_X_REAL_IP'];
-        }
-        if (isset($headers['HTTP_CLIENT_IP']) && filter_var($headers['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP)) {
-            return $headers['HTTP_CLIENT_IP'];
-        }
-        return $headers['REMOTE_ADDR'];
     }
 
     public function getInfo(): Info

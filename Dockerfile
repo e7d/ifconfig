@@ -1,7 +1,7 @@
 FROM composer AS build-dependencies
 WORKDIR /build
 COPY . /build/
-RUN composer setup
+RUN composer prod
 
 FROM node AS build-html
 WORKDIR /build
