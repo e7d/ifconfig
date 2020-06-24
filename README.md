@@ -13,72 +13,64 @@ Output available in HTML, plain text, JSON, XML and YAML.
 
 `docker run --name ifconfig -d -p 80:80 e7db/ifconfig`
 
-### Optional settings
+### Settings
 
+- provide [MaxMind GeoLite2 databases](#maxmind-geolite2-databases):
+  - set your MaxMind license key to download databases on container startup: `-e MAXMIND_LICENSE_KEY=XXX`
+  - expose your self-downloaded database files: - `-v /path/to/databases:/var/databases`
 - add a link to an ipv4+ipv6 domain: `-e HOST_AUTO=auto.my.domain`
 - add a link to an ipv4-only domain: `-e HOST_IPV4=ipv4.my.domain`
 - add a link to an ipv6-only domain: `-e HOST_IPV4=ipv6.my.domain`
 - display the footer link to the "about" page: `-e SHOW_ABOUT=true`
 - display the FAQ section on the "about" page: `-e SHOW_FAQ=true`
-- [use in-memory database](#in-memory-database)
-- [activate rate-limiting](#rate-limiting)
+- read the MaxMind databases [from memory](#in-memory-databases): `--mount type=tmpfs,destination=/tmpfs`
+- activate [rate-limiting](#rate-limiting):
+  - maximum requests per time window: `-e RATE_LIMIT=500`
+  - time window duration: `-e RATE_LIMIT_INTERVAL=60` (1 second by default)
 
-### In-memory database
+### MaxMind GeoLite2 databases
 
-The use of an in-memory database provides much faster access to the IP location database, with an increased usage of about 70 MB of RAM.  
+Two databases are required for the geolocation feature to work completely. If one or both of the databases are missing, the corresponding information will not be retrieved:
+- MaxMind GeoLite2 "ASN" (GeoLite2-ASN.mmdb)
+  - ASN number
+  - ASN organization
+  - Network
+- MaxMind GeoLite2 "City" (GeoLite2-City.mmdb)
+  - Country
+  - City
+  - Postal code
+  - Area subdivisions
+  - Location coordinates
+  - Time zone
+
+#### With a license key
+
+A script is included in the container entrypoint to automatically download them, provided you have set your MaxMind license key as the `MAXMIND_LICENSE_KEY` environment variable.
+To get a license key:
+- [Sign up](https://www.maxmind.com/en/geolite2/signup) with MaxMind for a GeoLite2 account  
+- [Log in](https://www.maxmind.com/en/account/login) with your account
+- Go to "My License Key" and then click "Generate new license key"  
+
+#### With a databases folder mount
+
+You can provide your own databases stored in a folder, using `-v /path/to/databases:/var/databases`.
+To download the databases:
+- [Sign up](https://www.maxmind.com/en/geolite2/signup) with MaxMind for a GeoLite2 account  
+- [Log in](https://www.maxmind.com/en/account/login) with your account
+- Go to "Download Files"
+- Download the "GeoLite2 ASN" and "GeoLite2 City" databases using their "Download GZIP" link.
+- Extract `GeoLite2-ASN.mmdb` and `GeoLite2-City.mmdb` to the `/path/to/databases` folder.
+
+### In-memory databases
+
+The use of an in-memory database provides much faster access to thedata, at the cost of an increased usage of about 100 MB of RAM.  
 It requires Docker version 17.0.6 minimum.
 
-Use the following command to use it:
-`docker run --name ifconfig -d -p 80:80 --mount type=tmpfs,destination=/tmpfs e7db/ifconfig`
-
-Or the following `docker-compose.yml` file:
-```yaml
-version: "3"
-services:
-  ifconfig:
-    image: e7db/ifconfig
-    tmpfs: /tmpfs
-    ports:
-      - 80:80
-```
+Provided a `/tmpfs` mount point is available, the MaxMind GeoLite2 databases are moved there on container startup.
 
 ### Rate-limiting
 
-Access to the API can be rate-limited.  
-By doing so, a specific IP can only call this service a specific amount of time for a defined window of time (e.g.: 500 times per minute).
-
-#### Setup
-
-To do so, you need a Redis database to run alongside this container, both sharing a `redis.sock` file.  
-Then, you need to enable the rate limiting using a couple of environment variables:
-- rate limit:
-  - `-e RATE_LIMIT=500` to allow 500 requests per time window
-  - disabled by default
-- rate limit interval (in seconds):
-  - `-e RATE_LIMIT_INTERVAL=60` for a window of 1 minute
-  - 1 second by default
-
-This whole setup can be achieved using the following `docker-compose.yml` file:
-```yaml
-version: "3"
-services:
-  ifconfig:
-    image: e7db/ifconfig
-    environment:
-      - RATE_LIMIT=500
-      - RATE_LIMIT_INTERVAL=60
-    ports:
-      - 80:80
-    volumes:
-      - /var/run/redis:/var/run/redis
-  redis:
-    image: redis
-    command: --unixsocket /var/run/redis/redis.sock --unixsocketperm 777
-    volumes:
-      - /var/run/redis:/var/run/redis
-```
-
-#### Requests response
+Access to the API can be rate-limited. By doing so, a specific IP can only call this service a specific amount of time for a defined window of time (e.g.: 500 times per minute).
 
 When issuing a request to a rate-limited service, a set of additional headers are added to the HTTP response:
 ```
@@ -99,30 +91,3 @@ They comply with the [RFC 6585](https://tools.ietf.org/html/rfc6585#section-4) a
 More documentation can also be found at MDN:
 - [429 Too Many Requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429)
 - [Retry-After](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After)
-
-## Manual setup
-
-Requires a web server with PHP support and a MaxMind license key.
-
-### Setup app
-
-```shell
-git clone https://github.com/e7d/ifconfig
-cd ifconfig
-composer run setup
-```
-
-### Download MaxMind free databases
-
-MaxMind GeoLite2 "ASN" (GeoLite2-ASN.mmdb) and "City" (GeoLite2-City.mmdb) databases must be downloaded in the `app/src/Reader/Databases/` folder of the application.  
-- [Sign up](https://www.maxmind.com/en/geolite2/signup) with MaxMind for a GeoLite2 account  
-- [Log in](https://www.maxmind.com/en/account/login) with your account and got to "My License Key" to "Generate new license key"  
-- Download and extract databases:
-```
-EXPORT MAXMIND_LICENSE_KEY="YOUR_LICENSE_KEY_HERE"
-cd /tmp
-wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-ASN&date=20200121&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz
-mv GeoLite2-ASN_*/GeoLite2-ASN.mmdb /path/to/ifconfig/app/src/Reader/Databases/
-wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&date=20200121&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz
-mv GeoLite2-City_*/GeoLite2-City.mmdb /path/to/ifconfig/app/src/Reader/Databases/
-```

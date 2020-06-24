@@ -32,9 +32,7 @@ class RateLimiter
     {
         \ini_set('redis.pconnect.pooling_enabled', 1);
         $redis = new Redis();
-        // $redis->connect('redis');
-        $redis->connect('/var/run/redis/redis.sock');
-        // $redis->pconnect('redis');
+        $redis->connect('/var/run/redis/redis-server.sock');
         list($startKey, $callsKey) = [
             $this->ip . "_start",
             $this->ip . "_calls"
@@ -49,7 +47,7 @@ class RateLimiter
             $redis->get($startKey),
             $redis->get($callsKey)
         ];
-        // $redis->close();
+        $redis->close();
         return [$start, $calls];
     }
 

@@ -6,12 +6,16 @@ services:
       context: .
       dockerfile: ./dev.Dockerfile
     environment:
-      - MODE=dev
+      # - MODE=dev
+      - MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY
+      # - DATABASE_DIR=/var/www/app/src/Reader/Databases
       # - HOST_AUTO=auto.my.domain
       # - HOST_IPV4=ipv4.my.domain
       # - HOST_IPV6=ipv6.my.domain
-      - SHOW_FAQ=true
-      - SHOW_ABOUT=true
+      # - RATE_LIMIT=500
+      # - RATE_LIMIT_INTERVAL=60
+      # - SHOW_FAQ=true
+      # - SHOW_ABOUT=true
     ports:
       - 8080:80
     tmpfs: /tmpfs

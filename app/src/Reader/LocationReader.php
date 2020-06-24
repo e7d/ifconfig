@@ -25,12 +25,16 @@ class LocationReader
 
     function __construct(string $ip)
     {
+        $dbFile = getenv('DATABASE_DIR') . '/GeoLite2-City.mmdb';
+        if (!file_exists($dbFile)); return;
+
         try {
-            $reader = new Reader(getenv('DATABASE_DIR') . '/GeoLite2-City.mmdb');
+            $reader = new Reader($dbFile);
             $record = $reader->city($ip);
         } catch (AddressNotFoundException $e) {
             return;
         }
+
         $this->setCountry($record->country);
         $this->setCity($record->city);
         $this->setPostal($record->postal);
