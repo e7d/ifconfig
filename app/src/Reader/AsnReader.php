@@ -14,7 +14,7 @@ class AsnReader
     function __construct(string $ip)
     {
         $dbFile = getenv('DATABASE_DIR') . '/GeoLite2-ASN.mmdb';
-        if (!file_exists($dbFile)); return;
+        if (!file_exists($dbFile)) return;
 
         try {
             $reader = new Reader($dbFile);

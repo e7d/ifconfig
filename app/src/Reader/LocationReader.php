@@ -26,7 +26,7 @@ class LocationReader
     function __construct(string $ip)
     {
         $dbFile = getenv('DATABASE_DIR') . '/GeoLite2-City.mmdb';
-        if (!file_exists($dbFile)); return;
+        if (!file_exists($dbFile)) return;
 
         try {
             $reader = new Reader($dbFile);
