@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ "$mode" == "dev" ]]; then
+if [[ "$MODE" == "dev" ]]; then
     cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
     echo "Development mode."
 else

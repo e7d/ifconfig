@@ -2,8 +2,8 @@
 
 namespace IfConfig\Reader;
 
-use Exception;
 use GeoIp2\Database\Reader;
+use GeoIp2\Exception\AddressNotFoundException;
 use GeoIp2\Model\Asn as AsnModel;
 use IfConfig\Types\ASN;
 
@@ -19,7 +19,7 @@ class AsnReader
         try {
             $reader = new Reader($dbFile);
             $record = $reader->asn($ip);
-        } catch (Exception $e) {
+        } catch (AddressNotFoundException $e) {
             return;
         }
 
