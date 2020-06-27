@@ -12,7 +12,6 @@
   },
   "scripts": {
     "benchmark": "ab -k -c 100 -n 100000 http://localhost:8080/",
-    "build:docker": "./hooks/build",
     "prod": "composer install && composer dump-autoload --optimize",
     "setup": "composer install && composer dump-autoload"
   }

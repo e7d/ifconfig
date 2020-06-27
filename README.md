@@ -15,7 +15,7 @@ Output available in HTML, plain text, JSON, XML and YAML.
 
 ### Settings
 
-- provide [MaxMind GeoLite2 databases](#maxmind-geolite2-databases):
+- provide geolocation [MaxMind GeoLite2 databases](#maxmind-geolite2-databases):
   - set your MaxMind license key to download databases on container startup: `-e MAXMIND_LICENSE_KEY=XXX`
   - expose your self-downloaded database files: - `-v /path/to/databases:/var/databases`
 - add a link to an ipv4+ipv6 domain: `-e HOST_AUTO=auto.my.domain`
@@ -27,6 +27,7 @@ Output available in HTML, plain text, JSON, XML and YAML.
 - activate [rate-limiting](#rate-limiting):
   - maximum requests per time window: `-e RATE_LIMIT=500`
   - time window duration: `-e RATE_LIMIT_INTERVAL=60` (1 second by default)
+- activate the [local DNS caching](#local-dns-caching): `-e DNS_CACHE=true`
 
 ### MaxMind GeoLite2 databases
 
@@ -70,7 +71,7 @@ Provided a `/tmpfs` mount point is available, the MaxMind GeoLite2 databases are
 
 ### Rate-limiting
 
-Access to the API can be rate-limited. By doing so, a specific IP can only call this service a specific amount of time for a defined window of time (e.g.: 500 times per minute).
+By rate-limiting access to the API, a specific IP can only call this service a specific amount of time for a defined window of time (e.g.: 500 times per minute).
 
 When issuing a request to a rate-limited service, a set of additional headers are added to the HTTP response:
 ```
@@ -91,3 +92,7 @@ They comply with the [RFC 6585](https://tools.ietf.org/html/rfc6585#section-4) a
 More documentation can also be found at MDN:
 - [429 Too Many Requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429)
 - [Retry-After](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After)
+
+### Local DNS caching
+
+By caching DNS requests locally, you can speed up name resolution on your environment. Increased performance is not guaranted, but usually depends on your available DNS server performance and network link.

@@ -5,17 +5,23 @@ services:
     build:
       context: .
       dockerfile: ./dev.Dockerfile
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+      - 8.8.8.8
+      - 8.8.4.4
     environment:
-      # - MODE=dev
-      - MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY
-      # - DATABASE_DIR=/var/www/app/src/Reader/Databases
+      # - DATABASE_DIR=/path/to/databases
+      # - DNS_CACHE=true
       # - HOST_AUTO=auto.my.domain
       # - HOST_IPV4=ipv4.my.domain
       # - HOST_IPV6=ipv6.my.domain
-      # - RATE_LIMIT=500
+      - MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY
+      # - MODE=dev
       # - RATE_LIMIT_INTERVAL=60
-      # - SHOW_FAQ=true
-      # - SHOW_ABOUT=true
+      # - RATE_LIMIT=500
+      # - SHOW_ABOUT=false
+      # - SHOW_FAQ=false
     ports:
       - 8080:80
     tmpfs: /tmpfs

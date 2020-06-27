@@ -30,4 +30,10 @@ if [[ ! -z "$RATE_LIMIT" ]]; then
     echo "Enabled Redis-based rate limiter."
 fi
 
+if [[ "$DNS_CACHE" == "true" ]]; then
+    service bind9 start
+    echo "nameserver 127.0.0.1" >/etc/resolv.conf
+    echo "Enabled local cache service."
+fi
+
 docker-php-entrypoint "$@"

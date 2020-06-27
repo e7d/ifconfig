@@ -22,16 +22,17 @@ RUN docker-php-ext-install opcache
 RUN a2enmod expires headers rewrite
 
 FROM dependencies
-ENV MODE prod
-ENV MAXMIND_LICENSE_KEY ""
 ENV DATABASE_DIR /var/databases
+ENV DNS_CACHE false
 ENV HOST_AUTO ""
 ENV HOST_IPV4 ""
 ENV HOST_IPV6 ""
-ENV RATE_LIMIT 0
+ENV MAXMIND_LICENSE_KEY ""
+ENV MODE prod
+ENV RATE_LIMIT ""
 ENV RATE_LIMIT_INTERVAL 1
-ENV SHOW_FAQ false
 ENV SHOW_ABOUT false
+ENV SHOW_FAQ false
 COPY ./docker /
 COPY --from=build-dependencies /build/app /var/www/app
 COPY --from=build-dependencies /build/vendor /var/www/vendor
