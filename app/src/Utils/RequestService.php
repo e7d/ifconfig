@@ -35,7 +35,7 @@ class RequestService
                     'ip' => $ip,
                     'host' => $entry
                 ]
-                : ['path' => [$entry]]
+                : ['path' => array_merge($data['path'], [$entry])]
         );
     }
 
@@ -44,6 +44,17 @@ class RequestService
         if ($entry === '') return $data;
         if (in_array($entry, RendererStrategy::PAGES)) {
             return array_merge($data, ['page' =>  $entry]);
+        }
+        if (preg_match(
+            '/(?P<entry>.*)\.(?P<format>' . implode('|', RendererStrategy::FORMATS) . ')/',
+            $entry,
+            $matches
+        )) {
+            $data = array_merge($data, [
+                'forcedFormat' => true,
+                'format' => $matches['format']
+            ]);
+            $entry = $matches['entry'];
         }
         if (in_array($entry, RendererStrategy::FORMATS)) {
             return array_merge($data, [
@@ -57,7 +68,7 @@ class RequestService
         if (filter_var($entry, FILTER_VALIDATE_DOMAIN)) {
             return self::parseDomain($data, $entry);
         }
-        return array_merge($data, ['path' => [$entry]]);
+        return array_merge($data, ['path' => array_merge($data['path'], [$entry])]);
     }
 
     private static function parseUri(string $uri): array
@@ -131,7 +142,7 @@ class RequestService
     {
         return array_merge(
             self::parseArray($headers),
-            ["format" => self::parseAcceptHeader($headers['HTTP_ACCEPT'])]
+            ['format' => self::parseAcceptHeader($headers['HTTP_ACCEPT'])]
         );
     }
 

@@ -5,11 +5,6 @@ services:
     build:
       context: .
       dockerfile: ./dev.Dockerfile
-    dns:
-      - 1.1.1.1
-      - 1.0.0.1
-      - 8.8.8.8
-      - 8.8.4.4
     environment:
       # - DATABASE_DIR=/path/to/databases
       # - DNS_CACHE=true
