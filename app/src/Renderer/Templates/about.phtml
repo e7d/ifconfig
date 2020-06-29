@@ -29,12 +29,12 @@ $domain = $_SERVER["HTTP_HOST"];
         padding: 4px 8px;
         height: 32px;
         line-height: 32px;
-        border-top: 1px solid #dee2e6;
+        border-top: 1px solid var(--title);
     }
 
     thead th {
         vertical-align: bottom;
-        border-bottom: 2px solid #dee2e6;
+        border-bottom: 2px solid var(--title);
     }
 
     th {
@@ -66,7 +66,7 @@ $domain = $_SERVER["HTTP_HOST"];
     select {
         background: white;
         border-radius: 4px;
-        border: 1px solid #ced4da;
+        border: 1px solid var(--title);
     }
 
     input:focus,
@@ -80,9 +80,9 @@ $domain = $_SERVER["HTTP_HOST"];
 
     input[type="submit"] {
         cursor: pointer;
-        color: #fff;
-        background-color: #007bff;
-        border-color: #007bff;
+        color: var(--color);
+        background-color: var(--blue);
+        border-color: var(--blue);
     }
 
     .form-group {
@@ -103,7 +103,7 @@ $domain = $_SERVER["HTTP_HOST"];
 
     .panel {
         padding: 16px;
-        background-color: #f8f9fa;
+        background-color: var(--subtitle);
         border-radius: 8px;
     }
 </style>

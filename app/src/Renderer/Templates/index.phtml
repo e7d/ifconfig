@@ -10,7 +10,30 @@
     <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP+hoaH/eHh4/wAAAP9JSUn/0NDQ/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/s7Oz/4aGhv8AAAD/UVFR/+jo6P8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/7Ozs/+Ghob/AAAA/1FRUf/o6Oj/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP+zs7P/hoaG/wAAAP9RUVH/6enp/xEREf8RERH/BgYG/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/s7Oz/4aGhv8AAAD/UVFR//7+/v/7+/v/+/v7//n5+f+goKD/BwcH/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/7Ozs/+Ghob/AAAA/1FRUf/o6Oj/AAAA/wAAAP8iIiL/4ODg/3R0dP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP+zs7P/hoaG/wAAAP9RUVH/6Ojo/wAAAP8AAAD/AAAA/4yMjP+wsLD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/s7Oz/4aGhv8AAAD/UVFR/+jo6P8AAAD/AAAA/wAAAP+ZmZn/qKio/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/7Ozs/+Ghob/AAAA/1FRUf/s7Oz/Li4u/y8vL/9aWlr/9PT0/1JSUv8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP+dnZ3/dXV1/wAAAP9HR0f/39/f/9/f3//f39//zMzM/2RkZP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==">
 
     <style>
+        @media (prefers-color-scheme: light) {
+            body {
+                --background: white;
+                --color: black;
+                --blue: #0051A8;
+                --blue-alt: #003166;
+                --title: #ddd;
+                --subtitle: #f5f5f5;
+            }
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                --background: black;
+                --color: white;
+                --blue: #54a6ff;
+                --blue-alt: #76b7ff;
+                --title: #444;
+                --subtitle: #222;
+            }
+        }
+
         body {
+            background: var(--background);
+            color: var(--color);
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ubuntu, Roboto,
                 "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
@@ -23,26 +46,26 @@
 
         a,
         a:visited {
-            color: #0051A8;
+            color: var(--blue);
             text-decoration: none;
         }
 
         a:hover {
-            color: #003166;
+            color: var(--blue-alt);
             text-decoration: underline;
         }
 
         h1 {
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid var(--title);
         }
 
         main {
-            border: 1px solid #ddd;
+            border: 1px solid var(--title);
             border-radius: 5px;
         }
 
         h2 {
-            background-color: #f5f5f5;
+            background-color: var(--subtitle);
             border: transparent;
             font-weight: normal;
             margin: 0;
@@ -61,11 +84,11 @@
         <h1>What is my IP information?</h1>
     </header>
     <?php require_once $this->page . '.phtml'; ?>
-<?php if (getenv('SHOW_ABOUT')) { ?>
-    <footer>
-        <a href="about">About</a>
-    </footer>
-<?php } ?>
+    <?php if (getenv('SHOW_ABOUT')) { ?>
+        <footer>
+            <a href="about">About</a>
+        </footer>
+    <?php } ?>
 </body>
 
 </html>
