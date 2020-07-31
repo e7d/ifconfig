@@ -8,16 +8,6 @@ use IfConfig\Types\Info;
 
 class RequestService
 {
-    private static function isCli(array $headers): bool
-    {
-        return preg_match('/curl|httpie|wget/i', $headers['HTTP_USER_AGENT'], $_,) === 1;
-    }
-
-    private static function getAcceptHeader(array $headers): string
-    {
-        return $headers['HTTP_ACCEPT'] ?? '';
-    }
-
     private static function parseIP(array $data, string $ip): array
     {
         return array_merge($data, [
@@ -71,7 +61,7 @@ class RequestService
         return array_merge($data, ['path' => array_merge($data['path'], [$entry])]);
     }
 
-    private static function parseUri(string $uri): array
+    private static function parsePath(string $uri): array
     {
         $pathParts = explode('/', substr($uri, 1));
         return array_reduce($pathParts, function ($data, $part) {
@@ -79,7 +69,7 @@ class RequestService
         }, ['path' => []]);
     }
 
-    private static function parseArray(array $array): array
+    private static function parseData(array $array): array
     {
         $data = [];
         array_walk($array, function ($value, $key) use (&$data) {
@@ -104,7 +94,7 @@ class RequestService
         return $data;
     }
 
-    private static function parseAcceptHeader(string $acceptHeader): string
+    private static function acceptHeaderToFormat(string $acceptHeader): string
     {
         foreach (explode(';', $acceptHeader) as $acceptEntry) {
             foreach (explode(',', $acceptEntry) as $acceptHeader) {
@@ -141,8 +131,8 @@ class RequestService
     private static function parseHeaders(array $headers): array
     {
         return array_merge(
-            self::parseArray($headers),
-            ['format' => self::parseAcceptHeader($headers['HTTP_ACCEPT'])]
+            self::parseData($headers),
+            ['format' => self::acceptHeaderToFormat($headers['HTTP_ACCEPT'] ?? '')]
         );
     }
 
@@ -151,13 +141,10 @@ class RequestService
         return new RendererOptions(
             $headers,
             $params,
-            self::getAcceptHeader($headers),
-            self::isCli($headers),
             array_merge(
-                ['error' => false],
                 self::parseHeaders($headers),
-                self::parseUri($headers['REDIRECT_URL'] ?? ''),
-                self::parseArray($params)
+                self::parsePath($headers['REDIRECT_URL'] ?? ''),
+                self::parseData($params)
             )
         );
     }

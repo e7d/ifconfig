@@ -7,9 +7,6 @@ class RendererOptions
     private array $headers;
     private array $params;
 
-    private string $acceptHeader;
-    private bool $cli;
-    private bool $error;
     private ?string $page;
     private bool $forcedFormat;
     private ?string $format;
@@ -21,15 +18,10 @@ class RendererOptions
     function __construct(
         array $headers,
         array $params,
-        string $acceptHeader,
-        bool $cli,
         array $data
     ) {
         $this->headers = $headers;
         $this->params = $params;
-        $this->cli = $cli;
-        $this->acceptHeader = $acceptHeader;
-        $this->error = $data['error'];
         $this->page = $data['page'] ?? null;
         $this->forcedFormat = $data['forcedFormat'] ?? false;
         $this->format = $data['format'] ?? null;
@@ -38,7 +30,6 @@ class RendererOptions
         $this->ip = $data['ip'] ?? null;
         $this->host = $data['host'] ?? null;
     }
-
     public function getHeaders(): array
     {
         return $this->headers;
@@ -47,16 +38,6 @@ class RendererOptions
     public function getParams(): array
     {
         return $this->params;
-    }
-
-    public function getAcceptHeader(): string
-    {
-        return $this->acceptHeader;
-    }
-
-    public function isCli(): bool
-    {
-        return $this->cli;
     }
 
     public function hasError(): bool
