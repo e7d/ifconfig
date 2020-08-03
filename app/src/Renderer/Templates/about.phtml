@@ -2,6 +2,18 @@
 $domain = $_SERVER["HTTP_HOST"];
 ?>
 <style>
+    @media (prefers-color-scheme: light) {
+        body {
+            --blue-color--shadow: rgba(0, 123, 255, 0.25);
+        }
+    }
+
+    @media (prefers-color-scheme: dark) {
+        body {
+            --blue-color--shadow: rgba(127, 189, 255, 0.25);
+        }
+    }
+
     article {
         padding: 8px;
     }
@@ -9,8 +21,7 @@ $domain = $_SERVER["HTTP_HOST"];
     a[target="_blank"] {
         background-position: center right;
         background-repeat: no-repeat;
-        background-image: linear-gradient(transparent, transparent),
-            url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiID8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiPgoJPHBhdGggZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMzZjIiBkPSJNMS41IDQuNTE4aDUuOTgyVjEwLjVIMS41eiIgLz4KCTxwYXRoIGZpbGw9IiMzNmMiIGQ9Ik01Ljc2NSAxSDExdjUuMzlMOS40MjcgNy45MzdsLTEuMzEtMS4zMUw1LjM5MyA5LjM1bC0yLjY5LTIuNjg4IDIuODEtMi44MDhMNC4yIDIuNTQ0eiIgLz4KCTxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik05Ljk5NSAyLjAwNGwuMDIyIDQuODg1TDguMiA1LjA3IDUuMzIgNy45NSA0LjA5IDYuNzIzbDIuODgyLTIuODgtMS44NS0xLjg1MnoiIC8+Cjwvc3ZnPgo=);
+        background-image: linear-gradient(transparent, transparent), url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiID8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiPgoJPHBhdGggZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMzZjIiBkPSJNMS41IDQuNTE4aDUuOTgyVjEwLjVIMS41eiIgLz4KCTxwYXRoIGZpbGw9IiMzNmMiIGQ9Ik01Ljc2NSAxSDExdjUuMzlMOS40MjcgNy45MzdsLTEuMzEtMS4zMUw1LjM5MyA5LjM1bC0yLjY5LTIuNjg4IDIuODEtMi44MDhMNC4yIDIuNTQ0eiIgLz4KCTxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik05Ljk5NSAyLjAwNGwuMDIyIDQuODg1TDguMiA1LjA3IDUuMzIgNy45NSA0LjA5IDYuNzIzbDIuODgyLTIuODgtMS44NS0xLjg1MnoiIC8+Cjwvc3ZnPgo=);
         padding-right: 16px;
     }
 
@@ -29,12 +40,12 @@ $domain = $_SERVER["HTTP_HOST"];
         padding: 4px 8px;
         height: 32px;
         line-height: 32px;
-        border-top: 1px solid var(--title);
+        border-top: 1px solid var(--border-color);
     }
 
     thead th {
         vertical-align: bottom;
-        border-bottom: 2px solid var(--title);
+        border-bottom: 2px solid var(--border-color);
     }
 
     th {
@@ -64,25 +75,27 @@ $domain = $_SERVER["HTTP_HOST"];
 
     input,
     select {
-        background: white;
+        background-color: var(--background-color);
+        color: var(--text-color);
         border-radius: 4px;
-        border: 1px solid var(--title);
+        border: 1px solid var(--border-color);
     }
 
     input:focus,
     input:active,
     select:focus,
     select:active {
-        border-color: #80bdff;
+        border-color: var(--blue-color);
         outline: 0;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        box-shadow: 0 0 0 0.2rem var(--blue-color--shadow);
     }
 
     input[type="submit"] {
         cursor: pointer;
-        color: var(--color);
-        background-color: var(--blue);
-        border-color: var(--blue);
+        color: var(--text-color);
+        background-color: var(--blue-color);
+        border-color: var(--blue-color);
+        color: var(--background-color);
     }
 
     .form-group {
@@ -103,7 +116,7 @@ $domain = $_SERVER["HTTP_HOST"];
 
     .panel {
         padding: 16px;
-        background-color: var(--subtitle);
+        background-color: var(--panel-bg-color);
         border-radius: 8px;
     }
 </style>

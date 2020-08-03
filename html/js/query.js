@@ -37,7 +37,7 @@ function generateForm(params) {
     ${Object.entries(params)
       .map(([k, v]) => `<input type="hidden" name="${k}" value="${v}">`)
       .join("")}
-    <input type="submit">
+    <input type="submit" value="Submit">
   </form>`;
 }
 
