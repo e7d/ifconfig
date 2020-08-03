@@ -17,7 +17,8 @@ Output available in HTML, plain text, JSON, XML and YAML.
 
 - provide geolocation [MaxMind GeoLite2 databases](#maxmind-geolite2-databases):
   - set your MaxMind license key to download databases on container startup: `-e MAXMIND_LICENSE_KEY=XXX`
-  - expose your self-downloaded database files: - `-v /path/to/databases:/var/databases`
+  - also set your MaxMind account ID to daily update the databases: `-e DATABASE_AUTO_UPDATE=true -e MAXMIND_ACCOUNT_ID=123456`
+  - or expose your self-downloaded database files: - `-v /path/to/databases:/var/databases`
 - add a link to an ipv4+ipv6 domain: `-e HOST_AUTO=auto.my.domain`
 - add a link to an ipv4-only domain: `-e HOST_IPV4=ipv4.my.domain`
 - add a link to an ipv6-only domain: `-e HOST_IPV4=ipv6.my.domain`
@@ -28,6 +29,7 @@ Output available in HTML, plain text, JSON, XML and YAML.
   - maximum requests per time window: `-e RATE_LIMIT=500`
   - time window duration: `-e RATE_LIMIT_INTERVAL=60` (1 second by default)
 - activate the [local DNS caching](#local-dns-caching): `-e DNS_CACHE=true`
+- track page views with Google Analytics: `-e GOOGLE_ANALYTICS_ID=UA-12345678-9`
 
 ### MaxMind GeoLite2 databases
 
