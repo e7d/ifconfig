@@ -6,7 +6,6 @@ use IfConfig\Renderer\Error\ErrorRenderer;
 use IfConfig\Renderer\Error\RenderError;
 use IfConfig\Renderer\RendererStrategy;
 use Utils\AnalyticsService;
-use Utils\IpReader;
 use Utils\RequestService;
 
 class Application
