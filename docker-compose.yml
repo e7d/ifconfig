@@ -9,10 +9,11 @@ services:
       # - DATABASE_AUTO_UPDATE=true
       # - DATABASE_DIR=/path/to/databases
       # - DNS_CACHE=true
+      # - GOOGLE_ANALYTICS_ID=UA-12345678-9
       # - HOST_AUTO=auto.my.domain
       # - HOST_IPV4=ipv4.my.domain
       # - HOST_IPV6=ipv6.my.domain
-      # - MAXMIND_ACCOUNT_ID=$MAXMIND_ACCOUNT_ID
+      # - MAXMIND_ACCOUNT_ID=123456
       - MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY
       # - MODE=dev
       # - RATE_LIMIT_INTERVAL=60
