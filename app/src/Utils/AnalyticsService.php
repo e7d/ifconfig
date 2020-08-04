@@ -9,7 +9,7 @@ class AnalyticsService
     private static function parseAcceptLanguage(?string $acceptLanguage): string
     {
         return $acceptLanguage
-            ? explode(',', explode(';', $acceptLanguage)[0])[0]
+            ? \strtolower(\explode(',', \explode(';', $acceptLanguage)[0])[0])
             : '';
     }
 
