@@ -28,7 +28,7 @@ class AnalyticsService
             ->setProtocolVersion('1')
             ->setTrackingId($gaId)
             ->setDataSource('api')
-            ->setClientId($clientIp)
+            ->setClientId(md5($clientIp))
             ->setIpOverride($clientIp)
             ->setUserAgentOverride($userAgent)
             ->setDocumentReferrer($referer)
