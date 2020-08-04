@@ -6,13 +6,21 @@ use TheIconic\Tracking\GoogleAnalytics\Analytics;
 
 class AnalyticsService
 {
+    private static function parseAcceptLanguage(?string $acceptLanguage): string
+    {
+        return $acceptLanguage
+            ? explode(',', explode(';', $acceptLanguage)[0])[0]
+            : '';
+    }
+
     public static function pageView(string $gaId, bool $debug = false): void
     {
         $clientIp = IpReader::read($_SERVER);
+        $referer = $_SERVER['HTTP_REFERER'] ?? '';
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $userLanguage = self::parseAcceptLanguage($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? null);
         $documentHostName = $_SERVER['HTTP_HOST'] ?? '';
         $documentPath = $_SERVER['REQUEST_URI'] ?? '';
-        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-        $referer = $_SERVER['HTTP_REFERER'] ?? '';
 
         $analytics = new Analytics(true);
         $analytics
@@ -21,11 +29,12 @@ class AnalyticsService
             ->setTrackingId($gaId)
             ->setDataSource('api')
             ->setClientId($clientIp)
-            ->setDocumentHostName($documentHostName)
-            ->setDocumentPath($documentPath)
             ->setIpOverride($clientIp)
             ->setUserAgentOverride($userAgent)
-            ->setDocumentReferrer($referer);
+            ->setDocumentReferrer($referer)
+            ->setUserLanguage($userLanguage)
+            ->setDocumentHostName($documentHostName)
+            ->setDocumentPath($documentPath);
         $analytics->sendPageview();
     }
 }
