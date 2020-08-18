@@ -19,12 +19,11 @@ class HtmlRenderer extends ContentTypeRenderer
 
     private function getCountryString(?Country $country): string
     {
-        return $country ?
-            (is_null($country->getFlag())
+        return is_null($country)
+            ? ''
+            : (is_null($country->getFlag())
                 ? ''
-                : '<img src="' . $country->getFlag()->getImage()->getBase64() . '" title="' . $country->getIsoCode() . '"> ')
-            . $country->getName() . ' (' . $country->getIsoCode() . ')'
-            : '';
+                : '<img src="' . $country->getFlag()->getImage()->getBase64() . '" title="' . $country->getIsoCode() . '"> ') . $country->getName() . ' (' . $country->getIsoCode() . ')';
     }
 
     private function getSubdivionsString(Subdivisions $subdivisions): string
