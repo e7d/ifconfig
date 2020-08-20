@@ -19,6 +19,12 @@ if [ ! -z "$MAXMIND_LICENSE_KEY" ]; then
     echo "Done."
 fi
 
+if [ -d "/tmpfs" ]; then
+    mv $DATABASE_DIR/*.mmdb /tmpfs/
+    export DATABASE_DIR=/tmpfs
+    echo "Enabled tmpfs mode."
+fi
+
 mask() {
     n=5
     start="${1:0:n}"
@@ -37,18 +43,12 @@ if [ ! -z "$DATABASE_AUTO_UPDATE" ]; then
         echo "LicenseKey: $(mask $MAXMIND_LICENSE_KEY)"
         sed -i "s/ACCOUNT_ID/$MAXMIND_ACCOUNT_ID/g" /usr/local/etc/GeoIP.conf
         sed -i "s/LICENSE_KEY/$MAXMIND_LICENSE_KEY/g" /usr/local/etc/GeoIP.conf
-        echo "0 5 * * * geoipupdate" >/tmp/cron
+        echo "0 5 * * * geoipupdate -f /usr/local/etc/GeoIP.conf -d $DATABASE_DIR/" >/tmp/cron
         crontab /tmp/cron
         rm /tmp/cron
         service cron start
         echo "Done."
     fi
-fi
-
-if [ -d "/tmpfs" ]; then
-    mv $DATABASE_DIR/*.mmdb /tmpfs/
-    export DATABASE_DIR=/tmpfs
-    echo "Enabled tmpfs mode."
 fi
 
 if [ ! -z "$RATE_LIMIT" ]; then
