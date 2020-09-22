@@ -84,10 +84,17 @@
     <header>
         <h1>What is my IP information?</h1>
     </header>
-    <?php require_once $this->page . '.phtml'; ?>
-    <?php if (getenv('SHOW_ABOUT')) { ?>
+    <?php
+
+    use IfConfig\Reader\AsnReader;
+    use IfConfig\Reader\LocationReader;
+
+    require_once $this->page . '.phtml';
+    if (getenv('SHOW_ABOUT')) {
+        $databaseDate = date('Y/m/d', max(AsnReader::getDbFileDate(), LocationReader::getDbFileDate()));
+    ?>
         <footer>
-            <a href="about">About</a>
+            <a href="about">About</a> - Database: <?= $databaseDate ?>
         </footer>
     <?php } ?>
 </body>

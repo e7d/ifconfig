@@ -7,14 +7,15 @@ use GeoIp2\Exception\AddressNotFoundException;
 use GeoIp2\Model\Asn as AsnModel;
 use IfConfig\Types\ASN;
 
-class AsnReader
+class AsnReader extends DatabaseReader
 {
+    protected static string $dbName = 'GeoLite2-ASN.mmdb';
     private ?ASN $asn = null;
 
     function __construct(string $ip)
     {
-        $dbFile = getenv('DATABASE_DIR') . '/GeoLite2-ASN.mmdb';
-        if (!file_exists($dbFile)) return;
+        $dbFile = self::getDbFilePath();
+        if (is_null($dbFile)) return;
 
         try {
             $reader = new Reader($dbFile);

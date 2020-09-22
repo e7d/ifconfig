@@ -14,8 +14,9 @@ use IfConfig\Types\Postal;
 use IfConfig\Types\Subdivision;
 use IfConfig\Types\Location;
 
-class LocationReader
+class LocationReader extends DatabaseReader
 {
+    protected static string $dbName = 'GeoLite2-City.mmdb';
     private ?Country $country = null;
     private ?City $city = null;
     private ?Postal $postal = null;
@@ -25,8 +26,8 @@ class LocationReader
 
     function __construct(string $ip)
     {
-        $dbFile = getenv('DATABASE_DIR') . '/GeoLite2-City.mmdb';
-        if (!file_exists($dbFile)) return;
+        $dbFile = self::getDbFilePath();
+        if (is_null($dbFile)) return;
 
         try {
             $reader = new Reader($dbFile);
