@@ -1,10 +1,10 @@
 <?php if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     <style>
         .force-ip {
-            position: absolute;
-            top: 0;
-            right: 0;
             margin: 8px;
+            position: absolute;
+            right: 0;
+            top: 0;
         }
 
         .force-ip span+span::before {
@@ -39,6 +39,20 @@
         content: "-";
     }
 
+    li.clipboard button {
+        background: url('data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgcm9sZT0iaW1nIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik0zMzYgNjRoLTgwYzAtMzUuMy0yOC43LTY0LTY0LTY0cy02NCAyOC43LTY0IDY0SDQ4QzIxLjUgNjQgMCA4NS41IDAgMTEydjM1MmMwIDI2LjUgMjEuNSA0OCA0OCA0OGgyODhjMjYuNSAwIDQ4LTIxLjUgNDgtNDhWMTEyYzAtMjYuNS0yMS41LTQ4LTQ4LTQ4ek0xOTIgNDBjMTMuMyAwIDI0IDEwLjcgMjQgMjRzLTEwLjcgMjQtMjQgMjQtMjQtMTAuNy0yNC0yNCAxMC43LTI0IDI0LTI0em0xNDQgNDE4YzAgMy4zLTIuNyA2LTYgNkg1NGMtMy4zIDAtNi0yLjctNi02VjExOGMwLTMuMyAyLjctNiA2LTZoNDJ2MzZjMCA2LjYgNS40IDEyIDEyIDEyaDE2OGM2LjYgMCAxMi01LjQgMTItMTJ2LTM2aDQyYzMuMyAwIDYgMi43IDYgNnoiPjwvcGF0aD48L3N2Zz4=') center no-repeat;
+        border: 0;
+        cursor: pointer;
+        display: none;
+        height: 14px;
+        margin-left: 0.2em;
+        width: 14px;
+    }
+
+    li.clipboard:hover button {
+        display: initial;
+    }
+
     @media (max-width: 640px) {
         li {
             flex-direction: column;
@@ -64,15 +78,15 @@
 <main class="info">
     <h2>Your Connection</h2>
     <ul>
-        <li>
+        <li class="clipboard">
             <label>IP Address</label>
             <span><?php echo $this->info->getIp(); ?></span>
         </li>
-        <li>
+        <li class="clipboard">
             <label>Remote Host</label>
             <span><?php echo $this->info->getHost(); ?></span>
         </li>
-        <li>
+        <li class="clipboard">
             <label>ASN</label>
             <span><?php echo $this->info->getAsn(); ?></span>
         </li>
@@ -118,3 +132,32 @@
         </li>
     </ul>
 </main>
+
+<script>
+    function selectText(node) {
+        if (document.body.createTextRange) {
+            const range = document.body.createTextRange();
+            range.moveToElementText(node);
+            range.select();
+        } else if (window.getSelection) {
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(node);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        } else {
+            console.warn("Could not select text in node: Unsupported browser.");
+        }
+    }
+
+    document.querySelectorAll('.clipboard').forEach(function (row) {
+        const span = row.querySelector('span');
+        const copyButton = document.createElement('button');
+        copyButton.classList.add('copy');
+        span.appendChild(copyButton);
+        copyButton.addEventListener('click', function () {
+            selectText(span);
+            document.execCommand("copy");
+        });
+    })
+</script>
