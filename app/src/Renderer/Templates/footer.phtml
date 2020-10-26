@@ -1,0 +1,10 @@
+<footer>
+<?php
+
+use IfConfig\Reader\DatabaseReader;
+
+$dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
+if (getenv('SHOW_ABOUT')) echo '<p><a href="about">About</a>' . ($dbLatestUpdate ? " - Database: $dbLatestUpdate" : '') . '</p>';
+if ($dbLatestUpdate) echo '<p>This product includes GeoLite2 data created by MaxMind, available from <a href="https://www.maxmind.com" target="_blank">https://www.maxmind.com</a>.</p>';
+?>
+</footer>

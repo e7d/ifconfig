@@ -42,7 +42,7 @@
             font-size: 11pt;
             max-width: 960px;
             margin: auto;
-            padding: 8px;
+            padding: 0.5em;
         }
 
         a,
@@ -70,12 +70,16 @@
             border: transparent;
             font-weight: normal;
             margin: 0;
-            padding: 16px 8px;
+            padding: 1em 0.5em;
         }
 
         footer {
-            line-height: 32px;
+            margin: 1em 0;
             text-align: center;
+        }
+
+        footer p {
+            margin: 0 0 0.5em;
         }
     </style>
 </head>
@@ -85,18 +89,9 @@
         <h1>What is my IP information?</h1>
     </header>
     <?php
-
-    use IfConfig\Reader\AsnReader;
-    use IfConfig\Reader\LocationReader;
-
     require_once $this->page . '.phtml';
-    if (getenv('SHOW_ABOUT')) {
-        $databaseDate = date('Y/m/d', max(AsnReader::getDbFileDate(), LocationReader::getDbFileDate()));
+    require_once 'footer.phtml';
     ?>
-        <footer>
-            <a href="about">About</a> - Database: <?= $databaseDate ?>
-        </footer>
-    <?php } ?>
 </body>
 
 </html>
