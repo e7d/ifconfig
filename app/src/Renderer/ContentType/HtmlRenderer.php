@@ -23,7 +23,7 @@ class HtmlRenderer extends ContentTypeRenderer
             ? ''
             : (is_null($country->getFlag())
                 ? ''
-                : '<img src="' . $country->getFlag()->getImage()->getBase64() . '" title="' . $country->getIsoCode() . '"> ') . $country->getName() . ' (' . $country->getIsoCode() . ')';
+                : '<img width="16" height="11" src="' . $country->getFlag()->getImage()->getBase64() . '" title="' . $country->getIsoCode() . '"> ') . $country->getName() . ' (' . $country->getIsoCode() . ')';
     }
 
     private function getSubdivionsString(Subdivisions $subdivisions): string
