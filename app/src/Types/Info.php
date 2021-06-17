@@ -21,7 +21,8 @@ class Info extends AbstractType
     protected ?string $referer = null;
     protected Headers $headers;
 
-    function __construct() {
+    public function __construct()
+    {
         $this->date = date('c');
     }
 

@@ -12,7 +12,7 @@ class Application
 {
     private RendererStrategy $rendererStrategy;
 
-    function __construct()
+    public function __construct()
     {
         $this->analytics();
         $this->render();
@@ -20,7 +20,9 @@ class Application
 
     private function analytics()
     {
-        if (!$gaId = getenv('GOOGLE_ANALYTICS_ID')) return;
+        if (!$gaId = getenv('GOOGLE_ANALYTICS_ID')) {
+            return;
+        }
         AnalyticsService::pageView($gaId, getenv('MODE') === 'dev');
     }
 

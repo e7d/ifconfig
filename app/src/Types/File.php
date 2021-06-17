@@ -9,9 +9,11 @@ class File implements JsonSerializable
     protected ?string $path;
     protected ?string $mimeType;
 
-    function __construct(string $path)
+    public function __construct(string $path)
     {
-        if (!file_exists($path)) return;
+        if (!file_exists($path)) {
+            return;
+        }
         $this->path = $path;
         $this->mimeType = mime_content_type($path);
     }

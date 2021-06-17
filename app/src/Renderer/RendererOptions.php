@@ -15,7 +15,7 @@ class RendererOptions
     private ?string $host;
     private ?string $ip;
 
-    function __construct(
+    public function __construct(
         array $headers,
         array $params,
         array $data

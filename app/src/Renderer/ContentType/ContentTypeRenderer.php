@@ -11,7 +11,7 @@ abstract class ContentTypeRenderer implements RendererInterface
     protected Info $info;
     protected ?Field $field;
 
-    function __construct(?Field $field = null)
+    public function __construct(?Field $field = null)
     {
         $this->field = $field;
     }

@@ -8,7 +8,7 @@ class ErrorRenderer implements RendererInterface
 {
     private RenderError $error;
 
-    function __construct(RenderError $error)
+    public function __construct(RenderError $error)
     {
         $this->error = $error;
     }

@@ -12,10 +12,12 @@ class AsnReader extends DatabaseReader
     protected static string $dbName = 'GeoLite2-ASN.mmdb';
     private ?ASN $asn = null;
 
-    function __construct(string $ip)
+    public function __construct(string $ip)
     {
         $dbFile = self::getDbFilePath();
-        if (is_null($dbFile)) return;
+        if (is_null($dbFile)) {
+            return;
+        }
 
         try {
             $reader = new Reader($dbFile);

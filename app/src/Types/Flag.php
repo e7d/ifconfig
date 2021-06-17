@@ -9,7 +9,7 @@ class Flag extends AbstractType
     protected ?string $emoji;
     protected File $image;
 
-    function __construct(string $isoCode)
+    public function __construct(string $isoCode)
     {
         $this->emoji = EmojiFlag::convert($isoCode);
         $this->image = new File(getcwd() . '/flags/' . strtolower($isoCode) . '.gif');

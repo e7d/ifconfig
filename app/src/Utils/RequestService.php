@@ -31,7 +31,9 @@ class RequestService
 
     private static function parseEntry(array $data, string $entry): array
     {
-        if ($entry === '') return $data;
+        if ($entry === '') {
+            return $data;
+        }
         if (in_array($entry, RendererStrategy::PAGES)) {
             return array_merge($data, ['page' =>  $entry]);
         }
@@ -73,12 +75,16 @@ class RequestService
     {
         $data = [];
         array_walk($array, function ($value, $key) use (&$data) {
-            if ($key === 'page' && in_array($value, RendererStrategy::PAGES)) $data['page'] = $value;
+            if ($key === 'page' && in_array($value, RendererStrategy::PAGES)) {
+                $data['page'] = $value;
+            }
             if ($key === 'format' && in_array($value, RendererStrategy::FORMATS)) {
                 $data['forcedFormat'] = true;
                 $data['format'] = $value;
             }
-            if ($key === 'field' && in_array($value, Info::getProperties())) $data['field'] = $value;
+            if ($key === 'field' && in_array($value, Info::getProperties())) {
+                $data['field'] = $value;
+            }
             if ($key === 'ip' && filter_var($value, FILTER_VALIDATE_IP)) {
                 $data['ip'] = $value;
                 $data['host'] = gethostbyaddr($value);

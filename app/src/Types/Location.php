@@ -10,7 +10,7 @@ class Location extends AbstractType
     protected ?float $latitude;
     protected ?float $longitude;
 
-    function __construct(RecordLocation $locationRecord)
+    public function __construct(RecordLocation $locationRecord)
     {
         $this->accuracyRadius = $locationRecord->accuracyRadius ?? null;
         $this->latitude = $locationRecord->latitude ?? null;

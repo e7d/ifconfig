@@ -60,14 +60,18 @@ class RateLimiter
 
     private function assert(): void
     {
-        if ($this->limit <= 0 || $this->interval <= 0) return;
+        if ($this->limit <= 0 || $this->interval <= 0) {
+            return;
+        }
 
         try {
             $now = time();
             list($start, $calls) = $this->update($now);
             $remaining = $this->interval - ($now - $start);
             $this->appendHeaders($remaining, $calls);
-            if ($calls <= $this->limit) return;
+            if ($calls <= $this->limit) {
+                return;
+            }
 
             header('Retry-After: ' . $remaining);
             header('Retry-After: ' . $this->getNextCallDate($remaining), false);

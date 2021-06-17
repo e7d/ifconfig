@@ -6,10 +6,16 @@ abstract class AbstractType
 {
     public function getPath(array $path)
     {
-        if (!$this->has($path[0])) return false;
+        if (!$this->has($path[0])) {
+            return false;
+        }
         $value = $this->get($path[0]);
-        if ($value instanceof AbstractStore) return isset($path[1]) ? $value->get($path[1]) : $value;
-        if ($value instanceof AbstractType) return isset($path[1]) ? $value->getPath(array_slice($path, 1)) : $value;
+        if ($value instanceof AbstractStore) {
+            return isset($path[1]) ? $value->get($path[1]) : $value;
+        }
+        if ($value instanceof AbstractType) {
+            return isset($path[1]) ? $value->getPath(array_slice($path, 1)) : $value;
+        }
         return is_null($value) ? '' : $value;
     }
 

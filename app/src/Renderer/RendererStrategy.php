@@ -25,7 +25,9 @@ class RendererStrategy
 
     private function getField(Info $info, array $path, ?string $field): ?Field
     {
-        if (!is_null($field)) $path = [$field];
+        if (!is_null($field)) {
+            $path = [$field];
+        }
         return count($path) > 0
             ? new Field(end($path), $info->getPath($path))
             : null;

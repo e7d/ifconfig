@@ -12,7 +12,7 @@ class InfoReader
     public const FIELDS = ['ip', 'host', 'port', 'method', 'referer', 'headers'];
     private Info $info;
 
-    function __construct(RendererOptions $options)
+    public function __construct(RendererOptions $options)
     {
         $this->info = new Info();
         list($ip, $host) =

@@ -1,7 +1,7 @@
 FROM golang AS geoipupdate-dependency
 RUN env GO111MODULE=on go get -u github.com/maxmind/geoipupdate/v4/cmd/geoipupdate
 
-FROM php:7-apache AS dependencies
+FROM php:8-apache AS dependencies
 RUN DEBIAN_FRONTEND=noninteractive \
     && apt-get -qy update \
     && apt-get -qy install bind9 cron redis-server wget \

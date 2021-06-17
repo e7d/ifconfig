@@ -6,7 +6,7 @@ use Error;
 
 class RenderError extends Error
 {
-    function __construct(string $format)
+    public function __construct(string $format)
     {
         parent::__construct($format === 'html' ? 'Not Found' : null, 404);
     }

@@ -10,7 +10,7 @@ class Country extends AbstractType
     protected ?string $isoCode;
     protected ?string $name;
 
-    function __construct(RecordCountry $countryRecord)
+    public function __construct(RecordCountry $countryRecord)
     {
         if (!empty($countryRecord->isoCode)) {
             $this->flag = new Flag($countryRecord->isoCode);

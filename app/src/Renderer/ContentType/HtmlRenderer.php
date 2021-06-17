@@ -12,7 +12,7 @@ class HtmlRenderer extends ContentTypeRenderer
 {
     private string $page;
 
-    function __construct(string $page = 'info')
+    public function __construct(string $page = 'info')
     {
         $this->page = $page;
     }
@@ -23,7 +23,9 @@ class HtmlRenderer extends ContentTypeRenderer
             ? ''
             : (is_null($country->getFlag())
                 ? ''
-                : '<img width="16" height="11" src="' . $country->getFlag()->getImage()->getBase64() . '" title="' . $country->getIsoCode() . '"> ') . $country->getName() . ' (' . $country->getIsoCode() . ')';
+                : '<img width="16" height="11" src="' . $country->getFlag()->getImage()->getBase64()
+                . '" title="' . $country->getIsoCode() . '"> ')
+            . $country->getName() . ' (' . $country->getIsoCode() . ')';
     }
 
     private function getSubdivionsString(Subdivisions $subdivisions): string
@@ -38,9 +40,12 @@ class HtmlRenderer extends ContentTypeRenderer
 
     private function getLocationString(?Location $location): string
     {
-        if (is_null($location)) return '';
+        if (is_null($location)) {
+            return '';
+        }
         $coordinates = $location->getLatitude() . ', ' . $location->getLongitude();
-        return '<a rel="noreferrer" href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude() . '&mlon=' . $location->getLongitude() . '" target="_blank">' . $coordinates . '</a>';
+        return '<a rel="noreferrer" href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude()
+            . '&mlon=' . $location->getLongitude() . '" target="_blank">' . $coordinates . '</a>';
     }
 
     private function getHeadersHtml(Headers $headers): string

@@ -9,7 +9,7 @@ class Field implements JsonSerializable
     protected string $name;
     protected $value;
 
-    function __construct(
+    public function __construct(
         string $name,
         $value
     ) {

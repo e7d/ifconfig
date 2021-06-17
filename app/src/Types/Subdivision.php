@@ -9,7 +9,7 @@ class Subdivision extends AbstractType implements JsonSerializable
     protected string $name;
     protected string $isoCode;
 
-    function __construct(
+    public function __construct(
         string $name,
         string $isoCode
     ) {

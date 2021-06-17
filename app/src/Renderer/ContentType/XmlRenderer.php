@@ -18,7 +18,8 @@ class XmlRenderer extends ContentTypeRenderer
         return $key;
     }
 
-    private function appendChildNodes(DOMDocument $document, DOMNode $node, array $data): DOMNode {
+    private function appendChildNodes(DOMDocument $document, DOMNode $node, array $data): DOMNode
+    {
         foreach ($data as $key => $value) {
             $childNode = $document->createElement($this->getNodeName($key, $value));
             $node->appendChild($this->getRecursiveNodes(
@@ -30,7 +31,8 @@ class XmlRenderer extends ContentTypeRenderer
         return $node;
     }
 
-    private function appendTextNode(DOMDocument $document, DOMNode $node, $data): DOMNode {
+    private function appendTextNode(DOMDocument $document, DOMNode $node, $data): DOMNode
+    {
         $node->appendChild($document->createTextNode($data));
         return $node;
     }

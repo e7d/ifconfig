@@ -8,7 +8,7 @@ class ASN extends AbstractType
     protected string $org;
     protected string $network;
 
-    function __construct(
+    public function __construct(
         int $number,
         string $org,
         string $network

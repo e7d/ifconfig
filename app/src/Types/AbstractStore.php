@@ -8,7 +8,7 @@ abstract class AbstractStore
 {
     protected ArrayObject $store;
 
-    function __construct(array $array)
+    public function __construct(array $array)
     {
         $this->store = new ArrayObject($array);
     }
@@ -31,7 +31,9 @@ abstract class AbstractStore
 
     public function __toString(): string
     {
-        if ($this->store->count() === 0) return '';
+        if ($this->store->count() === 0) {
+            return '';
+        }
         $headersArr = $this->getArrayCopy();
         return implode('; ', \array_map(function ($key, string $value) {
             return (is_string($key) ? $key . ': ' : '') . $value;
