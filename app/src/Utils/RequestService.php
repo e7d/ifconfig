@@ -48,7 +48,7 @@ class RequestService
             return array_merge($data, ['page' =>  $entry]);
         }
         if (preg_match(
-            '/(?P<entry>.*)\.(?P<format>' . implode('|', RendererStrategy::FORMATS) . ')/',
+            '/^(?P<entry>.*)\.(?P<format>' . implode('|', RendererStrategy::FORMATS) . ')$/',
             $entry,
             $matches
         )) {
@@ -117,16 +117,17 @@ class RequestService
         foreach (explode(';', $acceptHeader) as $acceptEntry) {
             foreach (explode(',', $acceptEntry) as $acceptHeader) {
                 switch ($acceptHeader) {
-                    case 'application/javascript':
                     case 'application/json':
-                    case 'application/x-javascript':
                     case 'application/x-json':
-                    case 'text/javascript':
                     case 'text/json':
-                    case 'text/x-javascript':
                     case 'text/x-json':
                     case '*/*':
                         return 'json';
+                    case 'application/javascript':
+                    case 'application/x-javascript':
+                    case 'text/javascript':
+                    case 'text/x-javascript':
+                        return 'jsonp';
                     case 'text/plain':
                         return 'text';
                     case 'application/xml':
