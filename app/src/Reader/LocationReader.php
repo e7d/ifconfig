@@ -56,7 +56,7 @@ class LocationReader extends DatabaseReader
         return $this->country;
     }
 
-    private function setCity(CityRecord $cityRecord)
+    private function setCity(CityRecord $cityRecord): void
     {
         $this->city = new City($cityRecord);
     }
@@ -66,7 +66,7 @@ class LocationReader extends DatabaseReader
         return $this->city;
     }
 
-    private function setPostal(PostalRecord $postalRecord)
+    private function setPostal(PostalRecord $postalRecord): void
     {
         $this->postal = new Postal($postalRecord);
     }
@@ -76,7 +76,7 @@ class LocationReader extends DatabaseReader
         return $this->postal;
     }
 
-    private function setSubdivisions(array $subdivisionsRecord)
+    private function setSubdivisions(array $subdivisionsRecord): void
     {
         $this->subdivisions = array_reduce($subdivisionsRecord, function ($subdivisions, $subdivision) {
             $subdivisions[] = new Subdivision(
@@ -92,7 +92,7 @@ class LocationReader extends DatabaseReader
         return $this->subdivisions;
     }
 
-    private function setLocation(LocationRecord $locationRecord)
+    private function setLocation(LocationRecord $locationRecord): void
     {
         $this->location = new Location($locationRecord);
     }
@@ -102,7 +102,7 @@ class LocationReader extends DatabaseReader
         return $this->location;
     }
 
-    private function setTimezone(LocationRecord $locationRecord)
+    private function setTimezone(LocationRecord $locationRecord): void
     {
         $this->timezone = $locationRecord->timeZone;
     }

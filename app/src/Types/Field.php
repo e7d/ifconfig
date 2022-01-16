@@ -27,7 +27,7 @@ class Field implements JsonSerializable
         return $this->name;
     }
 
-    public function getValue(bool $serialize = false)
+    public function getValue(bool $serialize = false): mixed
     {
         switch (true) {
             case $this->value instanceof AbstractType:
@@ -41,7 +41,7 @@ class Field implements JsonSerializable
         }
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->getValue();
     }

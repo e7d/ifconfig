@@ -4,7 +4,7 @@ namespace IfConfig\Types;
 
 abstract class AbstractType
 {
-    public function getPath(array $path)
+    public function getPath(array $path): string
     {
         if (!$this->has($path[0])) {
             return false;
@@ -19,12 +19,12 @@ abstract class AbstractType
         return is_null($value) ? '' : $value;
     }
 
-    public function has(string $field)
+    public function has(string $field): bool
     {
         return property_exists($this, $field);
     }
 
-    public function get(string $field)
+    public function get(string $field): mixed
     {
         return $this->has($field) ? $this->$field : null;
     }
@@ -34,7 +34,7 @@ abstract class AbstractType
         return $this->has($field) ? [$field => $this->expandValue($this->$field)] : null;
     }
 
-    private function expandValue($value, bool $serialize = false)
+    private function expandValue($value, bool $serialize = false): mixed
     {
         if ($value instanceof File) {
             return $serialize ? $value->getBase64() : $value;
@@ -48,7 +48,7 @@ abstract class AbstractType
         return $value;
     }
 
-    private function iterableToArray($object, bool $recursive = true, bool $serialize = false)
+    private function iterableToArray($object, bool $recursive = true, bool $serialize = false): array
     {
         $array = [];
         foreach ($object as $key => $value) {

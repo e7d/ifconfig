@@ -13,7 +13,7 @@ abstract class AbstractStore
         $this->store = new ArrayObject($array);
     }
 
-    public function get($key)
+    public function get($key): mixed
     {
         return $this->store[$key];
     }

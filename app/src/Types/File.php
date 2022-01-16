@@ -23,7 +23,7 @@ class File implements JsonSerializable
         return $this->getBase64();
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->getBase64();
     }

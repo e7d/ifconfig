@@ -18,7 +18,7 @@ class Application
         $this->render();
     }
 
-    private function analytics()
+    private function analytics(): void
     {
         if (!$gaId = getenv('GOOGLE_ANALYTICS_ID')) {
             return;
@@ -26,7 +26,7 @@ class Application
         AnalyticsService::pageView($gaId, getenv('MODE') === 'dev');
     }
 
-    private function render()
+    private function render(): void
     {
         $this->rendererStrategy = new RendererStrategy();
 
