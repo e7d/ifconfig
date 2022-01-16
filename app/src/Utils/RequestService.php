@@ -8,24 +8,34 @@ use IfConfig\Types\Info;
 
 class RequestService
 {
+    private static bool $hostResolved = false;
+
     private static function parseIP(array $data, string $ip): array
     {
+        $host = gethostbyaddr($ip);
+        if (!\is_null($host)) {
+            self::$hostResolved = true;
+        }
         return array_merge($data, [
             'ip' => $ip,
             'host' => gethostbyaddr($ip)
         ]);
     }
-    private static function parseDomain(array $data, string $entry): array
+
+    private static function parseHost(array $data, string $host): array
     {
-        $ip = DnsService::resolve($entry);
+        $ip = DnsService::resolve($host);
+        if (!\is_null($ip)) {
+            self::$hostResolved = true;
+        }
         return array_merge(
             $data,
             filter_var($ip, FILTER_VALIDATE_IP)
                 ? [
                     'ip' => $ip,
-                    'host' => $entry
+                    'host' => $host
                 ]
-                : ['path' => array_merge($data['path'], [$entry])]
+                : ['path' => array_merge($data['path'], [$host])]
         );
     }
 
@@ -54,11 +64,13 @@ class RequestService
                 'format' => $entry
             ]);
         }
-        if (filter_var($entry, FILTER_VALIDATE_IP)) {
-            return self::parseIP($data, $entry);
-        }
-        if (filter_var($entry, FILTER_VALIDATE_DOMAIN)) {
-            return self::parseDomain($data, $entry);
+        if (!self::$hostResolved) {
+            if (filter_var($entry, FILTER_VALIDATE_IP)) {
+                return self::parseIP($data, $entry);
+            }
+            if (filter_var($entry, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
+                return self::parseHost($data, $entry);
+            }
         }
         return array_merge($data, ['path' => array_merge($data['path'], [$entry])]);
     }
