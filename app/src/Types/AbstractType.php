@@ -4,7 +4,7 @@ namespace IfConfig\Types;
 
 abstract class AbstractType
 {
-    public function getPath(array $path): string
+    public function getPath(array $path): mixed
     {
         if (!$this->has($path[0])) {
             return false;
