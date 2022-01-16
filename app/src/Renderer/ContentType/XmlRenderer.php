@@ -4,11 +4,21 @@ namespace IfConfig\Renderer\ContentType;
 
 use DOMDocument;
 use DOMNode;
+use IfConfig\Types\Field;
 use JsonSerializable;
 use ReflectionClass;
 
 class XmlRenderer extends ContentTypeRenderer
 {
+    private bool $beautify = false;
+
+    public function __construct(?Field $field = null)
+    {
+        parent::__construct($field);
+        parse_str($_SERVER['QUERY_STRING'], $params);
+        $this->beautify = array_key_exists('beautify', $params);
+    }
+
     private function getNodeName($key, $value): string
     {
         if (is_object($value)) {
@@ -56,6 +66,10 @@ class XmlRenderer extends ContentTypeRenderer
                 $this->field ? $this->field->getValue() : $this->info->toArray()
             )
         );
+        if ($this->beautify) {
+            $document->preserveWhiteSpace = false;
+            $document->formatOutput = true;
+        }
         print $document->saveXML();
     }
 }
