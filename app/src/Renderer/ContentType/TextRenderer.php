@@ -14,6 +14,6 @@ class TextRenderer extends ContentTypeRenderer
             });
             exit;
         }
-        print empty($data) ? 'NULL' : $data;
+        print empty($data) ? 'NULL' : $data . PHP_EOL;
     }
 }
