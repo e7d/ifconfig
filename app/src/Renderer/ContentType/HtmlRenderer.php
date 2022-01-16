@@ -17,15 +17,20 @@ class HtmlRenderer extends ContentTypeRenderer
         $this->page = $page;
     }
 
+    private function getCountryFlagString(Country $country): string
+    {
+        $flag = $country->getFlag();
+        return is_null($flag)
+            ? ''
+            : '<img width="16" height="11" src="' . $flag->getImage()->getBase64()
+            . '" title="' . $country->getIsoCode() . '"> ';
+    }
+
     private function getCountryString(?Country $country): string
     {
         return is_null($country)
             ? ''
-            : (is_null($country->getFlag())
-                ? ''
-                : '<img width="16" height="11" src="' . $country->getFlag()->getImage()->getBase64()
-                . '" title="' . $country->getIsoCode() . '"> ')
-            . $country->getName() . ' (' . $country->getIsoCode() . ')';
+            : $this->getCountryFlagString($country) . $country->getName() . ' (' . $country->getIsoCode() . ')';
     }
 
     private function getSubdivionsString(Subdivisions $subdivisions): string
