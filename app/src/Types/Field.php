@@ -31,7 +31,7 @@ class Field implements JsonSerializable
     {
         switch (true) {
             case $this->value instanceof AbstractType:
-                return $this->value->toArray();
+                return $this->value->toArray(true, $serialize);
             case $this->value instanceof AbstractStore:
                 return $this->value->getArrayCopy($serialize);
             case $this->value instanceof File:

@@ -40,7 +40,7 @@ abstract class AbstractType
             return $serialize ? $value->getBase64() : $value;
         }
         if ($value instanceof AbstractType) {
-            return $this->iterableToArray($value, true);
+            return $this->iterableToArray($value, true, $serialize);
         }
         if ($value instanceof AbstractStore) {
             return $value->getArrayCopy($serialize);
