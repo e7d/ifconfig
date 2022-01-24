@@ -15,8 +15,8 @@ class XmlRenderer extends ContentTypeRenderer
     public function __construct(?Field $field = null)
     {
         parent::__construct($field);
-        parse_str($_SERVER['QUERY_STRING'], $params);
-        $this->beautify = array_key_exists('beautify', $params);
+        parse_str($_SERVER['QUERY_STRING'], $this->params);
+        $this->beautify = array_key_exists('beautify', $this->params) || array_key_exists('pretty', $this->params);
     }
 
     private function getNodeName($key, $value): string
@@ -43,7 +43,7 @@ class XmlRenderer extends ContentTypeRenderer
 
     private function appendTextNode(DOMDocument $document, DOMNode $node, $data): DOMNode
     {
-        $node->appendChild($document->createTextNode($data));
+        $node->appendChild($document->createTextNode($data ?? ''));
         return $node;
     }
 

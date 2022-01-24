@@ -13,7 +13,7 @@ class JsonRenderer extends ContentTypeRenderer
     {
         parent::__construct($field);
         parse_str($_SERVER['QUERY_STRING'], $this->params);
-        $this->beautify = array_key_exists('beautify', $this->params);
+        $this->beautify = array_key_exists('beautify', $this->params) || array_key_exists('pretty', $this->params);
     }
 
     protected function jsonRender(): string
