@@ -24,6 +24,7 @@ class JsonpRenderer extends JsonRenderer
 
     public function render(): void
     {
+        parent::render();
         header('Content-Type: application/javascript');
         print $this->callbackFunction . '(';
         print $this->jsonRender();

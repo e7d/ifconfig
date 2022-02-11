@@ -56,8 +56,9 @@ class XmlRenderer extends ContentTypeRenderer
 
     public function render(): void
     {
-        $document = new DOMDocument('1.0');
+        parent::render();
         header('Content-Type: text/xml; charset=UTF-8');
+        $document = new DOMDocument('1.0');
         $rootNode = $this->field ? $this->field->getName() : 'xml';
         $document->appendChild(
             $this->getRecursiveNodes(

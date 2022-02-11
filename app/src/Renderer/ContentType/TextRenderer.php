@@ -6,6 +6,7 @@ class TextRenderer extends ContentTypeRenderer
 {
     public function render(): void
     {
+        parent::render();
         header('Content-Type: text/plain; charset=UTF-8');
         $data = $this->field ? $this->field->getValue() : $this->info->toArray(false);
         if (is_array($data)) {

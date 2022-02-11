@@ -38,9 +38,6 @@ class Application
         try {
             $options = RequestService::parse($headers, $params);
             $renderer = $this->rendererStrategy->getRenderer($options);
-            if (is_null($options->getIp())) {
-                http_response_code(404);
-            }
             $renderer->render();
         } catch (RenderError $e) {
             $renderer = new ErrorRenderer($e);

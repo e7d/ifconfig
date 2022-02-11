@@ -27,6 +27,7 @@ class JsonRenderer extends ContentTypeRenderer
 
     public function render(): void
     {
+        parent::render();
         header('Content-Type: application/json');
         print $this->jsonRender() . PHP_EOL;
     }

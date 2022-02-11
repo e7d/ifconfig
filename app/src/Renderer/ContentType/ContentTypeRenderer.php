@@ -21,5 +21,10 @@ abstract class ContentTypeRenderer implements RendererInterface
         $this->info = $info;
     }
 
-    abstract public function render(): void;
+    public function render(): void
+    {
+        if (is_null($this->info->getIp())) {
+            http_response_code(404);
+        }
+    }
 }

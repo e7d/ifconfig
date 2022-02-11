@@ -63,6 +63,7 @@ class HtmlRenderer extends ContentTypeRenderer
 
     public function render(): void
     {
+        parent::render();
         require_once __DIR__ . "/../Templates/index.phtml";
     }
 }
