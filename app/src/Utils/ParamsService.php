@@ -20,4 +20,9 @@ class ParamsService
     {
         return array_key_exists($key, self::$params);
     }
+
+    public static function isSet(string $key): bool
+    {
+        return self::has($key) && !empty(self::get($key));
+    }
 }

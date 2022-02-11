@@ -7,6 +7,7 @@ use DOMNode;
 use IfConfig\Types\Field;
 use JsonSerializable;
 use ReflectionClass;
+use Utils\ParamsService;
 
 class XmlRenderer extends ContentTypeRenderer
 {
@@ -15,8 +16,7 @@ class XmlRenderer extends ContentTypeRenderer
     public function __construct(?Field $field = null)
     {
         parent::__construct($field);
-        parse_str($_SERVER['QUERY_STRING'], $this->params);
-        $this->beautify = array_key_exists('beautify', $this->params) || array_key_exists('pretty', $this->params);
+        $this->beautify = ParamsService::has('beautify') || ParamsService::has('pretty');
     }
 
     private function getNodeName($key, $value): string

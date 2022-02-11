@@ -3,17 +3,16 @@
 namespace IfConfig\Renderer\ContentType;
 
 use IfConfig\Types\Field;
+use Utils\ParamsService;
 
 class JsonRenderer extends ContentTypeRenderer
 {
-    protected array $params = [];
     protected bool $beautify = false;
 
     public function __construct(?Field $field = null)
     {
         parent::__construct($field);
-        parse_str($_SERVER['QUERY_STRING'], $this->params);
-        $this->beautify = array_key_exists('beautify', $this->params) || array_key_exists('pretty', $this->params);
+        $this->beautify = ParamsService::has('beautify') || ParamsService::has('pretty');
     }
 
     protected function jsonRender(): string

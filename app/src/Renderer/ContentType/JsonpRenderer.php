@@ -3,6 +3,7 @@
 namespace IfConfig\Renderer\ContentType;
 
 use IfConfig\Types\Field;
+use Utils\ParamsService;
 
 class JsonpRenderer extends JsonRenderer
 {
@@ -11,8 +12,8 @@ class JsonpRenderer extends JsonRenderer
     public function __construct(?Field $field = null)
     {
         parent::__construct($field);
-        $this->callbackFunction = array_key_exists('callback', $this->params)
-            ? $this->sanitizeCallback($this->params['callback'])
+        $this->callbackFunction = ParamsService::isSet('callback')
+            ? $this->sanitizeCallback(ParamsService::get('callback'))
             : 'callback';
     }
 
