@@ -26,7 +26,7 @@ abstract class ContentTypeRenderer implements RendererInterface
         if (isset($this->field) && $this->field->getValue() === false) {
             http_response_code(404);
         }
-        if (is_null($this->info->getIp())) {
+        if (isset($this->info) && is_null($this->info->getIp())) {
             http_response_code(404);
         }
     }
