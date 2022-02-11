@@ -9,7 +9,7 @@ COPY . /build/
 RUN ./minify.sh
 
 FROM golang AS geoipupdate-dependency
-RUN env GO111MODULE=on go get -u github.com/maxmind/geoipupdate/v4/cmd/geoipupdate
+RUN env GO111MODULE=on go install github.com/maxmind/geoipupdate/v4/cmd/geoipupdate@latest
 
 FROM php:8-apache AS dependencies
 RUN DEBIAN_FRONTEND=noninteractive \
