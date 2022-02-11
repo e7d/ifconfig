@@ -36,32 +36,24 @@ class RendererStrategy
         return new Field(end($path), $info->getFromPath($path));
     }
 
-    private function getHtmlRenderer(RendererOptions $options, ?Field $field): ContentTypeRenderer
-    {
-        if (isset($field) && $field->getValue() !== false && !$options->isForcedFormat()) {
-            return new TextRenderer($field);
-        }
-        return isset($field) && $field->getValue() === false
-            ? new ErrorRenderer(new Error($field->getName() . " not found", 404))
-            // ? new TextRenderer($field)
-            : new HtmlRenderer();
-    }
-
     private function getDataRenderer(RendererOptions $options, Info $info, ?Field $field): ContentTypeRenderer
     {
         if (isset($field) && $field->getValue() instanceof File && !$options->isForcedFormat()) {
             return new FileRenderer($field);
         }
+        if (isset($field) && $field->getValue() === false) {
+            return new ErrorRenderer(new Error('', 404));
+        }
         switch ($options->getFormat()) {
             case 'html':
-                $renderer = $this->getHtmlRenderer($options, $field);
+                $renderer = isset($field) && !$options->isForcedFormat()
+                    ? new TextRenderer($field)
+                    : new HtmlRenderer();
                 break;
             default:
             case 'json':
-                $renderer = new JsonRenderer($field);
-                break;
             case 'jsonp':
-                $renderer = new JsonpRenderer($field);
+                $renderer = new JsonRenderer($field, $options->getFormat() === 'jsonp');
                 break;
             case 'text':
             case 'txt':
