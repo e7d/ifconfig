@@ -64,6 +64,9 @@ class HtmlRenderer extends ContentTypeRenderer
     public function render(): void
     {
         parent::render();
+        if (isset($this->field) && $this->field->getValue() === false) {
+            return;
+        }
         require_once __DIR__ . "/../Templates/index.phtml";
     }
 }

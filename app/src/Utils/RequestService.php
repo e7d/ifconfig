@@ -13,7 +13,7 @@ class RequestService
     private static function parseIP(array $data, string $ip): array
     {
         $host = gethostbyaddr($ip);
-        if (!\is_null($host)) {
+        if (!is_null($host)) {
             self::$hostResolved = true;
         }
         return array_merge($data, [
@@ -36,7 +36,7 @@ class RequestService
     private static function parseHost(array $data, string $host): array
     {
         $ip = DnsService::resolve($host, self::getResolveTypeParam());
-        if (!\is_null($ip)) {
+        if (!is_null($ip)) {
             self::$hostResolved = true;
         }
         return array_merge(
@@ -47,8 +47,6 @@ class RequestService
                     'host' => $host
                 ]
                 : [
-                    'ip' => null,
-                    'host' => $host,
                     'path' => array_merge($data['path'], [$host])
                 ]
         );
@@ -172,14 +170,16 @@ class RequestService
 
     public static function parse(array $headers, array $params): RendererOptions
     {
-        return new RendererOptions(
-            $headers,
-            $params,
-            array_merge(
-                self::parseHeaders($headers),
-                self::parsePath($headers['REDIRECT_URL'] ?? ''),
-                self::parseData($params)
-            )
+        $data = array_merge(
+            self::parseHeaders($headers),
+            self::parsePath($headers['REDIRECT_URL'] ?? ''),
+            self::parseData($params)
         );
+        if (!array_key_exists('ip', $data) && !array_key_exists('host', $data)) {
+            $ip = IpReader::read($headers);
+            $data['ip'] = $ip;
+            $data['host'] = gethostbyaddr($ip);
+        }
+        return new RendererOptions($headers, $data);
     }
 }

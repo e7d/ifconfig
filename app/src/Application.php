@@ -2,8 +2,6 @@
 
 namespace IfConfig;
 
-use IfConfig\Renderer\Error\ErrorRenderer;
-use IfConfig\Renderer\Error\RenderError;
 use IfConfig\Renderer\RendererStrategy;
 use Utils\AnalyticsService;
 use Utils\ParamsService;
@@ -31,16 +29,10 @@ class Application
     private function render(): void
     {
         $this->rendererStrategy = new RendererStrategy();
-
         $headers = $_SERVER;
         $params = ParamsService::parse();
-
-        try {
-            $options = RequestService::parse($headers, $params);
-            $renderer = $this->rendererStrategy->getRenderer($options);
-            $renderer->render();
-        } catch (RenderError $e) {
-            $renderer = new ErrorRenderer($e);
-        }
+        $options = RequestService::parse($headers, $params);
+        $renderer = $this->rendererStrategy->getRenderer($options);
+        $renderer->render();
     }
 }

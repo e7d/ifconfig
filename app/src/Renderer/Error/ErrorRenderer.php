@@ -2,13 +2,15 @@
 
 namespace IfConfig\Renderer\Error;
 
+use Error;
 use IfConfig\Renderer\RendererInterface;
+use IfConfig\Renderer\ContentType\ContentTypeRenderer;
 
-class ErrorRenderer implements RendererInterface
+class ErrorRenderer extends ContentTypeRenderer
 {
-    private RenderError $error;
+    private Error $error;
 
-    public function __construct(RenderError $error)
+    public function __construct(Error $error)
     {
         $this->error = $error;
     }

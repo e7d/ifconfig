@@ -11,7 +11,7 @@ class Field implements JsonSerializable
 
     public function __construct(
         string $name,
-        $value
+        mixed $value
     ) {
         $this->name = $name;
         $this->value = $value;

@@ -4,7 +4,7 @@ namespace IfConfig\Types;
 
 abstract class AbstractType
 {
-    public function getPath(array $path): mixed
+    public function getFromPath(array $path): mixed
     {
         if (!$this->has($path[0])) {
             return false;
@@ -14,7 +14,7 @@ abstract class AbstractType
             return isset($path[1]) ? $value->get($path[1]) : $value;
         }
         if ($value instanceof AbstractType) {
-            return isset($path[1]) ? $value->getPath(array_slice($path, 1)) : $value;
+            return isset($path[1]) ? $value->getFromPath(array_slice($path, 1)) : $value;
         }
         return is_null($value) ? '' : $value;
     }

@@ -5,7 +5,6 @@ namespace IfConfig\Renderer;
 class RendererOptions
 {
     private array $headers;
-    private array $params;
 
     private ?string $page;
     private bool $forcedFormat;
@@ -17,11 +16,9 @@ class RendererOptions
 
     public function __construct(
         array $headers,
-        array $params,
         array $data
     ) {
         $this->headers = $headers;
-        $this->params = $params;
         $this->page = $data['page'] ?? null;
         $this->forcedFormat = $data['forcedFormat'] ?? false;
         $this->format = $data['format'] ?? null;
@@ -30,14 +27,10 @@ class RendererOptions
         $this->ip = $data['ip'] ?? null;
         $this->host = $data['host'] ?? null;
     }
+
     public function getHeaders(): array
     {
         return $this->headers;
-    }
-
-    public function getParams(): array
-    {
-        return $this->params;
     }
 
     public function hasError(): bool
