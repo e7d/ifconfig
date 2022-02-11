@@ -48,7 +48,8 @@ class RequestService
                 ]
                 : [
                     'ip' => null,
-                    'host' => $host
+                    'host' => $host,
+                    'path' => array_merge($data['path'], [$host])
                 ]
         );
     }
