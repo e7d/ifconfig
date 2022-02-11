@@ -22,6 +22,7 @@
     li {
         border-top: 1px solid var(--border-color);
         display: flex;
+        position: relative;
     }
 
     li>* {
@@ -35,23 +36,28 @@
         min-width: 140px;
     }
 
-    span:empty::after {
-        content: "-";
-    }
-
-    li.clipboard button {
+    button {
         background: url('data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgcm9sZT0iaW1nIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik0zMzYgNjRoLTgwYzAtMzUuMy0yOC43LTY0LTY0LTY0cy02NCAyOC43LTY0IDY0SDQ4QzIxLjUgNjQgMCA4NS41IDAgMTEydjM1MmMwIDI2LjUgMjEuNSA0OCA0OCA0OGgyODhjMjYuNSAwIDQ4LTIxLjUgNDgtNDhWMTEyYzAtMjYuNS0yMS41LTQ4LTQ4LTQ4ek0xOTIgNDBjMTMuMyAwIDI0IDEwLjcgMjQgMjRzLTEwLjcgMjQtMjQgMjQtMjQtMTAuNy0yNC0yNCAxMC43LTI0IDI0LTI0em0xNDQgNDE4YzAgMy4zLTIuNyA2LTYgNkg1NGMtMy4zIDAtNi0yLjctNi02VjExOGMwLTMuMyAyLjctNiA2LTZoNDJ2MzZjMCA2LjYgNS40IDEyIDEyIDEyaDE2OGM2LjYgMCAxMi01LjQgMTItMTJ2LTM2aDQyYzMuMyAwIDYgMi43IDYgNnoiPjwvcGF0aD48L3N2Zz4=') center no-repeat;
         border: 0;
         cursor: pointer;
         display: none;
-        width: 14px;
-        height: 14px;
+        height: 16px;
+        margin: 8px 0;
         vertical-align: middle;
-        margin-left: 0.2em;
+        width: 16px;
     }
 
-    li.clipboard:hover button {
+    li.headers button {
+        position: absolute;
+        right: 8px;
+    }
+
+    li:hover button {
         display: initial;
+    }
+
+    span:empty::after {
+        content: "-";
     }
 
     @media (max-width: 640px) {
@@ -66,6 +72,11 @@
         span {
             padding-top: 0;
         }
+
+        button {
+            position: absolute;
+            right: 8px;
+        }
     }
 </style>
 
@@ -79,15 +90,15 @@
 <main class="info">
     <h2>Your Connection</h2>
     <ul>
-        <li class="clipboard">
+        <li>
             <label>IP Address</label>
             <span><?php echo $this->info->getIp(); ?></span>
         </li>
-        <li class="clipboard">
+        <li>
             <label>Remote Host</label>
             <span><?php echo $this->info->getHost(); ?></span>
         </li>
-        <li class="clipboard">
+        <li>
             <label>ASN</label>
             <span><?php echo $this->info->getAsn(); ?></span>
         </li>
@@ -127,7 +138,7 @@
             <label>Referer</label>
             <span><?php echo $this->info->getReferer(); ?></span>
         </li>
-        <li>
+        <li class="headers">
             <label>Headers</label>
             <span><?php echo $this->getHeadersHtml($this->info->getHeaders()); ?></span>
         </li>
@@ -135,30 +146,18 @@
 </main>
 
 <script>
-    function selectText(node) {
-        if (document.body.createTextRange) {
-            const range = document.body.createTextRange();
-            range.moveToElementText(node);
-            range.select();
-        } else if (window.getSelection) {
-            const selection = window.getSelection();
-            const range = document.createRange();
-            range.selectNodeContents(node);
-            selection.removeAllRanges();
-            selection.addRange(range);
-        } else {
-            console.warn("Could not select text in node: Unsupported browser.");
-        }
+    function copyText(node) {
+        navigator.clipboard.writeText(node.textContent);
     }
 
-    document.querySelectorAll('.clipboard').forEach(function (row) {
+    document.querySelectorAll('li').forEach(function(row) {
         const span = row.querySelector('span');
+        if (!span.textContent) return;
         const copyButton = document.createElement('button');
         copyButton.classList.add('copy');
-        span.appendChild(copyButton);
-        copyButton.addEventListener('click', function () {
-            selectText(span);
-            document.execCommand("copy");
+        row.appendChild(copyButton);
+        copyButton.addEventListener('click', function() {
+            copyText(span);
         });
     })
 </script>
