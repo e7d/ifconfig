@@ -22,9 +22,20 @@ class RequestService
         ]);
     }
 
+    private static function getResolveTypeParam(): ?string
+    {
+        if (ParamsService::has('v6')) {
+            return DNS_AAAA;
+        }
+        if (ParamsService::has('v4')) {
+            return DNS_A;
+        }
+        return null;
+    }
+
     private static function parseHost(array $data, string $host): array
     {
-        $ip = DnsService::resolve($host);
+        $ip = DnsService::resolve($host, self::getResolveTypeParam());
         if (!\is_null($ip)) {
             self::$hostResolved = true;
         }

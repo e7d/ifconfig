@@ -6,6 +6,7 @@ use IfConfig\Renderer\Error\ErrorRenderer;
 use IfConfig\Renderer\Error\RenderError;
 use IfConfig\Renderer\RendererStrategy;
 use Utils\AnalyticsService;
+use Utils\ParamsService;
 use Utils\RequestService;
 
 class Application
@@ -20,7 +21,8 @@ class Application
 
     private function analytics(): void
     {
-        if (!$gaId = getenv('GOOGLE_ANALYTICS_ID')) {
+        $gaId = getenv('GOOGLE_ANALYTICS_ID');
+        if (!$gaId) {
             return;
         }
         AnalyticsService::pageView($gaId, getenv('MODE') === 'dev');
@@ -31,7 +33,7 @@ class Application
         $this->rendererStrategy = new RendererStrategy();
 
         $headers = $_SERVER;
-        $params = array_merge($_GET, $_POST);
+        $params = ParamsService::parse();
 
         try {
             $options = RequestService::parse($headers, $params);
