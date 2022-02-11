@@ -7,8 +7,8 @@ use DateTime;
 class Info extends AbstractType
 {
     protected string $date;
-    protected string $ip;
-    protected string $host;
+    protected ?string $ip;
+    protected ?string $host;
     protected ?ASN $asn = null;
     protected ?Country $country = null;
     protected ?City $city = null;
@@ -31,12 +31,12 @@ class Info extends AbstractType
         return array_keys(get_class_vars(__CLASS__));
     }
 
-    public function getIp(): string
+    public function getIp(): ?string
     {
         return $this->ip;
     }
 
-    public function setIp(string $ip): void
+    public function setIp(?string $ip): void
     {
         $this->ip = $ip;
     }

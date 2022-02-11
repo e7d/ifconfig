@@ -24,8 +24,12 @@ class LocationReader extends DatabaseReader
     private ?Location $location = null;
     private ?string $timezone = null;
 
-    public function __construct(string $ip)
+    public function __construct(?string $ip)
     {
+        if (is_null($ip)) {
+            return;
+        }
+
         $dbFile = self::getDbFilePath();
         if (is_null($dbFile)) {
             return;
