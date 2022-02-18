@@ -21,13 +21,13 @@ Output available in HTML, plain text, JSON, XML and YAML.
   - or expose your self-downloaded database files: - `-v /path/to/databases:/var/databases`
 - add a link to an ipv4+ipv6 domain: `-e HOST_AUTO=auto.my.domain`
 - add a link to an ipv4-only domain: `-e HOST_IPV4=ipv4.my.domain`
-- add a link to an ipv6-only domain: `-e HOST_IPV4=ipv6.my.domain`
+- add a link to an ipv6-only domain: `-e HOST_IPV6=ipv6.my.domain`
 - display the footer link to the "about" page: `-e SHOW_ABOUT=true`
 - display the FAQ section on the "about" page: `-e SHOW_FAQ=true`
 - read the MaxMind databases [from memory](#in-memory-databases): `--mount type=tmpfs,destination=/tmpfs`
 - activate [rate-limiting](#rate-limiting):
   - maximum requests per time window: `-e RATE_LIMIT=500`
-  - time window duration: `-e RATE_LIMIT_INTERVAL=60` (1 second by default)
+  - time window duration: `-e RATE_LIMIT_INTERVAL=60` (optional, 1 minute by default)
 - activate the [local DNS caching](#local-dns-caching): `-e DNS_CACHE=true`
 - track page views with Google Analytics: `-e GOOGLE_ANALYTICS_ID=UA-12345678-9`
 
