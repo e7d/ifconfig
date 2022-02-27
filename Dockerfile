@@ -14,6 +14,7 @@ RUN env GO111MODULE=on go install github.com/maxmind/geoipupdate/v4/cmd/geoipupd
 FROM php:8-apache AS dependencies
 RUN DEBIAN_FRONTEND=noninteractive \
     && apt-get -qy update \
+    && apt-get -qy upgrade \
     && apt-get -qy install bind9 cron redis-server wget \
     && apt-get -qy autoremove --purge \
     && apt-get clean \
