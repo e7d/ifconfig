@@ -110,11 +110,11 @@ class RequestService
             if ($key === 'field' && in_array($value, Info::getProperties())) {
                 $data['field'] = $value;
             }
-            if ($key === 'ip' && filter_var($value, FILTER_VALIDATE_IP)) {
+            if (in_array($key, ['ip', 'host']) && filter_var($value, FILTER_VALIDATE_IP)) {
                 $data['ip'] = $value;
                 $data['host'] = gethostbyaddr($value);
             }
-            if ($key === 'host' && filter_var($value, FILTER_VALIDATE_DOMAIN)) {
+            if (in_array($key, ['hostname', 'host']) && filter_var($value, FILTER_VALIDATE_DOMAIN)) {
                 $ip = DnsService::resolve($value);
                 if (filter_var($ip, FILTER_VALIDATE_IP)) {
                     $data['ip'] = $ip;
