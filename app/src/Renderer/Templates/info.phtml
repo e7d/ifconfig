@@ -1,7 +1,7 @@
 <?php if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     <style>
         .force-ip {
-            margin: 8px;
+            margin: var(--margin);
             position: absolute;
             right: 0;
             top: 0;
@@ -13,6 +13,20 @@
     </style>
 <?php } ?>
 <style>
+    form {
+
+        display: flex;
+    }
+
+    input {
+        margin: var(--margin) auto;
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        width: 400px;
+        padding: var(--margin);
+    }
+
     ul {
         list-style-type: none;
         margin: 0;
@@ -27,7 +41,7 @@
 
     li>* {
         overflow: auto;
-        padding: 8px;
+        padding: var(--margin);
     }
 
     label {
@@ -37,22 +51,27 @@
     }
 
     button {
-        background: url('data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgcm9sZT0iaW1nIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik0zMzYgNjRoLTgwYzAtMzUuMy0yOC43LTY0LTY0LTY0cy02NCAyOC43LTY0IDY0SDQ4QzIxLjUgNjQgMCA4NS41IDAgMTEydjM1MmMwIDI2LjUgMjEuNSA0OCA0OCA0OGgyODhjMjYuNSAwIDQ4LTIxLjUgNDgtNDhWMTEyYzAtMjYuNS0yMS41LTQ4LTQ4LTQ4ek0xOTIgNDBjMTMuMyAwIDI0IDEwLjcgMjQgMjRzLTEwLjcgMjQtMjQgMjQtMjQtMTAuNy0yNC0yNCAxMC43LTI0IDI0LTI0em0xNDQgNDE4YzAgMy4zLTIuNyA2LTYgNkg1NGMtMy4zIDAtNi0yLjctNi02VjExOGMwLTMuMyAyLjctNiA2LTZoNDJ2MzZjMCA2LjYgNS40IDEyIDEyIDEyaDE2OGM2LjYgMCAxMi01LjQgMTItMTJ2LTM2aDQyYzMuMyAwIDYgMi43IDYgNnoiPjwvcGF0aD48L3N2Zz4=') center no-repeat;
+        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48cGF0aCBkPSJNMzM2IDY0aC04MGMwLTM1LjMtMjguNy02NC02NC02NHMtNjQgMjguNy02NCA2NEg0OEMyMS41IDY0IDAgODUuNSAwIDExMnYzNTJjMCAyNi41IDIxLjUgNDggNDggNDhoMjg4YzI2LjUgMCA0OC0yMS41IDQ4LTQ4VjExMmMwLTI2LjUtMjEuNS00OC00OC00OHpNMTkyIDQwYzEzLjMgMCAyNCAxMC43IDI0IDI0cy0xMC43IDI0LTI0IDI0LTI0LTEwLjctMjQtMjQgMTAuNy0yNCAyNC0yNHptMTQ0IDQxOGMwIDMuMy0yLjcgNi02IDZINTRjLTMuMyAwLTYtMi43LTYtNlYxMThjMC0zLjMgMi43LTYgNi02aDQydjM2YzAgNi42IDUuNCAxMiAxMiAxMmgxNjhjNi42IDAgMTItNS40IDEyLTEydi0zNmg0MmMzLjMgMCA2IDIuNyA2IDZ6Ii8+PC9zdmc+') center no-repeat;
         border: 0;
         cursor: pointer;
         display: none;
         height: 16px;
-        margin: 8px 0;
+        margin: var(--margin) 0;
         vertical-align: middle;
         width: 16px;
     }
 
     li.headers button {
         position: absolute;
-        right: 8px;
+        right: var(--margin);
     }
 
     li:hover button {
+        display: initial;
+    }
+
+    li.copied button {
+        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNy44MzcgMTcuODM3Ij48cGF0aCBkPSJNMTYuMTQ1IDIuNTcxYS43LjcgMCAwIDAtLjk5IDBMNi45MiAxMC44MDRsLTQuMjQxLTQuMjdhLjY5OC42OTggMCAwIDAtLjk4OSAwTC4yMDQgOC4wMTlhLjcwMy43MDMgMCAwIDAgMCAuOTlsNi4yMTcgNi4yNThhLjcwNC43MDQgMCAwIDAgLjk5IDBMMTcuNjMgNS4wNDdhLjcuNyAwIDAgMCAwLS45OTRsLTEuNDg1LTEuNDgyeiIvPjwvc3ZnPg==') center no-repeat;
         display: initial;
     }
 
@@ -61,6 +80,10 @@
     }
 
     @media (max-width: 640px) {
+        input {
+            width: 100%;
+        }
+
         li {
             flex-direction: column;
         }
@@ -75,7 +98,7 @@
 
         button {
             position: absolute;
-            right: 8px;
+            right: var(--margin);
         }
     }
 </style>
@@ -87,6 +110,9 @@
         <?php if (getenv('HOST_IPV6')) { ?><span><a href="//<?php echo getenv('HOST_IPV6') . $_SERVER['REQUEST_URI']; ?>">IPv6</a></span><?php } ?>
     </div>
 <?php } ?>
+<form>
+    <input type="text" name="host" placeholder="Search any IP Address or Host...">
+</form>
 <main class="info">
     <h2>Your Connection</h2>
     <ul>
@@ -147,17 +173,30 @@
 
 <script>
     function copyText(node) {
-        navigator.clipboard.writeText(node.textContent);
+        navigator.clipboard.writeText(node.innerHTML.replaceAll('<br>', '\n').replaceAll(/<.*?>/g, ''));
+    }
+
+    function acknowledgeCopy(row, button) {
+        window.clearTimeout(button.copiedTimeout);
+        row.classList.add('copied');
+        row.copiedTimeout = window.setTimeout(function() {
+            row.classList.remove('copied');
+        }, 2000);
+    }
+
+    function handleCopy(row, span) {
+        const button = document.createElement('button');
+        button.classList.add('copy');
+        row.appendChild(button);
+        button.addEventListener('click', function() {
+            copyText(span);
+            acknowledgeCopy(row, button);
+        });
     }
 
     document.querySelectorAll('li').forEach(function(row) {
         const span = row.querySelector('span');
         if (!span.textContent) return;
-        const copyButton = document.createElement('button');
-        copyButton.classList.add('copy');
-        row.appendChild(copyButton);
-        copyButton.addEventListener('click', function() {
-            copyText(span);
-        });
+        handleCopy(row, span);
     })
 </script>

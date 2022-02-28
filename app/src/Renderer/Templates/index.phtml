@@ -37,6 +37,8 @@
         }
 
         body {
+            --border-radius: 4px;
+            --margin: 8px;
             background: var(--background-color);
             color: var(--text-color);
             box-sizing: border-box;
@@ -46,7 +48,7 @@
             font-size: 11pt;
             max-width: 960px;
             margin: auto;
-            padding: 0.5em;
+            padding: var(--margin);
         }
 
         a,
@@ -66,7 +68,7 @@
 
         main {
             border: 1px solid var(--border-color);
-            border-radius: 5px;
+            border-radius: var(--border-radius);
         }
 
         h2 {
@@ -74,16 +76,16 @@
             border: transparent;
             font-weight: normal;
             margin: 0;
-            padding: 1em 0.5em;
+            padding: calc(var(--margin) * 2) var(--margin);
         }
 
         footer {
-            margin: 1em 0;
+            margin: calc(var(--margin) * 2) 0;
             text-align: center;
         }
 
         footer p {
-            margin: 0 0 0.5em;
+            margin: 0 0 var(--margin);
         }
     </style>
 </head>

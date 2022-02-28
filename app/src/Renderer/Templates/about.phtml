@@ -63,7 +63,7 @@ $domain = $_SERVER["HTTP_HOST"];
         margin: 2px;
         font-family: monospace;
         font-size: small;
-        border-radius: 4px;
+        border-radius: var(--border-radius);
     }
 
     input,
@@ -77,7 +77,7 @@ $domain = $_SERVER["HTTP_HOST"];
     select {
         background-color: var(--background-color);
         color: var(--text-color);
-        border-radius: 4px;
+        border-radius: var(--border-radius);
         border: 1px solid var(--border-color);
     }
 
@@ -103,8 +103,6 @@ $domain = $_SERVER["HTTP_HOST"];
         display: flex;
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-        margin-right: -15px;
-        margin-left: -15px;
         margin-bottom: 8px;
     }
 
@@ -115,9 +113,9 @@ $domain = $_SERVER["HTTP_HOST"];
     }
 
     .panel {
-        padding: 16px;
+        padding: 8px;
         background-color: var(--panel-bg-color);
-        border-radius: 8px;
+        border-radius: var(--border-radius);
     }
 </style>
 
@@ -330,14 +328,14 @@ $domain = $_SERVER["HTTP_HOST"];
 
             <h4>Is this service rate-limited?</h4>
             <?php if (getenv('RATE_LIMIT')) {
-                $rateLimit = (int) getenv('RATE_LIMIT');
-                $rateLimitInterval = (int) getenv('RATE_LIMIT_INTERVAL');
-            ?>
+    $rateLimit = (int) getenv('RATE_LIMIT');
+    $rateLimitInterval = (int) getenv('RATE_LIMIT_INTERVAL'); ?>
                 <p>
                     Yes. <?= $rateLimit ?> request<?= $rateLimit !== 1 ? 's are' : ' is' ?> accepted every <?= $rateLimitInterval !== 1 ? $rateLimitInterval . ' seconds' : 'second' ?>.<br>
                     In between requests will get a "<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429" target="_blank">429 Too Many Requests</a>" error, with a pair of <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After" target="_blank">Retry-After</a> headers indicating when the next query will succeed.
                 </p>
-            <?php } else { ?>
+            <?php
+} else { ?>
                 <p>No.</p>
             <?php } ?>
 
@@ -353,4 +351,4 @@ $domain = $_SERVER["HTTP_HOST"];
     </article>
 </main>
 
-<script src="js/query.js"></script>
+<script src="//<?= $domain ?>/js/query.js"></script>
