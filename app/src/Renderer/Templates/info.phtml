@@ -110,7 +110,7 @@
         <?php if (getenv('HOST_IPV6')) { ?><span><a href="//<?php echo getenv('HOST_IPV6') . $_SERVER['REQUEST_URI']; ?>">IPv6</a></span><?php } ?>
     </div>
 <?php } ?>
-<form>
+<form action="//<?= $_SERVER["HTTP_HOST"] ?>">
     <input type="text" name="host" placeholder="Search any IP Address or Host...">
 </form>
 <main class="info">
