@@ -2,7 +2,7 @@
 
 # ifconfig
 
-Check your online information. Compatible with any HTTP compatible client is supported, including your browser, cURL, HTTPie, GNU Wget and FreeBSD fetch.  
+Check your online information. Any HTTP compatible client is supported, including your browser, cURL, HTTPie, GNU Wget and FreeBSD fetch.  
 Output available in HTML, plain text, JSON, XML and YAML.
 
 ## Demo
@@ -66,14 +66,14 @@ To download the databases:
 
 ### In-memory databases
 
-The use of an in-memory database provides much faster access to thedata, at the cost of an increased usage of about 100 MB of RAM.  
+The use of an in-memory database provides much faster access to the data, at the cost of an increased usage of about 100 MB of RAM.  
 It requires Docker version 17.0.6 minimum.
 
-Provided a `/tmpfs` mount point is available, the MaxMind GeoLite2 databases are moved there on container startup.
+Provided a `/tmpfs` mount point is available, the MaxMind GeoLite2 databases are moved there on container start.
 
 ### Rate-limiting
 
-By rate-limiting access to the API, a specific IP can only call this service a specific amount of time for a defined window of time (e.g.: 500 times per minute).
+By restricting access to the API, a specific IP can only call this service a specific number of times for a defined time window (e.g. 500 times per minute).
 
 When issuing a request to a rate-limited service, a set of additional headers are added to the HTTP response:
 ```
@@ -84,7 +84,7 @@ X-RateLimit-Reset: Tue, 23 Jun 2020 13:49:57 +0000
 ```
 They comply to the draft opened at IETF website, regarding the [RateLimit Header Fields for HTTP](https://tools.ietf.org/id/draft-polli-ratelimit-headers-00.html), but prefixed with an `X-` tag, pending validation.
 
-When the limit is reached, the service answers with a `429 Too Many Requests` status code. It comes with a set of additional headers, indicating when the next request can be issued:
+When the limit is reached, the service answers with a `429 Too Many Requests` status code. It comes with a set of additional headers, indicating when the next successfully accepted request can be issued:
 ```
 Retry-After: 12
 Retry-After: Tue, 21 Jun 2020 17:29:27 +0000
