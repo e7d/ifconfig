@@ -29,6 +29,7 @@ ENV RATE_LIMIT ""
 ENV RATE_LIMIT_INTERVAL 1
 ENV SHOW_ABOUT false
 ENV SHOW_FAQ false
+ENV SHOW_SUPPORT false
 COPY ./docker /
 COPY --from=geoipupdate-dependency /go/bin/geoipupdate /usr/bin/geoipupdate
 ENTRYPOINT [ "/entrypoint.sh" ]

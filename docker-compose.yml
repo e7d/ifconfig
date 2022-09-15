@@ -18,8 +18,9 @@ services:
       # - MODE=dev
       # - RATE_LIMIT_INTERVAL=60
       # - RATE_LIMIT=500
-      # - SHOW_ABOUT=false
-      # - SHOW_FAQ=false
+      # - SHOW_ABOUT=true
+      # - SHOW_FAQ=true
+      # - SHOW_SUPPORT=true
     ports:
       - 8080:80
     tmpfs: /tmpfs

@@ -12,23 +12,23 @@
     <style>
         @media (prefers-color-scheme: light) {
             body {
-                --background-color: white;
                 --background-color-alt: #f5f5f5;
-                --text-color: black;
-                --blue-color: #0051a8;
+                --background-color: white;
                 --blue-color--alt: #003166;
+                --blue-color: #0051a8;
                 --border-color: #ddd;
+                --text-color: black;
             }
         }
 
         @media (prefers-color-scheme: dark) {
             body {
-                --background-color: black;
                 --background-color-alt: #222;
-                --text-color: #ddd;
-                --blue-color: #54a6ff;
+                --background-color: black;
                 --blue-color--alt: #76b7ff;
+                --blue-color: #54a6ff;
                 --border-color: #444;
+                --text-color: #ddd;
             }
 
             button {
@@ -40,14 +40,14 @@
             --border-radius: 4px;
             --margin: 8px;
             background: var(--background-color);
-            color: var(--text-color);
             box-sizing: border-box;
+            color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ubuntu, Roboto,
                 "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
                 "Segoe UI Symbol";
             font-size: 11pt;
-            max-width: 960px;
             margin: auto;
+            max-width: 960px;
             padding: var(--margin);
         }
 
@@ -62,13 +62,18 @@
             text-decoration: underline;
         }
 
+        a.h1 {
+            color: inherit;
+            text-decoration: none;
+        }
+
         h1 {
             border-bottom: 1px solid var(--border-color);
         }
 
         main {
-            border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
         }
 
         h2 {
@@ -92,7 +97,7 @@
 
 <body>
     <header>
-        <h1>What is my IP information?</h1>
+        <h1><a class="h1" href="/">What is my IP information?</a></h1>
     </header>
     <?php
     require_once $this->page . '.phtml';

@@ -2,6 +2,7 @@
 
 namespace IfConfig\Renderer\ContentType;
 
+use IfConfig\Types\ASN;
 use IfConfig\Types\Country;
 use IfConfig\Types\Headers;
 use IfConfig\Types\Location;
@@ -11,6 +12,18 @@ use IfConfig\Types\Subdivisions;
 class HtmlRenderer extends ContentTypeRenderer
 {
     private string $page;
+
+    private function getAsnWithLink(ASN $asn): string
+    {
+        return '<a rel="noreferrer" href="https://ipinfo.io/AS' . $asn->getNumber() . '" target="_blank" title="Find AS number details on IPinfo.io">AS' . $asn->getNumber() . ' ' . $asn->getOrg() . '</a> (' . $asn->getNetwork() . ')';
+    }
+
+    private function getAsnString(?ASN $asn): string
+    {
+        return is_null($asn)
+            ? ''
+            : $this->getAsnWithLink($asn);
+    }
 
     public function __construct(string $page = 'info')
     {
@@ -50,7 +63,7 @@ class HtmlRenderer extends ContentTypeRenderer
         }
         $coordinates = $location->getLatitude() . ', ' . $location->getLongitude();
         return '<a rel="noreferrer" href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude()
-            . '&mlon=' . $location->getLongitude() . '" target="_blank">' . $coordinates . '</a>';
+            . '&mlon=' . $location->getLongitude() . '" target="_blank" title="View coordinates location on OpenStreetMap (openstreetmap.org)">' . $coordinates . '</a>';
     }
 
     private function getHeadersHtml(Headers $headers): string

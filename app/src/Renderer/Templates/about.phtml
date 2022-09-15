@@ -1,5 +1,7 @@
 <?php
+use IfConfig\Reader\DatabaseReader;
 $domain = $_SERVER["HTTP_HOST"];
+$dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
 ?>
 <style>
     @media (prefers-color-scheme: light) {
@@ -19,9 +21,9 @@ $domain = $_SERVER["HTTP_HOST"];
     }
 
     a[target="_blank"] {
+        background-image: linear-gradient(transparent, transparent), url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiID8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiPgoJPHBhdGggZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMzZjIiBkPSJNMS41IDQuNTE4aDUuOTgyVjEwLjVIMS41eiIgLz4KCTxwYXRoIGZpbGw9IiMzNmMiIGQ9Ik01Ljc2NSAxSDExdjUuMzlMOS40MjcgNy45MzdsLTEuMzEtMS4zMUw1LjM5MyA5LjM1bC0yLjY5LTIuNjg4IDIuODEtMi44MDhMNC4yIDIuNTQ0eiIgLz4KCTxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik05Ljk5NSAyLjAwNGwuMDIyIDQuODg1TDguMiA1LjA3IDUuMzIgNy45NSA0LjA5IDYuNzIzbDIuODgyLTIuODgtMS44NS0xLjg1MnoiIC8+Cjwvc3ZnPgo=);
         background-position: center right;
         background-repeat: no-repeat;
-        background-image: linear-gradient(transparent, transparent), url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiID8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiPgoJPHBhdGggZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMzZjIiBkPSJNMS41IDQuNTE4aDUuOTgyVjEwLjVIMS41eiIgLz4KCTxwYXRoIGZpbGw9IiMzNmMiIGQ9Ik01Ljc2NSAxSDExdjUuMzlMOS40MjcgNy45MzdsLTEuMzEtMS4zMUw1LjM5MyA5LjM1bC0yLjY5LTIuNjg4IDIuODEtMi44MDhMNC4yIDIuNTQ0eiIgLz4KCTxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik05Ljk5NSAyLjAwNGwuMDIyIDQuODg1TDguMiA1LjA3IDUuMzIgNy45NSA0LjA5IDYuNzIzbDIuODgyLTIuODgtMS44NS0xLjg1MnoiIC8+Cjwvc3ZnPgo=);
         padding-right: 16px;
     }
 
@@ -31,21 +33,21 @@ $domain = $_SERVER["HTTP_HOST"];
 
 
     table {
-        width: 100%;
         border-collapse: collapse;
+        width: 100%;
     }
 
     th,
     td {
-        padding: 4px 8px;
+        border-top: 1px solid var(--border-color);
         height: 32px;
         line-height: 32px;
-        border-top: 1px solid var(--border-color);
+        padding: 4px 8px;
     }
 
     thead th {
-        vertical-align: bottom;
         border-bottom: 2px solid var(--border-color);
+        vertical-align: bottom;
     }
 
     th {
@@ -58,12 +60,12 @@ $domain = $_SERVER["HTTP_HOST"];
 
     .cmd {
         background-color: #222;
+        border-radius: var(--border-radius);
         color: whitesmoke;
-        padding: 2px 4px;
-        margin: 2px;
         font-family: monospace;
         font-size: small;
-        border-radius: var(--border-radius);
+        margin: 2px;
+        padding: 2px 4px;
     }
 
     input,
@@ -123,9 +125,23 @@ $domain = $_SERVER["HTTP_HOST"];
     <h2>About</h2>
 
     <article>
-        <h3>Supported clients</h3>
+        <nav>
+            <h3>Table of Contents</h3>
+            <ul>
+                <li><a href="#supported-clients">Supported clients</a></li>
+                <li><a href="#output-formats">Output formats</a></li>
+                <li><a href="#specific-field-query">Specific field query</a></li>
+                <li><a href="#query-generator">Query generator</a></li>
+                <?php if (getenv('SHOW_FAQ') === 'true') { ?><li><a href="#faq">FAQ</a></li><?php } ?>
+                <?php if ($dbLatestUpdate) { ?><li><a href="#external-resources">External resources</a></li><?php } ?>
+                <li><a href="#references">References</a></li>
+                <?php if (getenv('SHOW_SUPPORT') === 'true') { ?><li><a href="#support">Support the project</a></li><?php } ?>
+            </ul>
+        </nav>
+
+        <h3 id="supported-clients">Supported clients</h3>
         <p>
-            Any HTTP compatible client is supported, including your browser, <a href="https://curl.haxx.se/" target="_blank">cURL</a>, <a href="https://httpie.org/" target="_blank">HTTPie</a>, <a href="https://www.gnu.org/software/wget/" target="_blank">GNU Wget</a> and <a href="https://www.freebsd.org/cgi/man.cgi?fetch(1)" target="_blank">FreeBSD fetch</a>.
+            Any HTTP compatible client is supported, including your browser, <a rel="noreferrer" href="https://curl.haxx.se/" target="_blank">cURL</a>, <a rel="noreferrer" href="https://httpie.org/" target="_blank">HTTPie</a>, <a rel="noreferrer" href="https://www.gnu.org/software/wget/" target="_blank">GNU Wget</a> and <a rel="noreferrer" href="https://www.freebsd.org/cgi/man.cgi?fetch(1)" target="_blank">FreeBSD fetch</a>.
         </p>
         <table>
             <thead>
@@ -154,7 +170,7 @@ $domain = $_SERVER["HTTP_HOST"];
             </tbody>
         </table>
 
-        <h3>Output formats</h3>
+        <h3 id="output-formats">Output formats</h3>
         <p>
             Different output formats are supported: HTML, JSON, Text, XML and YAML.<br>
             The response will use the first compatible output format listed in the "Accept" header, and JSON is always used as fallback.
@@ -197,7 +213,7 @@ $domain = $_SERVER["HTTP_HOST"];
             </table>
         </p>
 
-        <h3>Specific field query</h3>
+        <h3 id="specific-field-query">Specific field query</h3>
         <p>Every field visible in the JSON, XML and YAML format can be queried specifically.</p>
         <p>
             To do so, use the URL to query them, using a slashed syntax:
@@ -265,7 +281,7 @@ $domain = $_SERVER["HTTP_HOST"];
             </table>
         </p>
 
-        <h3>Query generator</h3>
+        <h3 id="query-generator">Query generator</h3>
         <div class="panel">
             <form name="generator">
                 <div class="form-group">
@@ -318,8 +334,8 @@ $domain = $_SERVER["HTTP_HOST"];
             </div>
         </div>
 
-        <?php if (getenv('SHOW_FAQ')) { ?>
-            <h3>FAQ</h3>
+        <?php if (getenv('SHOW_FAQ') === 'true') { ?>
+            <h3 id="faq">FAQ</h3>
             <h4>Is using this service from automated scripts/tools permitted?</h4>
             <p>Yes.</p>
 
@@ -332,21 +348,37 @@ $domain = $_SERVER["HTTP_HOST"];
     $rateLimitInterval = (int) getenv('RATE_LIMIT_INTERVAL'); ?>
                 <p>
                     Yes. <?= $rateLimit ?> request<?= $rateLimit !== 1 ? 's are' : ' is' ?> accepted every <?= $rateLimitInterval !== 1 ? $rateLimitInterval . ' seconds' : 'second' ?>.<br>
-                    In between requests will get a "<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429" target="_blank">429 Too Many Requests</a>" error, with a pair of <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After" target="_blank">Retry-After</a> headers indicating when the next query will succeed.
+                    In between requests will get a "<a rel="noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429" target="_blank">429 Too Many Requests</a>" error, with a pair of <a rel="noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After" target="_blank">Retry-After</a> headers indicating when the next query will succeed.
                 </p>
-            <?php
-} else { ?>
+            <?php } else { ?>
                 <p>No.</p>
             <?php } ?>
 
             <h4>Can I run my own service?</h4>
-            <p>Yes, the source code is available on <a href="https://github.com/e7d/ifconfig" target="_blank">GitHub</a>.</p>
+            <p>Yes, the source code is available on <a rel="noreferrer" href="https://github.com/e7d/ifconfig" target="_blank">GitHub</a>.</p>
+        <?php } ?>
 
-            <h3>References</h3>
-            <ol>
-                <li id="note-1"><a href="#ref-1">^</a> <a href="https://en.wikipedia.org/wiki/Autonomous_system_(Internet)" target="_blank">Autonomous system number</a></li>
-                <li id="note-2"><a href="#ref-2">^</a> <a href="https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country" target="_blank">Administrative subdivisions</a> are specific to each country and may or may not be specified.</li>
-            </ol>
+        <?php if ($dbLatestUpdate) { ?>
+            <h3 id="external-resources">External resources</h3>
+            <p>This product includes GeoLite2 data created by MaxMind, available from <a rel="noreferrer" href="https://dev.maxmind.com/geoip" target="_blank">https://www.maxmind.com</a>.</p>
+        <?php } ?>
+
+        <h3 id="references">References</h3>
+        <ol>
+            <li id="note-1"><a href="#ref-1">^</a> <a rel="noreferrer" href="https://en.wikipedia.org/wiki/Autonomous_system_(Internet)" target="_blank">Autonomous system number</a></li>
+            <li id="note-2"><a href="#ref-2">^</a> <a rel="noreferrer" href="https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country" target="_blank">Administrative subdivisions</a> are specific to each country and may or may not be specified.</li>
+        </ol>
+
+        <?php if (getenv('SHOW_SUPPORT') === 'true') { ?>
+            <h3 id="support">Support the project</h3>
+            <p>
+                To support the project, you can make a donation using cryptocurrencies, to the following addresses:
+                <ul>
+                    <li><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAopJREFUOE9lk8tLlFEYh5/3nPycmTTM1UCBOo0ldhESjImgQFoptOlCgStxofgXSAshojbRRiwUWkS2KNtEmwi6iCmkRQVZhlpGQhfTajSb0e+8cWaklDjwcTgfv/f6/ARAOzHSicvdLydTzrp2UQ4iEvdvqH5S4ZExpkuaJ4bXamStOOxNdItqK2IAAQ2BZTCloEugK6jIJdsy1fY3SC4D4HoqHoLPahRdckjUIIFgimHhiRLgsNsNuiz4alreHfI68Z+wt7xbMK1ABs0WUpCAuQHYdwWK4zD/Hr6NwdcusJUZCAsVd8m2vG8TvVyWUmOGEFGkWFh8AXXXoKoeNgSQnoWNm+FOG8z1Q3QXuAUFEXFuv4S95X2COYVqiFiLBLAyBg2vYGs1zM1ASRw+T8KDDkjfArsjRLNWRa+L60l8RHQL6ivwpwgWXsLJKYiVwPlSSJ2GhjMwNQK362DTXsV9F5QZcT0VK4jY/Cgt6G+I1sCJfr8/GB+AaAlsq4PRfhg+BrEa0LT/H+YD5JVgS2H2GVR3QONZGB/Mx91xAH79hP6jsHQfbBI0m5v/agtsgUAJ3wrJC7CzEeJJ6DsCj29D01VINcHITRg6DsVrWvg7RIKQlTeWQw+hvBYiRTA7Db9+QLwSgijcPQcTHRDZHeIWrYq7/m+NvgdbKnx6CodvQFktBLE8Kovz8GEUnjdBQRWQVTyTxu1fBSnRLdCKRDJkxwrZfhHCDCTrYbADvtyDCBCp9DhngEIVzYO0HmU9iIkqv187DIZgj+SGZWKKhg5NG1QFMY9My2Qe5f/N5FoxvnRvkDQ5sNR58HJrVfKZ15lpvZ3LUs5Ku6jxxorjXa6s2jnskubpdXb+A+khJ2aa2mA5AAAAAElFTkSuQmCC" title="Bitcoin (BTC)" alt="BTC"> <a href="bitcoin:bc1qugc2y2cpulzra543ucnhmps7zd3zz2hjg9ezn2">bc1qugc2y2cpulzra543ucnhmps7zd3zz2hjg9ezn2</a></li>
+                    <li><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAn1JREFUOE+lk0tIlFEYht/3/HNTp6EEcyBtEbXJsDYV/RYm1OCmAgm60crVRLlo0SIX2cIWLYIu5KZWoRWEUG3MApNsJNuUZIuINiqMCRY2jXP5//PFOf9kg9t2h3N5zvd+7/sRAPogqg/UZt3pvtsn5HkRtJNMmj0RyZIYp8idkczeyeo3rH6ccqfugkwzeIRQyKwAzxOQhIjFDYxm9pz7CwluAEi571+T0g5QRESHwlRLWW3P65NKvLJokgoQinB8NLP7oDmzF8zPJNMAiiISjdUSz16VMfjAKsCZs1kcPRRGIW8rKQISFYGthEazhsqQpsDgj1JBULeOePR8lwWcOPIB+V+CSIwQ2ymjUKggLlNtU4METwPwRcSpqVN4+rKEt2+2wN3faG9nJhbQduAbjh2OYOW3Nt/4AByBDDHlTs2R3GSQkSj5ZczHyctxXO1vsY20Oklc6Z3B42s5bOtwUCqKkKZmmTcAj6RjuqEI/FzUGB7bgWSyFp4X1BsKKWSzeXR1fML6BgVtuCIQob8KIIFySVC/UaHnUhNad25AIhGxgOXlEqY//sCt63NY+q4RjgSWiogFWAmG6YTAuc8+em82onlzLaIxZQHFgsbsbB79PQto2u7A92BqqEioNNHQHIeOsSpRr3D/YQtyubIFxONhdJ+awfKShrHY98UH4RAYqtjITNATYTRGfJ300dldgxu3Wy3g4oVpjNxbwVbXQbFgsgCBaSO0uxokAGkTEtESrYkHVg4/McqAruPzgYU5DSrasBEYeGGCVB1lEO0MQmKjvDgbRLmh+V+UTZVAVZTXDhPBtLHUDlO4MkzlYJhsBCkDoxNrhul/xvkPXkha9FjxyKAAAAAASUVORK5CYII=" title="Ethereum (ETH)" alt="ETH"> <a href="ethereum:0x57f1afbC888d6954F954B0960524E4aa5Fa188af">0x57f1afbC888d6954F954B0960524E4aa5Fa188af</a></li>
+                    <li><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAArtJREFUOE+dU00odFEYfs4dl4thSuGWMXdW2EkxZTY+IllIDQtsLGzQV5KFKRs1IkVZaGZNzShLlJSa70v5MqKUZKPmTmO6YjM/7vUzc4/OMSMsv3d1O/d9nvd5znlego8SAJj573YAvwF0AJDzZxqAvwA2APz7iiE/wH4Ak6zBarWisrKS96ZSKWQymY9JghAwTXOqQMIICvUnP5U6nU4zGo0yVYX/tLi42LTZbIIoiiSRSDA1vxiw0MAnC4LwUlVVVfL4+IiBgQH09vaCUorj42McHBwgmUwyzEtFRUVJOp0OAJhiBMzzCQBaXV1NHh4esLe3h+bmZiQSCRQVFUGSJExPT6O1tRUejwfz8/P06OiIKIriZgRBAKNOpzMXjUYtu7u7aGpqQl9fH25vb7k9r9eLkZER5h+np6fw+Xw5VVUtkiSFGEG8vLy87unpifb39xO/34/6+noOnJubw/DwMFdxfn7OlTDymZkZGg6HidVqvWMEWVmWLZqmYW1tDW1tbVhaWsLy8jJEUcTFxQUHNjQ0oLGxETs7OxgbG4PD4UAsFstxAofDYYnFYggGgxgcHMT19TVubm64ipaWFqTTaUxMTGB9fR1nZ2eYnZ2FLMvQNC3HZMQzmUxdd3c3XVlZIQxMCOFAXdexubmJjQ2WHyAej2N8fByHh4e0rKyM6Lp+RyRJCj4/P4/a7fbc4uKixeVywTAMbG9vY3V1lQPdbje2trZweXnJFSqKwi8RQIg9Rbuqqic9PT10YWGBhEIhXF1dIRAI4PX1FdlsFjU1NYhEIhgaGkJtbS3u7+9pPkP8GVn5RVGcfHt7ewFQUlpaiq6uLnR2dnI7+/v7CIfDBd+8B8BnkD6jbLfbOwzDoLqum4ZhfIuyoiimqqqFs29R/rqJn8vEVNhsNk7OIszuJV988s9l+u91fgeO9R454M2E/wAAAABJRU5ErkJggg==" title="Stellar Lumen (XLM)" alt="XLM"> <a href="ethereum:GCOLPDHCPV2SW72UWPN3QWIHVIBPDGG7USJVPE76CNKO5TCXBR7GGWXW">GCOLPDHCPV2SW72UWPN3QWIHVIBPDGG7USJVPE76CNKO5TCXBR7GGWXW</a></li>
+                </ul>
+            </p>
         <?php } ?>
     </article>
 </main>
