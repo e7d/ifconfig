@@ -6,7 +6,7 @@ use GeoIp2\Record\Country as RecordCountry;
 
 class Country extends AbstractType
 {
-    protected ?Flag $flag;
+    protected ?Flag $flag = null;
     protected ?string $isoCode;
     protected ?string $name;
 

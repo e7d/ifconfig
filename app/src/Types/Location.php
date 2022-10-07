@@ -22,17 +22,17 @@ class Location extends AbstractType
         return $this->latitude . ', ' . $this->longitude;
     }
 
-    public function getAccuracyRadius(): float
+    public function getAccuracyRadius(): ?float
     {
         return $this->accuracyRadius;
     }
 
-    public function getLatitude(): float
+    public function getLatitude(): ?float
     {
         return $this->latitude;
     }
 
-    public function getLongitude(): float
+    public function getLongitude(): ?float
     {
         return $this->longitude;
     }

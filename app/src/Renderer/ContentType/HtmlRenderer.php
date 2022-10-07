@@ -33,7 +33,7 @@ class HtmlRenderer extends ContentTypeRenderer
     private function getCountryFlagString(Country $country): string
     {
         $flag = $country->getFlag();
-        return is_null($flag)
+        return is_null($flag) || is_null($flag->getImage())
             ? ''
             : '<img width="16" height="11" src="' . $flag->getImage()->getBase64()
             . '" title="' . $country->getIsoCode() . '"> ';
@@ -41,7 +41,7 @@ class HtmlRenderer extends ContentTypeRenderer
 
     private function getCountryString(?Country $country): string
     {
-        return is_null($country)
+        return is_null($country) || is_null($country->getName())
             ? ''
             : $this->getCountryFlagString($country) . $country->getName() . ' (' . $country->getIsoCode() . ')';
     }
@@ -58,7 +58,7 @@ class HtmlRenderer extends ContentTypeRenderer
 
     private function getLocationString(?Location $location): string
     {
-        if (is_null($location)) {
+        if (is_null($location) || is_null($location->getLatitude()) || is_null($location->getLongitude())) {
             return '';
         }
         $coordinates = $location->getLatitude() . ', ' . $location->getLongitude();
