@@ -6,9 +6,34 @@ class ParamsService
 {
     private static array $params = [];
 
+    private static function parseUrl(string $url): array
+    {
+        $host = parse_url($url, PHP_URL_HOST);
+        return ['host' => $host];
+    }
+
+    private static function parseQuery(string $query): array
+    {
+        if ($url = filter_var($query, FILTER_VALIDATE_URL)) {
+            return static::parseUrl($url);
+        }
+        if ($ip = filter_var($query, FILTER_VALIDATE_IP)) {
+            return ['ip' => $ip];
+        }
+        if ($domain = filter_var($query, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
+            return ['host' => $domain];
+        }
+        return [];
+    }
+
     public static function parse(): array
     {
-        return self::$params = array_merge($_GET, $_POST);
+        $params = array_merge($_GET, $_POST);
+        $query = $params['q'] ?? $params['query'] ?? null;
+        if (!empty($query)) {
+            $params = array_merge($params, self::parseQuery($query));
+        }
+        return self::$params = $params;
     }
 
     public static function get(string $key): ?string
