@@ -1,4 +1,8 @@
-<?php if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
+<?php
+
+use Utils\ParamsService;
+
+if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     <style>
         .force-ip {
             margin: var(--margin);
@@ -118,7 +122,7 @@
     </div>
 <?php } ?>
 <form name="search" action="//<?= $_SERVER["HTTP_HOST"] ?>">
-    <input type="text" name="host" placeholder="Search any IP Address or Host..." autofocus>
+    <input type="text" name="q" placeholder="Search any IP Address, Host or URL" autofocus autocapitalize="off" value="<?= ParamsService::get("query") ?? ParamsService::get("q") ?? '' ?>">
 </form>
 <main class="info">
     <h2>Your Connection</h2>

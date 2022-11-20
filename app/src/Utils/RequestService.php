@@ -114,7 +114,7 @@ class RequestService
                 $data['ip'] = $value;
                 $data['host'] = gethostbyaddr($value);
             }
-            if (in_array($key, ['hostname', 'host']) && filter_var($value, FILTER_VALIDATE_DOMAIN)) {
+            if (in_array($key, ['hostname', 'host']) && filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
                 $ip = DnsService::resolve($value);
                 if (filter_var($ip, FILTER_VALIDATE_IP)) {
                     $data['ip'] = $ip;
