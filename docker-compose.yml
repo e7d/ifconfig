@@ -4,21 +4,20 @@ services:
       context: .
       dockerfile: ./dev.Dockerfile
     environment:
-      # - DATABASE_AUTO_UPDATE=true
-      # - DATABASE_DIR=/path/to/databases
-      # - DNS_CACHE=true
-      # - GOOGLE_ANALYTICS_ID=UA-12345678-9
-      # - HOST_AUTO=auto.my.domain
-      # - HOST_IPV4=ipv4.my.domain
-      # - HOST_IPV6=ipv6.my.domain
-      # - MAXMIND_ACCOUNT_ID=123456
+      - DATABASE_AUTO_UPDATE=$DATABASE_AUTO_UPDATE
+      - DATABASE_DIR=$DATABASE_DIR
+      - DNS_CACHE=$DNS_CACHE
+      - HOST_AUTO=$HOST_AUTO
+      - HOST_IPV4=$HOST_IPV4
+      - HOST_IPV6=$HOST_IPV6
+      - MAXMIND_ACCOUNT_ID=$MAXMIND_ACCOUNT_ID
       - MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY
-      # - MODE=dev
-      # - RATE_LIMIT_INTERVAL=60
-      # - RATE_LIMIT=500
-      # - SHOW_ABOUT=true
-      # - SHOW_FAQ=true
-      # - SHOW_SUPPORT=true
+      - MODE=$MODE
+      - RATE_LIMIT_INTERVAL=$RATE_LIMIT_INTERVAL
+      - RATE_LIMIT=$RATE_LIMIT
+      - SHOW_ABOUT=$SHOW_ABOUT
+      - SHOW_FAQ=$SHOW_FAQ
+      - SHOW_SUPPORT=$SHOW_SUPPORT
     ports:
       - 8080:80
     tmpfs: /tmpfs

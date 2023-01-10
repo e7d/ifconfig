@@ -29,7 +29,7 @@ class ParamsService
     public static function parse(): array
     {
         $params = array_merge($_GET, $_POST);
-        $query = $params['q'] ?? $params['query'] ?? null;
+        $query = trim($params['q'] ?? $params['query'] ?? '');
         if (!empty($query)) {
             $params = array_merge($params, self::parseQuery($query));
         }

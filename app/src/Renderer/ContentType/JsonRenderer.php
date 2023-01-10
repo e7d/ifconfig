@@ -39,7 +39,7 @@ class JsonRenderer extends ContentTypeRenderer
     public function render(): void
     {
         parent::render();
-        header('Content-Type: application/' . $this->jsonp ? 'javascript' : 'json');
+        header('Content-Type: application/' . ($this->jsonp ? 'javascript' : 'json'));
         if ($this->jsonp) {
             print $this->callbackFunction . '(';
         }

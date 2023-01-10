@@ -3,7 +3,6 @@
 namespace IfConfig;
 
 use IfConfig\Renderer\RendererStrategy;
-use Utils\AnalyticsService;
 use Utils\ParamsService;
 use Utils\RequestService;
 
@@ -13,17 +12,7 @@ class Application
 
     public function __construct()
     {
-        $this->analytics();
         $this->render();
-    }
-
-    private function analytics(): void
-    {
-        $gaId = getenv('GOOGLE_ANALYTICS_ID');
-        if (!$gaId) {
-            return;
-        }
-        AnalyticsService::pageView($gaId, getenv('MODE') === 'dev');
     }
 
     private function render(): void
