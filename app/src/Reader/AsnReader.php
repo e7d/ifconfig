@@ -18,6 +18,10 @@ class AsnReader extends DatabaseReader
             return;
         }
 
+        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+            return;
+        }
+
         $dbFile = self::getDbFilePath();
         if (is_null($dbFile)) {
             return;

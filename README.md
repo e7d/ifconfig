@@ -29,7 +29,6 @@ Output available in HTML, plain text, JSON, XML and YAML.
   - maximum requests per time window: `-e RATE_LIMIT=500`
   - time window duration: `-e RATE_LIMIT_INTERVAL=60` (optional, 1 minute by default)
 - activate the [local DNS caching](#local-dns-caching): `-e DNS_CACHE=true`
-- track page views with Google Analytics: `-e GOOGLE_ANALYTICS_ID=UA-12345678-9`
 
 ### MaxMind GeoLite2 databases
 

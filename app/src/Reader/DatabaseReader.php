@@ -9,10 +9,6 @@ class DatabaseReader
     public static function getDbFilePath(): ?string
     {
         $file = getenv('DATABASE_DIR') . '/' . static::$dbName;
-        var_dump(\getenv('PATH'));
-        var_dump(\getenv('DATABASE_DIR'));
-        var_dump(\getenv('USER'));
-        var_dump(\exec('export'));
         return file_exists($file) ? $file : null;
     }
 

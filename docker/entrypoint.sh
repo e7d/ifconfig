@@ -55,8 +55,16 @@ if [ "$DNS_CACHE" == "true" ]; then
     echo "Enabled local cache service."
 fi
 
-echo "export TOTO=toto" >>/etc/profile.d/ifconfig.sh
+echo "SetEnv DATABASE_DIR $DATABASE_DIR" >>/etc/apache2/conf-available/environment.conf
+echo "SetEnv HOST_AUTO $HOST_AUTO" >>/etc/apache2/conf-available/environment.conf
+echo "SetEnv HOST_IPV4 $HOST_IPV4" >>/etc/apache2/conf-available/environment.conf
+echo "SetEnv HOST_IPV6 $HOST_IPV6" >>/etc/apache2/conf-available/environment.conf
+echo "SetEnv RATE_LIMIT $RATE_LIMIT" >>/etc/apache2/conf-available/environment.conf
+echo "SetEnv RATE_LIMIT_INTERVAL $RATE_LIMIT_INTERVAL" >>/etc/apache2/conf-available/environment.conf
+echo "SetEnv SHOW_ABOUT $SHOW_ABOUT" >>/etc/apache2/conf-available/environment.conf
+echo "SetEnv SHOW_FAQ $SHOW_FAQ" >>/etc/apache2/conf-available/environment.conf
+echo "SetEnv SHOW_SUPPORT $SHOW_SUPPORT" >>/etc/apache2/conf-available/environment.conf
 
-service php8.1-fpm start
+service php8.2-fpm start
 service apache-htcacheclean start
 /apache2-foreground.sh

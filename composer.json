@@ -7,9 +7,9 @@
     ]
   },
   "require": {
+    "php": "^8.2",
     "geoip2/geoip2": "^2.10",
-    "symfony/yaml": "^6.0",
-    "theiconic/php-ga-measurement-protocol": "^2.7"
+    "symfony/yaml": "^6.2.0"
   },
   "scripts": {
     "benchmark": "ab -k -c 100 -n 100000 http://localhost:8080/",

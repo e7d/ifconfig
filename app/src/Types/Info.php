@@ -2,8 +2,6 @@
 
 namespace IfConfig\Types;
 
-use DateTime;
-
 class Info extends AbstractType
 {
     protected string $date;
