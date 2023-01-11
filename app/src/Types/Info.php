@@ -156,6 +156,7 @@ class Info extends AbstractType
 
     public function setHeaders(array $headers): void
     {
+        ksort($headers);
         $this->headers = new Headers($headers);
     }
 }
