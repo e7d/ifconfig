@@ -2,7 +2,7 @@ services:
   ifconfig:
     build:
       context: .
-      dockerfile: ./dev.Dockerfile
+      target: dev
     environment:
       - DATABASE_AUTO_UPDATE=$DATABASE_AUTO_UPDATE
       - DATABASE_DIR=$DATABASE_DIR

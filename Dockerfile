@@ -28,7 +28,7 @@ WORKDIR /build
 COPY . /build/
 RUN ./minify.sh
 
-FROM dependencies
+FROM dependencies AS dev
 ENV DATABASE_AUTO_UPDATE ""
 ENV DATABASE_DIR /var/databases
 ENV DNS_CACHE false
@@ -37,7 +37,7 @@ ENV HOST_IPV4 ""
 ENV HOST_IPV6 ""
 ENV MAXMIND_ACCOUNT_ID ""
 ENV MAXMIND_LICENSE_KEY ""
-ENV MODE prod
+ENV MODE dev
 ENV RATE_LIMIT ""
 ENV RATE_LIMIT_INTERVAL 1
 ENV SHOW_ABOUT false
@@ -46,12 +46,15 @@ ENV SHOW_SUPPORT false
 COPY ./docker /
 RUN a2enconf environment
 COPY --from=geoipupdate-dependency /go/bin/geoipupdate /usr/bin/geoipupdate
+WORKDIR /var/www
+ENTRYPOINT [ "/entrypoint.sh" ]
+STOPSIGNAL SIGWINCH
+EXPOSE 80
+
+FROM dev AS prod
+ENV MODE prod
 COPY --from=build-dependencies /build/app /var/www/app
 COPY --from=build-dependencies /build/vendor /var/www/vendor
 COPY --from=build-html /build/app/src/Renderer/Templates /var/www/app/src/Renderer/Templates
 COPY --from=build-html /build/html /var/www/html
 RUN mkdir -p /var/databases
-WORKDIR /var/www
-ENTRYPOINT [ "/entrypoint.sh" ]
-STOPSIGNAL SIGWINCH
-EXPOSE 80
