@@ -13,6 +13,7 @@ use IfConfig\Types\City;
 use IfConfig\Types\Postal;
 use IfConfig\Types\Subdivision;
 use IfConfig\Types\Location;
+use Utils\StopwatchService;
 
 class LocationReader extends DatabaseReader
 {
@@ -40,10 +41,13 @@ class LocationReader extends DatabaseReader
         }
 
         try {
+            StopwatchService::get('database')->start();
             $reader = new Reader($dbFile);
             $record = $reader->city($ip);
         } catch (AddressNotFoundException $e) {
             return;
+        } finally {
+            StopwatchService::get('database')->stop();
         }
 
         $this->setCountry($record->country);

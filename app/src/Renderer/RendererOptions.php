@@ -33,11 +33,6 @@ class RendererOptions
         return $this->headers;
     }
 
-    public function hasError(): bool
-    {
-        return $this->error;
-    }
-
     public function getPage(): ?string
     {
         return $this->page;

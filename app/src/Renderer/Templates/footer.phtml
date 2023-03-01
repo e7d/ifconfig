@@ -2,9 +2,30 @@
 <?php
 
 use IfConfig\Reader\DatabaseReader;
+use Utils\StopwatchService;
+
+function toTime($timestamp): string
+{
+    return (string) number_format($timestamp * 1000, 2) . "ms";
+}
+
+function toStopwatchStats(): string
+{
+    StopwatchService::get('total')->stop();
+    $total = StopwatchService::get('total')->get();
+    $dns = StopwatchService::get('dns')->get();
+    $database = StopwatchService::get('database')->get();
+    $php = $total - $dns - $database;
+    $totalMs = toTime($total);
+    $dnsMs = toTime($dns);
+    $databaseMs = toTime($database);
+    $phpMs = toTime($php);
+    return " - <span title=\"PHP: $phpMs&#13;&#10;DNS: $dnsMs&#13;&#10;Database: $databaseMs\">$totalMs</span>";
+}
 
 $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
-if (getenv('SHOW_ABOUT') === 'true') echo '<p><a href="about">About</a>' . ($dbLatestUpdate ? " - Database: $dbLatestUpdate" : '') . '</p>';
+$stopwatch = toStopwatchStats();
+if (getenv('SHOW_ABOUT') === 'true') echo '<p><a href="about">About</a>' . ($dbLatestUpdate ? " - Database: $dbLatestUpdate" : '') . ($stopwatch ?? '') . '</p>';
 elseif ($dbLatestUpdate) echo '<p>This product includes GeoLite2 data created by MaxMind, available from <a href="https://dev.maxmind.com/geoip" target="_blank" rel="noreferrer">https://www.maxmind.com</a>.</p>';
 ?>
 </footer>

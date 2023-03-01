@@ -6,6 +6,7 @@ use GeoIp2\Database\Reader;
 use GeoIp2\Exception\AddressNotFoundException;
 use GeoIp2\Model\Asn as AsnModel;
 use IfConfig\Types\ASN;
+use Utils\StopwatchService;
 
 class AsnReader extends DatabaseReader
 {
@@ -28,10 +29,13 @@ class AsnReader extends DatabaseReader
         }
 
         try {
+            StopwatchService::get('database')->start();
             $reader = new Reader($dbFile);
             $record = $reader->asn($ip);
         } catch (AddressNotFoundException $e) {
             return;
+        } finally {
+            StopwatchService::get('database')->stop();
         }
 
         $this->setAsn($record);

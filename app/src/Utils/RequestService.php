@@ -10,22 +10,15 @@ class RequestService
 {
     private static bool $hostResolved = false;
 
-    private static function getHost(string $ip): string | false
-    {
-        return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)
-            ? gethostbyaddr($ip)
-            : false;
-    }
-
     private static function parseIP(array $data, string $ip): array
     {
-        $host = self::getHost($ip);
+        $host = DnsService::reverse($ip);
         if (!is_null($host)) {
             self::$hostResolved = true;
         }
         return array_merge($data, [
             'ip' => $ip,
-            'host' => self::getHost($ip)
+            'host' => $host
         ]);
     }
 
@@ -122,7 +115,7 @@ class RequestService
             }
             if (in_array($key, ['ip', 'host']) && filter_var($value, FILTER_VALIDATE_IP)) {
                 $data['ip'] = $value;
-                $data['host'] = self::getHost($value);
+                $data['host'] = DnsService::reverse($value);
             }
             if (in_array($key, ['hostname', 'host']) && filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
                 $ip = DnsService::resolve($value);
@@ -188,7 +181,7 @@ class RequestService
         if (!array_key_exists('ip', $data) && !array_key_exists('host', $data)) {
             $ip = IpReader::read($headers);
             $data['ip'] = $ip;
-            $data['host'] = self::getHost($ip);
+            $data['host'] = DnsService::reverse($ip);
         }
         return new RendererOptions($headers, $data);
     }
