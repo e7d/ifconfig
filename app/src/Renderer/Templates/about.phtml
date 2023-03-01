@@ -1,5 +1,7 @@
 <?php
+
 use IfConfig\Reader\DatabaseReader;
+
 $domain = $_SERVER["HTTP_HOST"];
 $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
 ?>
@@ -177,109 +179,109 @@ $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
         </p>
         <p>
             The Output format can also be forced through URL:
-            <table>
-                <thead>
-                    <tr>
-                        <th>Format</th>
-                        <th>Link</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>HTML</td>
-                        <td><a href="//<?= $domain ?>/html"><?= $domain ?>/html</a></td>
-                    </tr>
-                    <tr>
-                        <td>JSON</td>
-                        <td><a href="//<?= $domain ?>/json"><?= $domain ?>/json</a></td>
-                    </tr>
-                    <tr>
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Format</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>HTML</td>
+                    <td><a href="//<?= $domain ?>/html"><?= $domain ?>/html</a></td>
+                </tr>
+                <tr>
+                    <td>JSON</td>
+                    <td><a href="//<?= $domain ?>/json"><?= $domain ?>/json</a></td>
+                </tr>
+                <tr>
                     <td>JSONP</td>
                     <td><a href="//<?= $domain ?>/jsonp"><?= $domain ?>/jsonp</a></td>
                 </tr>
                 <tr>
-                        <td>Text</td>
-                        <td><a href="//<?= $domain ?>/text"><?= $domain ?>/text</a></td>
-                    </tr>
-                    <tr>
-                        <td>XML</td>
-                        <td><a href="//<?= $domain ?>/xml"><?= $domain ?>/xml</a></td>
-                    </tr>
-                    <tr>
-                        <td>YAML</td>
-                        <td><a href="//<?= $domain ?>/yaml"><?= $domain ?>/yaml</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </p>
+                    <td>Text</td>
+                    <td><a href="//<?= $domain ?>/text"><?= $domain ?>/text</a></td>
+                </tr>
+                <tr>
+                    <td>XML</td>
+                    <td><a href="//<?= $domain ?>/xml"><?= $domain ?>/xml</a></td>
+                </tr>
+                <tr>
+                    <td>YAML</td>
+                    <td><a href="//<?= $domain ?>/yaml"><?= $domain ?>/yaml</a></td>
+                </tr>
+            </tbody>
+        </table>
 
         <h3 id="specific-field-query">Specific field query</h3>
         <p>Every field visible in the JSON, XML and YAML format can be queried specifically.</p>
         <p>
             To do so, use the URL to query them, using a slashed syntax:
-            <table>
-                <thead>
-                    <tr>
-                        <th>Format</th>
-                        <th>Link</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>IP</td>
-                        <td><a href="//<?= $domain ?>/ip"><?= $domain ?>/ip</a></td>
-                    </tr>
-                    <tr>
-                        <td>Host name</td>
-                        <td><a href="//<?= $domain ?>/host"><?= $domain ?>/host</a></td>
-                    </tr>
-                    <tr>
-                        <td>ASN<sup id="ref-1" class="reference"><a href="#note-1">[1]</a></sup></td>
-                        <td><a href="//<?= $domain ?>/asn"><?= $domain ?>/asn</a></td>
-                    </tr>
-                    <tr>
-                        <td>Country</td>
-                        <td><a href="//<?= $domain ?>/country"><?= $domain ?>/country</a></td>
-                    </tr>
-                    <tr>
-                        <td>City</td>
-                        <td><a href="//<?= $domain ?>/city"><?= $domain ?>/city</a></td>
-                    </tr>
-                    <tr>
-                        <td>Postal code</td>
-                        <td><a href="//<?= $domain ?>/postal"><?= $domain ?>/postal</a></td>
-                    </tr>
-                    <tr>
-                        <td>Subdivisions<sup id="ref-2" class="reference"><a href="#note-2">[2]</a></sup></td>
-                        <td><a href="//<?= $domain ?>/subdivisions"><?= $domain ?>/subdivisions</a></td>
-                    </tr>
-                    <tr>
-                        <td>Coordinates</td>
-                        <td><a href="//<?= $domain ?>/location"><?= $domain ?>/location</a></td>
-                    </tr>
-                    <tr>
-                        <td>Time zone</td>
-                        <td><a href="//<?= $domain ?>/timezone"><?= $domain ?>/timezone</a></td>
-                    </tr>
-                    <tr>
-                        <td>Client port</td>
-                        <td><a href="//<?= $domain ?>/port"><?= $domain ?>/port</a></td>
-                    </tr>
-                    <tr>
-                        <td>HTTP method</td>
-                        <td><a href="//<?= $domain ?>/method"><?= $domain ?>/method</a></td>
-                    </tr>
-                    <tr>
-                        <td>HTTP referer</td>
-                        <td><a href="//<?= $domain ?>/referer"><?= $domain ?>/referer</a></td>
-                    </tr>
-                    <tr>
-                        <td>HTTP headers</td>
-                        <td><a href="//<?= $domain ?>/headers"><?= $domain ?>/headers</a></td>
-                    </tr>
-                </tbody>
-            </table>
         </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Format</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>IP</td>
+                    <td><a href="//<?= $domain ?>/ip"><?= $domain ?>/ip</a></td>
+                </tr>
+                <tr>
+                    <td>Host name</td>
+                    <td><a href="//<?= $domain ?>/host"><?= $domain ?>/host</a></td>
+                </tr>
+                <tr>
+                    <td>ASN<sup id="ref-1" class="reference"><a href="#note-1">[1]</a></sup></td>
+                    <td><a href="//<?= $domain ?>/asn"><?= $domain ?>/asn</a></td>
+                </tr>
+                <tr>
+                    <td>Country</td>
+                    <td><a href="//<?= $domain ?>/country"><?= $domain ?>/country</a></td>
+                </tr>
+                <tr>
+                    <td>City</td>
+                    <td><a href="//<?= $domain ?>/city"><?= $domain ?>/city</a></td>
+                </tr>
+                <tr>
+                    <td>Postal code</td>
+                    <td><a href="//<?= $domain ?>/postal"><?= $domain ?>/postal</a></td>
+                </tr>
+                <tr>
+                    <td>Subdivisions<sup id="ref-2" class="reference"><a href="#note-2">[2]</a></sup></td>
+                    <td><a href="//<?= $domain ?>/subdivisions"><?= $domain ?>/subdivisions</a></td>
+                </tr>
+                <tr>
+                    <td>Coordinates</td>
+                    <td><a href="//<?= $domain ?>/location"><?= $domain ?>/location</a></td>
+                </tr>
+                <tr>
+                    <td>Time zone</td>
+                    <td><a href="//<?= $domain ?>/timezone"><?= $domain ?>/timezone</a></td>
+                </tr>
+                <tr>
+                    <td>Client port</td>
+                    <td><a href="//<?= $domain ?>/port"><?= $domain ?>/port</a></td>
+                </tr>
+                <tr>
+                    <td>HTTP method</td>
+                    <td><a href="//<?= $domain ?>/method"><?= $domain ?>/method</a></td>
+                </tr>
+                <tr>
+                    <td>HTTP referer</td>
+                    <td><a href="//<?= $domain ?>/referer"><?= $domain ?>/referer</a></td>
+                </tr>
+                <tr>
+                    <td>HTTP headers</td>
+                    <td><a href="//<?= $domain ?>/headers"><?= $domain ?>/headers</a></td>
+                </tr>
+            </tbody>
+        </table>
 
         <h3 id="query-generator">Query generator</h3>
         <div class="panel">
@@ -344,11 +346,22 @@ $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
 
             <h4>Is this service rate-limited?</h4>
             <?php if (getenv('RATE_LIMIT')) {
-    $rateLimit = (int) getenv('RATE_LIMIT');
-    $rateLimitInterval = (int) getenv('RATE_LIMIT_INTERVAL'); ?>
+                $rateLimit = (int) getenv('RATE_LIMIT');
+                $rateLimitInterval = (int) getenv('RATE_LIMIT_INTERVAL'); ?>
                 <p>
-                    Yes. <?= $rateLimit ?> request<?= $rateLimit !== 1 ? 's are' : ' is' ?> accepted every <?= $rateLimitInterval !== 1 ? $rateLimitInterval . ' seconds' : 'second' ?>.<br>
-                    In between requests will get a "<a rel="noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429" target="_blank">429 Too Many Requests</a>" error, with a pair of <a rel="noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After" target="_blank">Retry-After</a> headers indicating when the next query will succeed.
+                    Yes. <?= $rateLimit ?> request<?= $rateLimit !== 1 ? 's are' : ' is' ?> accepted every <?= $rateLimitInterval !== 1 ? $rateLimitInterval . ' seconds' : 'second' ?>.
+                </p>
+                <p>
+                    In between requests will get a "<a rel="noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429" target="_blank">429 Too Many Requests</a>" error, with a <a rel="noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After" target="_blank">Retry-After</a> response header having a pair of values indicating when the next query will succeed.
+                </p>
+                <p>
+                    Successful requests will get "<a rel="noreferrer" href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/06/" target="_blank">RateLimit</a>" headers indicating:
+                    <ul>
+                        <li><em>X-RateLimit-Policy</em>: the quota policy</li>
+                        <li><em>X-RateLimit-Remaining</em>: the remaining quota in the current window</li>
+                        <li><em>X-RateLimit-Limit</em>: the server's quota for requests by the client in the time window</li>
+                        <li><em>X-RateLimit-Reset</em>: the time remaining in the current window, specified in seconds</li>
+                    </ul>
                 </p>
             <?php } else { ?>
                 <p>No.</p>
@@ -373,11 +386,11 @@ $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
             <h3 id="support">Support the project</h3>
             <p>
                 To support the project, you can make a donation using cryptocurrencies, to the following addresses:
-                <ul>
-                    <li><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAopJREFUOE9lk8tLlFEYh5/3nPycmTTM1UCBOo0ldhESjImgQFoptOlCgStxofgXSAshojbRRiwUWkS2KNtEmwi6iCmkRQVZhlpGQhfTajSb0e+8cWaklDjwcTgfv/f6/ARAOzHSicvdLydTzrp2UQ4iEvdvqH5S4ZExpkuaJ4bXamStOOxNdItqK2IAAQ2BZTCloEugK6jIJdsy1fY3SC4D4HoqHoLPahRdckjUIIFgimHhiRLgsNsNuiz4alreHfI68Z+wt7xbMK1ABs0WUpCAuQHYdwWK4zD/Hr6NwdcusJUZCAsVd8m2vG8TvVyWUmOGEFGkWFh8AXXXoKoeNgSQnoWNm+FOG8z1Q3QXuAUFEXFuv4S95X2COYVqiFiLBLAyBg2vYGs1zM1ASRw+T8KDDkjfArsjRLNWRa+L60l8RHQL6ivwpwgWXsLJKYiVwPlSSJ2GhjMwNQK362DTXsV9F5QZcT0VK4jY/Cgt6G+I1sCJfr8/GB+AaAlsq4PRfhg+BrEa0LT/H+YD5JVgS2H2GVR3QONZGB/Mx91xAH79hP6jsHQfbBI0m5v/agtsgUAJ3wrJC7CzEeJJ6DsCj29D01VINcHITRg6DsVrWvg7RIKQlTeWQw+hvBYiRTA7Db9+QLwSgijcPQcTHRDZHeIWrYq7/m+NvgdbKnx6CodvQFktBLE8Kovz8GEUnjdBQRWQVTyTxu1fBSnRLdCKRDJkxwrZfhHCDCTrYbADvtyDCBCp9DhngEIVzYO0HmU9iIkqv187DIZgj+SGZWKKhg5NG1QFMY9My2Qe5f/N5FoxvnRvkDQ5sNR58HJrVfKZ15lpvZ3LUs5Ku6jxxorjXa6s2jnskubpdXb+A+khJ2aa2mA5AAAAAElFTkSuQmCC" title="Bitcoin (BTC)" alt="BTC"> <a href="bitcoin:bc1qugc2y2cpulzra543ucnhmps7zd3zz2hjg9ezn2">bc1qugc2y2cpulzra543ucnhmps7zd3zz2hjg9ezn2</a></li>
-                    <li><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAn1JREFUOE+lk0tIlFEYht/3/HNTp6EEcyBtEbXJsDYV/RYm1OCmAgm60crVRLlo0SIX2cIWLYIu5KZWoRWEUG3MApNsJNuUZIuINiqMCRY2jXP5//PFOf9kg9t2h3N5zvd+7/sRAPogqg/UZt3pvtsn5HkRtJNMmj0RyZIYp8idkczeyeo3rH6ccqfugkwzeIRQyKwAzxOQhIjFDYxm9pz7CwluAEi571+T0g5QRESHwlRLWW3P65NKvLJokgoQinB8NLP7oDmzF8zPJNMAiiISjdUSz16VMfjAKsCZs1kcPRRGIW8rKQISFYGthEazhsqQpsDgj1JBULeOePR8lwWcOPIB+V+CSIwQ2ymjUKggLlNtU4METwPwRcSpqVN4+rKEt2+2wN3faG9nJhbQduAbjh2OYOW3Nt/4AByBDDHlTs2R3GSQkSj5ZczHyctxXO1vsY20Oklc6Z3B42s5bOtwUCqKkKZmmTcAj6RjuqEI/FzUGB7bgWSyFp4X1BsKKWSzeXR1fML6BgVtuCIQob8KIIFySVC/UaHnUhNad25AIhGxgOXlEqY//sCt63NY+q4RjgSWiogFWAmG6YTAuc8+em82onlzLaIxZQHFgsbsbB79PQto2u7A92BqqEioNNHQHIeOsSpRr3D/YQtyubIFxONhdJ+awfKShrHY98UH4RAYqtjITNATYTRGfJ300dldgxu3Wy3g4oVpjNxbwVbXQbFgsgCBaSO0uxokAGkTEtESrYkHVg4/McqAruPzgYU5DSrasBEYeGGCVB1lEO0MQmKjvDgbRLmh+V+UTZVAVZTXDhPBtLHUDlO4MkzlYJhsBCkDoxNrhul/xvkPXkha9FjxyKAAAAAASUVORK5CYII=" title="Ethereum (ETH)" alt="ETH"> <a href="ethereum:0x57f1afbC888d6954F954B0960524E4aa5Fa188af">0x57f1afbC888d6954F954B0960524E4aa5Fa188af</a></li>
-                    <li><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAArtJREFUOE+dU00odFEYfs4dl4thSuGWMXdW2EkxZTY+IllIDQtsLGzQV5KFKRs1IkVZaGZNzShLlJSa70v5MqKUZKPmTmO6YjM/7vUzc4/OMSMsv3d1O/d9nvd5znlego8SAJj573YAvwF0AJDzZxqAvwA2APz7iiE/wH4Ak6zBarWisrKS96ZSKWQymY9JghAwTXOqQMIICvUnP5U6nU4zGo0yVYX/tLi42LTZbIIoiiSRSDA1vxiw0MAnC4LwUlVVVfL4+IiBgQH09vaCUorj42McHBwgmUwyzEtFRUVJOp0OAJhiBMzzCQBaXV1NHh4esLe3h+bmZiQSCRQVFUGSJExPT6O1tRUejwfz8/P06OiIKIriZgRBAKNOpzMXjUYtu7u7aGpqQl9fH25vb7k9r9eLkZER5h+np6fw+Xw5VVUtkiSFGEG8vLy87unpifb39xO/34/6+noOnJubw/DwMFdxfn7OlTDymZkZGg6HidVqvWMEWVmWLZqmYW1tDW1tbVhaWsLy8jJEUcTFxQUHNjQ0oLGxETs7OxgbG4PD4UAsFstxAofDYYnFYggGgxgcHMT19TVubm64ipaWFqTTaUxMTGB9fR1nZ2eYnZ2FLMvQNC3HZMQzmUxdd3c3XVlZIQxMCOFAXdexubmJjQ2WHyAej2N8fByHh4e0rKyM6Lp+RyRJCj4/P4/a7fbc4uKixeVywTAMbG9vY3V1lQPdbje2trZweXnJFSqKwi8RQIg9Rbuqqic9PT10YWGBhEIhXF1dIRAI4PX1FdlsFjU1NYhEIhgaGkJtbS3u7+9pPkP8GVn5RVGcfHt7ewFQUlpaiq6uLnR2dnI7+/v7CIfDBd+8B8BnkD6jbLfbOwzDoLqum4ZhfIuyoiimqqqFs29R/rqJn8vEVNhsNk7OIszuJV988s9l+u91fgeO9R454M2E/wAAAABJRU5ErkJggg==" title="Stellar Lumen (XLM)" alt="XLM"> <a href="ethereum:GCOLPDHCPV2SW72UWPN3QWIHVIBPDGG7USJVPE76CNKO5TCXBR7GGWXW">GCOLPDHCPV2SW72UWPN3QWIHVIBPDGG7USJVPE76CNKO5TCXBR7GGWXW</a></li>
-                </ul>
+            <ul>
+                <li><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAopJREFUOE9lk8tLlFEYh5/3nPycmTTM1UCBOo0ldhESjImgQFoptOlCgStxofgXSAshojbRRiwUWkS2KNtEmwi6iCmkRQVZhlpGQhfTajSb0e+8cWaklDjwcTgfv/f6/ARAOzHSicvdLydTzrp2UQ4iEvdvqH5S4ZExpkuaJ4bXamStOOxNdItqK2IAAQ2BZTCloEugK6jIJdsy1fY3SC4D4HoqHoLPahRdckjUIIFgimHhiRLgsNsNuiz4alreHfI68Z+wt7xbMK1ABs0WUpCAuQHYdwWK4zD/Hr6NwdcusJUZCAsVd8m2vG8TvVyWUmOGEFGkWFh8AXXXoKoeNgSQnoWNm+FOG8z1Q3QXuAUFEXFuv4S95X2COYVqiFiLBLAyBg2vYGs1zM1ASRw+T8KDDkjfArsjRLNWRa+L60l8RHQL6ivwpwgWXsLJKYiVwPlSSJ2GhjMwNQK362DTXsV9F5QZcT0VK4jY/Cgt6G+I1sCJfr8/GB+AaAlsq4PRfhg+BrEa0LT/H+YD5JVgS2H2GVR3QONZGB/Mx91xAH79hP6jsHQfbBI0m5v/agtsgUAJ3wrJC7CzEeJJ6DsCj29D01VINcHITRg6DsVrWvg7RIKQlTeWQw+hvBYiRTA7Db9+QLwSgijcPQcTHRDZHeIWrYq7/m+NvgdbKnx6CodvQFktBLE8Kovz8GEUnjdBQRWQVTyTxu1fBSnRLdCKRDJkxwrZfhHCDCTrYbADvtyDCBCp9DhngEIVzYO0HmU9iIkqv187DIZgj+SGZWKKhg5NG1QFMY9My2Qe5f/N5FoxvnRvkDQ5sNR58HJrVfKZ15lpvZ3LUs5Ku6jxxorjXa6s2jnskubpdXb+A+khJ2aa2mA5AAAAAElFTkSuQmCC" title="Bitcoin (BTC)" alt="BTC"> <a href="bitcoin:bc1qugc2y2cpulzra543ucnhmps7zd3zz2hjg9ezn2">bc1qugc2y2cpulzra543ucnhmps7zd3zz2hjg9ezn2</a></li>
+                <li><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAn1JREFUOE+lk0tIlFEYht/3/HNTp6EEcyBtEbXJsDYV/RYm1OCmAgm60crVRLlo0SIX2cIWLYIu5KZWoRWEUG3MApNsJNuUZIuINiqMCRY2jXP5//PFOf9kg9t2h3N5zvd+7/sRAPogqg/UZt3pvtsn5HkRtJNMmj0RyZIYp8idkczeyeo3rH6ccqfugkwzeIRQyKwAzxOQhIjFDYxm9pz7CwluAEi571+T0g5QRESHwlRLWW3P65NKvLJokgoQinB8NLP7oDmzF8zPJNMAiiISjdUSz16VMfjAKsCZs1kcPRRGIW8rKQISFYGthEazhsqQpsDgj1JBULeOePR8lwWcOPIB+V+CSIwQ2ymjUKggLlNtU4METwPwRcSpqVN4+rKEt2+2wN3faG9nJhbQduAbjh2OYOW3Nt/4AByBDDHlTs2R3GSQkSj5ZczHyctxXO1vsY20Oklc6Z3B42s5bOtwUCqKkKZmmTcAj6RjuqEI/FzUGB7bgWSyFp4X1BsKKWSzeXR1fML6BgVtuCIQob8KIIFySVC/UaHnUhNad25AIhGxgOXlEqY//sCt63NY+q4RjgSWiogFWAmG6YTAuc8+em82onlzLaIxZQHFgsbsbB79PQto2u7A92BqqEioNNHQHIeOsSpRr3D/YQtyubIFxONhdJ+awfKShrHY98UH4RAYqtjITNATYTRGfJ300dldgxu3Wy3g4oVpjNxbwVbXQbFgsgCBaSO0uxokAGkTEtESrYkHVg4/McqAruPzgYU5DSrasBEYeGGCVB1lEO0MQmKjvDgbRLmh+V+UTZVAVZTXDhPBtLHUDlO4MkzlYJhsBCkDoxNrhul/xvkPXkha9FjxyKAAAAAASUVORK5CYII=" title="Ethereum (ETH)" alt="ETH"> <a href="ethereum:0x57f1afbC888d6954F954B0960524E4aa5Fa188af">0x57f1afbC888d6954F954B0960524E4aa5Fa188af</a></li>
+                <li><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAArtJREFUOE+dU00odFEYfs4dl4thSuGWMXdW2EkxZTY+IllIDQtsLGzQV5KFKRs1IkVZaGZNzShLlJSa70v5MqKUZKPmTmO6YjM/7vUzc4/OMSMsv3d1O/d9nvd5znlego8SAJj573YAvwF0AJDzZxqAvwA2APz7iiE/wH4Ak6zBarWisrKS96ZSKWQymY9JghAwTXOqQMIICvUnP5U6nU4zGo0yVYX/tLi42LTZbIIoiiSRSDA1vxiw0MAnC4LwUlVVVfL4+IiBgQH09vaCUorj42McHBwgmUwyzEtFRUVJOp0OAJhiBMzzCQBaXV1NHh4esLe3h+bmZiQSCRQVFUGSJExPT6O1tRUejwfz8/P06OiIKIriZgRBAKNOpzMXjUYtu7u7aGpqQl9fH25vb7k9r9eLkZER5h+np6fw+Xw5VVUtkiSFGEG8vLy87unpifb39xO/34/6+noOnJubw/DwMFdxfn7OlTDymZkZGg6HidVqvWMEWVmWLZqmYW1tDW1tbVhaWsLy8jJEUcTFxQUHNjQ0oLGxETs7OxgbG4PD4UAsFstxAofDYYnFYggGgxgcHMT19TVubm64ipaWFqTTaUxMTGB9fR1nZ2eYnZ2FLMvQNC3HZMQzmUxdd3c3XVlZIQxMCOFAXdexubmJjQ2WHyAej2N8fByHh4e0rKyM6Lp+RyRJCj4/P4/a7fbc4uKixeVywTAMbG9vY3V1lQPdbje2trZweXnJFSqKwi8RQIg9Rbuqqic9PT10YWGBhEIhXF1dIRAI4PX1FdlsFjU1NYhEIhgaGkJtbS3u7+9pPkP8GVn5RVGcfHt7ewFQUlpaiq6uLnR2dnI7+/v7CIfDBd+8B8BnkD6jbLfbOwzDoLqum4ZhfIuyoiimqqqFs29R/rqJn8vEVNhsNk7OIszuJV988s9l+u91fgeO9R454M2E/wAAAABJRU5ErkJggg==" title="Stellar Lumen (XLM)" alt="XLM"> <a href="ethereum:GCOLPDHCPV2SW72UWPN3QWIHVIBPDGG7USJVPE76CNKO5TCXBR7GGWXW">GCOLPDHCPV2SW72UWPN3QWIHVIBPDGG7USJVPE76CNKO5TCXBR7GGWXW</a></li>
+            </ul>
             </p>
         <?php } ?>
     </article>

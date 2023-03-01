@@ -9,8 +9,9 @@ use RedisException;
 
 class RateLimiter
 {
-    /** @var string */
-    private $ip;
+    private string $ip;
+    private int $limit;
+    private int $interval;
 
     public function __construct(string $ip)
     {
@@ -22,10 +23,11 @@ class RateLimiter
 
     private function appendHeaders(int $remaining, int $calls): void
     {
-        header('X-RateLimit-Limit: ' . $this->limit . ', ' . $this->limit . ';window=' . $this->interval);
+        // draft-ietf-httpapi-ratelimit-headers-06: https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/06/
+        header('X-RateLimit-Limit: ' . $this->limit);
+        header('X-RateLimit-Policy: ' . $this->limit . ';w=' . $this->interval);
         header('X-RateLimit-Remaining: ' . max(0, $this->limit - $calls));
         header('X-RateLimit-Reset: ' . $remaining);
-        header('X-RateLimit-Reset: ' . $this->getNextCallDate($remaining), false);
     }
 
     private function update(int $now): array
@@ -73,8 +75,8 @@ class RateLimiter
                 return;
             }
 
-            header('Retry-After: ' . $remaining);
             header('Retry-After: ' . $this->getNextCallDate($remaining), false);
+            header('Retry-After: ' . $remaining);
         } catch (RedisException $e) {
             http_response_code(500);
             die('500 Internal Server Error');
