@@ -9,7 +9,6 @@ use IfConfig\Reader\LocationReader;
 use IfConfig\Renderer\ContentType\ContentTypeRenderer;
 use IfConfig\Renderer\ContentType\FileRenderer;
 use IfConfig\Renderer\ContentType\HtmlRenderer;
-use IfConfig\Renderer\ContentType\JsonpRenderer;
 use IfConfig\Renderer\ContentType\JsonRenderer;
 use IfConfig\Renderer\ContentType\TextRenderer;
 use IfConfig\Renderer\ContentType\XmlRenderer;
@@ -23,6 +22,7 @@ use Utils\IpReader;
 class RendererStrategy
 {
     public const PAGES = ['about'];
+    public const DEV_PAGES = ['opcache'];
     public const FORMATS = ['html', 'json', 'jsonp', 'text', 'txt', 'xml', 'yaml', 'yml'];
 
     private function getField(Info $info, array $path, ?string $field): mixed

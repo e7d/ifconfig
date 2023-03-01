@@ -67,6 +67,9 @@ class RequestService
         if (in_array($entry, RendererStrategy::PAGES)) {
             return array_merge($data, ['page' =>  $entry]);
         }
+        if (getenv('MODE') === 'dev' && in_array($entry, RendererStrategy::DEV_PAGES)) {
+            return array_merge($data, ['page' =>  $entry]);
+        }
         if (preg_match(
             '/^(?P<entry>.*)\.(?P<format>' . implode('|', RendererStrategy::FORMATS) . ')$/',
             $entry,

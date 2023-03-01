@@ -59,6 +59,7 @@ echo "SetEnv DATABASE_DIR $DATABASE_DIR" >>/etc/apache2/conf-available/environme
 echo "SetEnv HOST_AUTO $HOST_AUTO" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv HOST_IPV4 $HOST_IPV4" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv HOST_IPV6 $HOST_IPV6" >>/etc/apache2/conf-available/environment.conf
+echo "SetEnv MODE $MODE" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv RATE_LIMIT $RATE_LIMIT" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv RATE_LIMIT_INTERVAL $RATE_LIMIT_INTERVAL" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv SHOW_ABOUT $SHOW_ABOUT" >>/etc/apache2/conf-available/environment.conf

@@ -22,4 +22,4 @@ services:
       - 8080:80
     tmpfs: /tmpfs
     volumes:
-      - .:/var/www:ro
+      - .:/var/www
