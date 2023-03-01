@@ -5,6 +5,6 @@ use IfConfig\Reader\DatabaseReader;
 
 $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
 if (getenv('SHOW_ABOUT') === 'true') echo '<p><a href="about">About</a>' . ($dbLatestUpdate ? " - Database: $dbLatestUpdate" : '') . '</p>';
-elseif ($dbLatestUpdate) echo '<p>This product includes GeoLite2 data created by MaxMind, available from <a rel="noreferrer" href="https://dev.maxmind.com/geoip" target="_blank">https://www.maxmind.com</a>.</p>';
+elseif ($dbLatestUpdate) echo '<p>This product includes GeoLite2 data created by MaxMind, available from <a href="https://dev.maxmind.com/geoip" target="_blank" rel="noreferrer">https://www.maxmind.com</a>.</p>';
 ?>
 </footer>

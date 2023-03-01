@@ -143,7 +143,7 @@ $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
 
         <h3 id="supported-clients">Supported clients</h3>
         <p>
-            Any HTTP compatible client is supported, including your browser, <a rel="noreferrer" href="https://curl.haxx.se/" target="_blank">cURL</a>, <a rel="noreferrer" href="https://httpie.org/" target="_blank">HTTPie</a>, <a rel="noreferrer" href="https://www.gnu.org/software/wget/" target="_blank">GNU Wget</a> and <a rel="noreferrer" href="https://www.freebsd.org/cgi/man.cgi?fetch(1)" target="_blank">FreeBSD fetch</a>.
+            Any HTTP compatible client is supported, including your browser, <a href="https://curl.haxx.se/" target="_blank" rel="noreferrer">cURL</a>, <a href="https://httpie.org/" target="_blank" rel="noreferrer">HTTPie</a>, <a href="https://www.gnu.org/software/wget/" target="_blank" rel="noreferrer">GNU Wget</a> and <a href="https://www.freebsd.org/cgi/man.cgi?fetch(1)" target="_blank" rel="noreferrer">FreeBSD fetch</a>.
         </p>
         <table>
             <thead>
@@ -352,10 +352,10 @@ $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
                     Yes. <?= $rateLimit ?> request<?= $rateLimit !== 1 ? 's are' : ' is' ?> accepted every <?= $rateLimitInterval !== 1 ? $rateLimitInterval . ' seconds' : 'second' ?>.
                 </p>
                 <p>
-                    In between requests will get a "<a rel="noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429" target="_blank">429 Too Many Requests</a>" error, with a <a rel="noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After" target="_blank">Retry-After</a> response header having a pair of values indicating when the next query will succeed.
+                    In between requests will get a "<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429" target="_blank" rel="noreferrer">429 Too Many Requests</a>" error, with a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After" target="_blank" rel="noreferrer">Retry-After</a> response header having a pair of values indicating when the next query will succeed.
                 </p>
                 <p>
-                    Successful requests will get "<a rel="noreferrer" href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/06/" target="_blank">RateLimit</a>" headers indicating:
+                    Successful requests will get "<a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/06/" target="_blank" rel="noreferrer">RateLimit</a>" headers indicating:
                     <ul>
                         <li><em>X-RateLimit-Policy</em>: the quota policy</li>
                         <li><em>X-RateLimit-Remaining</em>: the remaining quota in the current window</li>
@@ -368,18 +368,18 @@ $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
             <?php } ?>
 
             <h4>Can I run my own service?</h4>
-            <p>Yes, the source code is available on <a rel="noreferrer" href="https://github.com/e7d/ifconfig" target="_blank">GitHub</a>.</p>
+            <p>Yes, the source code is available on <a href="https://github.com/e7d/ifconfig" target="_blank" rel="noreferrer">GitHub</a>.</p>
         <?php } ?>
 
         <?php if ($dbLatestUpdate) { ?>
             <h3 id="external-resources">External resources</h3>
-            <p>This product includes GeoLite2 data created by MaxMind, available from <a rel="noreferrer" href="https://dev.maxmind.com/geoip" target="_blank">https://www.maxmind.com</a>.</p>
+            <p>This product includes GeoLite2 data created by MaxMind, available from <a href="https://dev.maxmind.com/geoip" target="_blank" rel="noreferrer">https://www.maxmind.com</a>.</p>
         <?php } ?>
 
         <h3 id="references">References</h3>
         <ol>
-            <li id="note-1"><a href="#ref-1">^</a> <a rel="noreferrer" href="https://en.wikipedia.org/wiki/Autonomous_system_(Internet)" target="_blank">Autonomous system number</a></li>
-            <li id="note-2"><a href="#ref-2">^</a> <a rel="noreferrer" href="https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country" target="_blank">Administrative subdivisions</a> are specific to each country and may or may not be specified.</li>
+            <li id="note-1"><a href="#ref-1">^</a> <a href="https://en.wikipedia.org/wiki/Autonomous_system_(Internet)" target="_blank" rel="noreferrer">Autonomous system number</a></li>
+            <li id="note-2"><a href="#ref-2">^</a> <a href="https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country" target="_blank" rel="noreferrer">Administrative subdivisions</a> are specific to each country and may or may not be specified.</li>
         </ol>
 
         <?php if (getenv('SHOW_SUPPORT') === 'true') { ?>

@@ -15,7 +15,7 @@ class HtmlRenderer extends ContentTypeRenderer
 
     private function getAsnWithLink(ASN $asn): string
     {
-        return '<a rel="noreferrer" href="https://ipinfo.io/AS' . $asn->getNumber() . '" target="_blank" title="Find AS number details on IPinfo.io">AS' . $asn->getNumber() . ' ' . $asn->getOrg() . '</a> (' . $asn->getNetwork() . ')';
+        return '<a href="https://ipinfo.io/AS' . $asn->getNumber() . '" target="_blank" rel="noreferrer" title="Find AS number details on IPinfo.io">AS' . $asn->getNumber() . ' ' . $asn->getOrg() . '</a> (' . $asn->getNetwork() . ')';
     }
 
     private function getAsnString(?ASN $asn): string
@@ -62,8 +62,7 @@ class HtmlRenderer extends ContentTypeRenderer
             return '';
         }
         $coordinates = $location->getLatitude() . ', ' . $location->getLongitude();
-        return '<a rel="noreferrer" href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude()
-            . '&mlon=' . $location->getLongitude() . '" target="_blank" title="View coordinates location on OpenStreetMap (openstreetmap.org)">' . $coordinates . '</a>';
+        return '<a href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude() . '&mlon=' . $location->getLongitude() . '" target="_blank" rel="noreferrer" title="View coordinates location on OpenStreetMap (openstreetmap.org)">' . $coordinates . '</a>';
     }
 
     private function getHeadersHtml(Headers $headers): string

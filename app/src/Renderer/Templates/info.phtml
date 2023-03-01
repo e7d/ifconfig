@@ -2,6 +2,15 @@
 
 use Utils\ParamsService;
 
+$query = ParamsService::get("query") ?? ParamsService::get("q") ?? '';
+
+function toFormatUri(string $format, string $query)
+{
+    return '?' .
+        (!empty($query) ? 'q=' . $query . '&' : '') .
+        'format=' . $format;
+}
+
 if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     <style>
         .force-ip {
@@ -19,16 +28,47 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
 <style>
     form {
         display: flex;
+        justify-content: center;
+        margin-bottom: var(--margin);
     }
 
     input {
-        background-color: var(--background-color);
-        border-radius: var(--border-radius);
-        border: 1px solid var(--border-color);
         color: var(--text-color);
-        margin: var(--margin) auto;
         padding: var(--margin);
+        border: 1px solid var(--border-color);
+    }
+
+    input[name=q] {
+        background-color: var(--background-color);
         width: 400px;
+        border-top-left-radius: var(--border-radius);
+        border-bottom-left-radius: var(--border-radius);
+    }
+
+    input[type=submit] {
+        margin-left: -1px;
+        border-top-right-radius: var(--border-radius);
+        border-bottom-right-radius: var(--border-radius);
+        cursor: pointer;
+    }
+
+    h2 {
+        display: flex;
+    }
+
+    h2 span {
+        flex: 1;
+    }
+
+    h2 .links a {
+        background-color: var(--blue-color);
+        background-image: none;
+        border-radius: 4px;
+        color: var(--background-color);
+        font-size: small;
+        padding: 2px 4px;
+        text-decoration: none;
+        text-transform: uppercase;
     }
 
     ul {
@@ -38,9 +78,12 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     }
 
     li {
-        border-top: 1px solid var(--border-color);
         display: flex;
         position: relative;
+    }
+
+    li+li {
+        border-top: 1px solid var(--border-color);
     }
 
     li>* {
@@ -62,7 +105,9 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     }
 
     button {
-        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48cGF0aCBkPSJNMzM2IDY0aC04MGMwLTM1LjMtMjguNy02NC02NC02NHMtNjQgMjguNy02NCA2NEg0OEMyMS41IDY0IDAgODUuNSAwIDExMnYzNTJjMCAyNi41IDIxLjUgNDggNDggNDhoMjg4YzI2LjUgMCA0OC0yMS41IDQ4LTQ4VjExMmMwLTI2LjUtMjEuNS00OC00OC00OHpNMTkyIDQwYzEzLjMgMCAyNCAxMC43IDI0IDI0cy0xMC43IDI0LTI0IDI0LTI0LTEwLjctMjQtMjQgMTAuNy0yNCAyNC0yNHptMTQ0IDQxOGMwIDMuMy0yLjcgNi02IDZINTRjLTMuMyAwLTYtMi43LTYtNlYxMThjMC0zLjMgMi43LTYgNi02aDQydjM2YzAgNi42IDUuNCAxMiAxMiAxMmgxNjhjNi42IDAgMTItNS40IDEyLTEydi0zNmg0MmMzLjMgMCA2IDIuNyA2IDZ6Ii8+PC9zdmc+') center no-repeat;
+        background-color: var(--blue-color);;
+        -webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48cGF0aCBkPSJNMzM2IDY0aC04MGMwLTM1LjMtMjguNy02NC02NC02NHMtNjQgMjguNy02NCA2NEg0OEMyMS41IDY0IDAgODUuNSAwIDExMnYzNTJjMCAyNi41IDIxLjUgNDggNDggNDhoMjg4YzI2LjUgMCA0OC0yMS41IDQ4LTQ4VjExMmMwLTI2LjUtMjEuNS00OC00OC00OHpNMTkyIDQwYzEzLjMgMCAyNCAxMC43IDI0IDI0cy0xMC43IDI0LTI0IDI0LTI0LTEwLjctMjQtMjQgMTAuNy0yNCAyNC0yNHptMTQ0IDQxOGMwIDMuMy0yLjcgNi02IDZINTRjLTMuMyAwLTYtMi43LTYtNlYxMThjMC0zLjMgMi43LTYgNi02aDQydjM2YzAgNi42IDUuNCAxMiAxMiAxMmgxNjhjNi42IDAgMTItNS40IDEyLTEydi0zNmg0MmMzLjMgMCA2IDIuNyA2IDZ6Ii8+PC9zdmc+') center no-repeat;
+        mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48cGF0aCBkPSJNMzM2IDY0aC04MGMwLTM1LjMtMjguNy02NC02NC02NHMtNjQgMjguNy02NCA2NEg0OEMyMS41IDY0IDAgODUuNSAwIDExMnYzNTJjMCAyNi41IDIxLjUgNDggNDggNDhoMjg4YzI2LjUgMCA0OC0yMS41IDQ4LTQ4VjExMmMwLTI2LjUtMjEuNS00OC00OC00OHpNMTkyIDQwYzEzLjMgMCAyNCAxMC43IDI0IDI0cy0xMC43IDI0LTI0IDI0LTI0LTEwLjctMjQtMjQgMTAuNy0yNCAyNC0yNHptMTQ0IDQxOGMwIDMuMy0yLjcgNi02IDZINTRjLTMuMyAwLTYtMi43LTYtNlYxMThjMC0zLjMgMi43LTYgNi02aDQydjM2YzAgNi42IDUuNCAxMiAxMiAxMmgxNjhjNi42IDAgMTItNS40IDEyLTEydi0zNmg0MmMzLjMgMCA2IDIuNyA2IDZ6Ii8+PC9zdmc+') center no-repeat;
         border: 0;
         cursor: pointer;
         display: none;
@@ -82,7 +127,8 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     }
 
     li.copied button {
-        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNy44MzcgMTcuODM3Ij48cGF0aCBkPSJNMTYuMTQ1IDIuNTcxYS43LjcgMCAwIDAtLjk5IDBMNi45MiAxMC44MDRsLTQuMjQxLTQuMjdhLjY5OC42OTggMCAwIDAtLjk4OSAwTC4yMDQgOC4wMTlhLjcwMy43MDMgMCAwIDAgMCAuOTlsNi4yMTcgNi4yNThhLjcwNC43MDQgMCAwIDAgLjk5IDBMMTcuNjMgNS4wNDdhLjcuNyAwIDAgMCAwLS45OTRsLTEuNDg1LTEuNDgyeiIvPjwvc3ZnPg==') center no-repeat;
+        -webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNy44MzcgMTcuODM3Ij48cGF0aCBkPSJNMTYuMTQ1IDIuNTcxYS43LjcgMCAwIDAtLjk5IDBMNi45MiAxMC44MDRsLTQuMjQxLTQuMjdhLjY5OC42OTggMCAwIDAtLjk4OSAwTC4yMDQgOC4wMTlhLjcwMy43MDMgMCAwIDAgMCAuOTlsNi4yMTcgNi4yNThhLjcwNC43MDQgMCAwIDAgLjk5IDBMMTcuNjMgNS4wNDdhLjcuNyAwIDAgMCAwLS45OTRsLTEuNDg1LTEuNDgyeiIvPjwvc3ZnPg==') center no-repeat;
+        mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNy44MzcgMTcuODM3Ij48cGF0aCBkPSJNMTYuMTQ1IDIuNTcxYS43LjcgMCAwIDAtLjk5IDBMNi45MiAxMC44MDRsLTQuMjQxLTQuMjdhLjY5OC42OTggMCAwIDAtLjk4OSAwTC4yMDQgOC4wMTlhLjcwMy43MDMgMCAwIDAgMCAuOTlsNi4yMTcgNi4yNThhLjcwNC43MDQgMCAwIDAgLjk5IDBMMTcuNjMgNS4wNDdhLjcuNyAwIDAgMCAwLS45OTRsLTEuNDg1LTEuNDgyeiIvPjwvc3ZnPg==') center no-repeat;
         display: initial;
     }
 
@@ -91,8 +137,13 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     }
 
     @media (max-width: 640px) {
-        input {
+        input[name=q] {
             width: 100%;
+        }
+
+        h2 {
+            flex-direction: column;
+            text-align: center;
         }
 
         li {
@@ -122,10 +173,20 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     </div>
 <?php } ?>
 <form name="search" action="//<?= $_SERVER["HTTP_HOST"] ?>">
-    <input type="text" name="q" placeholder="Search any IP Address, Host or URL" autofocus autocapitalize="off" value="<?= ParamsService::get("query") ?? ParamsService::get("q") ?? '' ?>">
+    <input type="text" name="q" placeholder="Search any IP Address, Host or URL" autofocus autocapitalize="off" value="<?= $query ?>">
+    <input type="submit" value="Search">
 </form>
-<main class="info">
-    <h2>Your Connection</h2>
+<main>
+    <h2>
+        <span>Your Connection</span>
+        <div class="links">
+            <a target="_blank" href="<?= toFormatUri('json', $query) ?>">json</a>
+            <a target="_blank" href="<?= toFormatUri('jsonp', $query) ?>">jsonp</a>
+            <a target="_blank" href="<?= toFormatUri('txt', $query) ?>">txt</a>
+            <a target="_blank" href="<?= toFormatUri('xml', $query) ?>">xml</a>
+            <a target="_blank" href="<?= toFormatUri('yaml', $query) ?>">yaml</a>
+        </div>
+    </h2>
     <ul>
         <li>
             <label>IP Address</label>
@@ -209,5 +270,5 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         const span = row.querySelector('span');
         if (!span.textContent) return;
         handleCopy(row, span);
-    })
+    });
 </script>
