@@ -19,13 +19,13 @@ RUN env GO111MODULE=on go install github.com/maxmind/geoipupdate/v4/cmd/geoipupd
 
 FROM composer AS build-dependencies
 WORKDIR /build
-COPY . /build/
+COPY . /build
 RUN composer prod
 
 FROM node AS build-html
 WORKDIR /build
-COPY . /build/
-RUN ./minify.sh
+COPY . /build
+RUN ./docker/build/minify.sh
 
 FROM dependencies AS common
 ENV DATABASE_AUTO_UPDATE ""
@@ -41,7 +41,7 @@ ENV RATE_LIMIT_INTERVAL 1
 ENV SHOW_ABOUT false
 ENV SHOW_FAQ false
 ENV SHOW_SUPPORT false
-COPY ./docker /
+COPY ./docker/resources /
 RUN a2enconf environment
 COPY --from=geoipupdate-dependency /go/bin/geoipupdate /usr/bin/geoipupdate
 WORKDIR /var/www

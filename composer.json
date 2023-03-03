@@ -13,7 +13,7 @@
   },
   "scripts": {
     "benchmark": "ab -k -c 100 -n 100000 http://localhost:8080/",
-    "docker:build": "docker build -t e7db/ifconfig .",
+    "docker:build": "docker build -t e7db/ifconfig -f docker/build/Dockerfile .",
     "docker:composer": "docker run -it --rm -v $PWD:/app composer",
     "prod": "composer install && composer dump-autoload --optimize",
     "setup": "composer install && composer dump-autoload"

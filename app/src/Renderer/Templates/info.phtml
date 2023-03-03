@@ -179,7 +179,7 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
 </form>
 <main>
     <h2>
-        <span><?= empty($query) ? "Your Connection" : "$query information" ?></span>
+        <span><?= empty($query) ? "Your connection" : "$query information" ?></span>
         <div class="links">
             <a target="_blank" href="<?= toFormatUri('json', $query) ?>">json</a>
             <a target="_blank" href="<?= toFormatUri('jsonp', $query) ?>">jsonp</a>
