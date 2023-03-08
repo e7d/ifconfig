@@ -11,8 +11,10 @@ class RendererOptions
     private ?string $format;
     private array $path;
     private ?string $field;
-    private ?string $host;
+    private array $query;
+    private ?string $type;
     private ?string $ip;
+    private ?string $host;
 
     public function __construct(
         array $headers,
@@ -24,6 +26,8 @@ class RendererOptions
         $this->format = $data['format'] ?? null;
         $this->path = $data['path'];
         $this->field = $data['field'] ?? null;
+        $this->query = $data['query'] ?? [];
+        $this->type = $data['type'] ?? null;
         $this->ip = $data['ip'] ?? null;
         $this->host = $data['host'] ?? null;
     }
@@ -56,6 +60,16 @@ class RendererOptions
     public function getField(): ?string
     {
         return $this->field;
+    }
+
+    public function getQuery(): array
+    {
+        return $this->query;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
     }
 
     public function getIp(): ?string

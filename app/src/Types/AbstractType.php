@@ -4,6 +4,11 @@ namespace IfConfig\Types;
 
 abstract class AbstractType
 {
+    public static function getProperties(): array
+    {
+        return array_keys(get_class_vars(get_called_class()));
+    }
+
     public function getFromPath(array $path): mixed
     {
         if (!$this->has($path[0])) {

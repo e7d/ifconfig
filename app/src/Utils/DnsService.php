@@ -23,13 +23,13 @@ class DnsService
         }
     }
 
-    public static function reverse(string $ip): string | false
+    public static function reverse(string $ip): ?string
     {
         try {
             StopwatchService::get('dns')->start();
             return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)
-                ? gethostbyaddr($ip)
-                : false;
+                ? gethostbyaddr($ip) ?? null
+                : null;
         } catch (Exception $e) {
             return null;
         } finally {

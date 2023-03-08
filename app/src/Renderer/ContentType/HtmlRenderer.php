@@ -12,6 +12,25 @@ use IfConfig\Types\Subdivisions;
 class HtmlRenderer extends ContentTypeRenderer
 {
     private string $page;
+    private array $query;
+    private ?string $type;
+
+    public function __construct(string $page, array $query = [], ?string $type = null)
+    {
+        $this->page = $page;
+        $this->query = $query;
+        $this->type = $type;
+    }
+
+    private function getQuery(): string
+    {
+        return $this->query['host'] ?? $this->query['ip'] ?? '';
+    }
+
+    private function getType(): string
+    {
+        return $this->type ?? '';
+    }
 
     private function getAsnWithLink(ASN $asn): string
     {
@@ -23,11 +42,6 @@ class HtmlRenderer extends ContentTypeRenderer
         return is_null($asn)
             ? ''
             : $this->getAsnWithLink($asn);
-    }
-
-    public function __construct(string $page = 'info')
-    {
-        $this->page = $page;
     }
 
     private function getCountryFlagString(Country $country): string

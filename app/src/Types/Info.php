@@ -26,7 +26,14 @@ class Info extends AbstractType
 
     public static function getProperties(): array
     {
-        return array_keys(get_class_vars(__CLASS__));
+        return array_merge(
+            parent::getProperties(),
+            ASN::getProperties(),
+            Country::getProperties(),
+            City::getProperties(),
+            Postal::getProperties(),
+            Location::getProperties()
+        );
     }
 
     public function getIp(): ?string

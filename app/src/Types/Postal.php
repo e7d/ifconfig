@@ -15,10 +15,10 @@ class Postal extends AbstractType
 
     public function __toString(): string
     {
-        return $this->code;
+        return $this->code ?? '';
     }
 
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
     }

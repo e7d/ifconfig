@@ -19,7 +19,7 @@ class Location extends AbstractType
 
     public function __toString(): string
     {
-        return $this->latitude . ', ' . $this->longitude;
+        return $this->latitude && $this->longitude ? $this->latitude . ', ' . $this->longitude : '';
     }
 
     public function getAccuracyRadius(): ?float

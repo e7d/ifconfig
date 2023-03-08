@@ -299,6 +299,14 @@ $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
                     <input id="query" type="text" name="q">
                 </div>
                 <div class="form-group">
+                    <label for="type">Query type</label>
+                    <select id="type" name="type">
+                        <option value="">Auto</option>
+                        <option value="v4">IPv4</option>
+                        <option value="v6">IPv6</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="format">Output format</label>
                     <select id="format" name="format">
                         <option value="">Auto</option>

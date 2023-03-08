@@ -19,8 +19,8 @@ class Application
     {
         $this->rendererStrategy = new RendererStrategy();
         $headers = $_SERVER;
-        $params = ParamsService::parse();
-        $options = RequestService::parse($headers, $params);
+        ParamsService::parse();
+        $options = RequestService::parse($headers);
         $renderer = $this->rendererStrategy->getRenderer($options);
         $renderer->render();
     }

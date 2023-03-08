@@ -19,9 +19,17 @@ class Country extends AbstractType
         $this->name = $countryRecord->name ?? null;
     }
 
+    public static function getProperties(): array
+    {
+        return \array_merge(
+            parent::getProperties(),
+            Flag::getProperties()
+        );
+    }
+
     public function __toString(): string
     {
-        return $this->name . ' (' . $this->isoCode . ')';
+        return  $this->name ? $this->name . ' (' . $this->isoCode . ')' : '';
     }
 
     public function getFlag(): ?Flag

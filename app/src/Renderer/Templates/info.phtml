@@ -1,13 +1,13 @@
 <?php
 
-use Utils\ParamsService;
+$query = $this->getQuery();
+$type = $this->getType();
 
-$query = ParamsService::get("query") ?? ParamsService::get("q") ?? '';
-
-function toFormatUri(string $format, string $query)
+function toFormatUri(string $format, string $query, ?string $type): string
 {
-    return '?' .
+    return '/?' .
         (!empty($query) ? 'q=' . $query . '&' : '') .
+        (!empty($type) ? 'type=' . $type . '&' : '') .
         'format=' . $format;
 }
 
@@ -32,7 +32,7 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         margin-bottom: var(--margin);
     }
 
-    input {
+    input, select {
         color: var(--text-color);
         padding: var(--margin);
         border: 1px solid var(--border-color);
@@ -43,6 +43,11 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         width: 400px;
         border-top-left-radius: var(--border-radius);
         border-bottom-left-radius: var(--border-radius);
+    }
+
+    select[name=type] {
+        background-color: var(--background-color);
+        margin-left: -1px;
     }
 
     input[type=submit] {
@@ -175,17 +180,22 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
 <?php } ?>
 <form name="search" action="//<?= $_SERVER["HTTP_HOST"] ?>">
     <input type="text" name="q" placeholder="Search any IP Address, Host or URL" autofocus autocapitalize="off" value="<?= $query ?>">
+    <select name="type">
+        <option value="">-</option>
+        <option value="v4" <?= $type === 'v4' ? 'selected' : '' ?>>IPv4</option>
+        <option value="v6" <?= $type === 'v6' ? 'selected' : '' ?>>IPv6</option>
+    </select>
     <input type="submit" value="Search">
 </form>
 <main>
     <h2>
         <span><?= empty($query) ? "Your connection" : "$query information" ?></span>
         <div class="links">
-            <a target="_blank" href="<?= toFormatUri('json', $query) ?>">json</a>
-            <a target="_blank" href="<?= toFormatUri('jsonp', $query) ?>">jsonp</a>
-            <a target="_blank" href="<?= toFormatUri('txt', $query) ?>">txt</a>
-            <a target="_blank" href="<?= toFormatUri('xml', $query) ?>">xml</a>
-            <a target="_blank" href="<?= toFormatUri('yaml', $query) ?>">yaml</a>
+            <a target="_blank" href="<?= toFormatUri('json', $query, $type) ?>">json</a>
+            <a target="_blank" href="<?= toFormatUri('jsonp', $query, $type) ?>">jsonp</a>
+            <a target="_blank" href="<?= toFormatUri('txt', $query, $type) ?>">txt</a>
+            <a target="_blank" href="<?= toFormatUri('xml', $query, $type) ?>">xml</a>
+            <a target="_blank" href="<?= toFormatUri('yaml', $query, $type) ?>">yaml</a>
         </div>
     </h2>
     <ul>
