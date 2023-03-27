@@ -18,6 +18,7 @@ services:
       - SHOW_ABOUT=$SHOW_ABOUT
       - SHOW_FAQ=$SHOW_FAQ
       - SHOW_SUPPORT=$SHOW_SUPPORT
+    network_mode: host
     ports:
       - 8080:80
     tmpfs: /tmpfs

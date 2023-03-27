@@ -1,7 +1,9 @@
 <?php
 
 $query = $this->getQuery();
+$queryString = $query['ip'] ?? $query['host'] ?? '';
 $type = $this->getType();
+$otherIpType = $this->info->getIpVersion() === 'v4' ? 'v6' : 'v4';
 
 function toFormatUri(string $format, string $query, ?string $type): string
 {
@@ -43,11 +45,6 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         width: 400px;
         border-top-left-radius: var(--border-radius);
         border-bottom-left-radius: var(--border-radius);
-    }
-
-    select[name=ip] {
-        background-color: var(--background-color-alt);
-        margin-left: -1px;
     }
 
     input[type=submit] {
@@ -111,7 +108,7 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     }
 
     button {
-        background-color: var(--blue-color);;
+        background-color: var(--blue-color);
         -webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48cGF0aCBkPSJNMzM2IDY0aC04MGMwLTM1LjMtMjguNy02NC02NC02NHMtNjQgMjguNy02NCA2NEg0OEMyMS41IDY0IDAgODUuNSAwIDExMnYzNTJjMCAyNi41IDIxLjUgNDggNDggNDhoMjg4YzI2LjUgMCA0OC0yMS41IDQ4LTQ4VjExMmMwLTI2LjUtMjEuNS00OC00OC00OHpNMTkyIDQwYzEzLjMgMCAyNCAxMC43IDI0IDI0cy0xMC43IDI0LTI0IDI0LTI0LTEwLjctMjQtMjQgMTAuNy0yNCAyNC0yNHptMTQ0IDQxOGMwIDMuMy0yLjcgNi02IDZINTRjLTMuMyAwLTYtMi43LTYtNlYxMThjMC0zLjMgMi43LTYgNi02aDQydjM2YzAgNi42IDUuNCAxMiAxMiAxMmgxNjhjNi42IDAgMTItNS40IDEyLTEydi0zNmg0MmMzLjMgMCA2IDIuNyA2IDZ6Ii8+PC9zdmc+') center no-repeat;
         mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48cGF0aCBkPSJNMzM2IDY0aC04MGMwLTM1LjMtMjguNy02NC02NC02NHMtNjQgMjguNy02NCA2NEg0OEMyMS41IDY0IDAgODUuNSAwIDExMnYzNTJjMCAyNi41IDIxLjUgNDggNDggNDhoMjg4YzI2LjUgMCA0OC0yMS41IDQ4LTQ4VjExMmMwLTI2LjUtMjEuNS00OC00OC00OHpNMTkyIDQwYzEzLjMgMCAyNCAxMC43IDI0IDI0cy0xMC43IDI0LTI0IDI0LTI0LTEwLjctMjQtMjQgMTAuNy0yNCAyNC0yNHptMTQ0IDQxOGMwIDMuMy0yLjcgNi02IDZINTRjLTMuMyAwLTYtMi43LTYtNlYxMThjMC0zLjMgMi43LTYgNi02aDQydjM2YzAgNi42IDUuNCAxMiAxMiAxMmgxNjhjNi42IDAgMTItNS40IDEyLTEydi0zNmg0MmMzLjMgMCA2IDIuNyA2IDZ6Ii8+PC9zdmc+') center no-repeat;
         border: 0;
@@ -173,87 +170,101 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
 
 <?php if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     <div class="force-ip">
-        <?php if (getenv('HOST_AUTO')) { ?><span><a href="//<?php echo getenv('HOST_AUTO') . $_SERVER['REQUEST_URI']; ?>">Auto</a></span><?php } ?>
-        <?php if (getenv('HOST_IPV4')) { ?><span><a href="//<?php echo getenv('HOST_IPV4') . $_SERVER['REQUEST_URI']; ?>">IPv4</a></span><?php } ?>
-        <?php if (getenv('HOST_IPV6')) { ?><span><a href="//<?php echo getenv('HOST_IPV6') . $_SERVER['REQUEST_URI']; ?>">IPv6</a></span><?php } ?>
+        <?php if (getenv('HOST_AUTO')) { ?><span><a href="//<?= getenv('HOST_AUTO') . $_SERVER['REQUEST_URI']; ?>">Auto</a></span><?php } ?>
+        <?php if (getenv('HOST_IPV4')) { ?><span><a href="//<?= getenv('HOST_IPV4') . $_SERVER['REQUEST_URI']; ?>">IPv4</a></span><?php } ?>
+        <?php if (getenv('HOST_IPV6')) { ?><span><a href="//<?= getenv('HOST_IPV6') . $_SERVER['REQUEST_URI']; ?>">IPv6</a></span><?php } ?>
     </div>
 <?php } ?>
 <form name="search" action="//<?= $_SERVER["HTTP_HOST"] ?>">
-    <input type="text" name="q" placeholder="Search any IP Address, Host or URL" autofocus autocapitalize="off" value="<?= $query ?>">
-    <select name="ip">
-        <option value="">-</option>
-        <option value="v4" <?= $type === 'v4' ? 'selected' : '' ?>>IPv4</option>
-        <option value="v6" <?= $type === 'v6' ? 'selected' : '' ?>>IPv6</option>
-    </select>
+    <input type="text" name="q" placeholder="Search any IP Address, Host or URL" autofocus autocapitalize="off" value="<?= $queryString ?>">
     <input type="submit" value="Search">
 </form>
 <main>
     <h2>
-        <span><?= empty($query) ? "Your connection" : "$query information" ?></span>
+        <span><?= empty($queryString) ? "Your connection" : "$queryString information" ?></span>
         <div class="links">
-            <a target="_blank" href="<?= toFormatUri('json', $query, $type) ?>">json</a>
-            <a target="_blank" href="<?= toFormatUri('jsonp', $query, $type) ?>">jsonp</a>
-            <a target="_blank" href="<?= toFormatUri('txt', $query, $type) ?>">txt</a>
-            <a target="_blank" href="<?= toFormatUri('xml', $query, $type) ?>">xml</a>
-            <a target="_blank" href="<?= toFormatUri('yaml', $query, $type) ?>">yaml</a>
+            <a target="_blank" href="<?= toFormatUri('json', $queryString, $type) ?>">json</a>
+            <a target="_blank" href="<?= toFormatUri('jsonp', $queryString, $type) ?>">jsonp</a>
+            <a target="_blank" href="<?= toFormatUri('txt', $queryString, $type) ?>">txt</a>
+            <a target="_blank" href="<?= toFormatUri('xml', $queryString, $type) ?>">xml</a>
+            <a target="_blank" href="<?= toFormatUri('yaml', $queryString, $type) ?>">yaml</a>
         </div>
     </h2>
     <ul>
-        <li>
-            <label>IP<?php echo $this->info->getIpVersion(); ?> Address</label>
-            <span><?php echo $this->info->getIp(); ?></span>
+        <li id="ipv4">
+            <label>IPv4 Address</label>
+            <span><?= $this->info->getIpVersion() === 'v4' ? $this->info->getIp() : ''; ?></span>
+        </li>
+        <li id="ipv6">
+            <label>IPv6 Address</label>
+            <span><?= $this->info->getIpVersion() === 'v6' ? $this->info->getIp() : ''; ?></span>
         </li>
         <li>
             <label>Remote Host</label>
-            <span><?php echo $this->info->getHost(); ?></span>
+            <span><?= $this->info->getHost(); ?></span>
         </li>
         <li>
             <label>ASN</label>
-            <span><?php echo $this->getAsnString($this->info->getAsn()); ?></span>
+            <span><?= $this->getAsnString($this->info->getAsn()); ?></span>
         </li>
         <li>
             <label>Country</label>
-            <span><?php echo $this->getCountryString($this->info->getCountry()); ?></span>
+            <span><?= $this->getCountryString($this->info->getCountry()); ?></span>
         </li>
         <li>
             <label>City</label>
-            <span><?php echo $this->info->getCity(); ?></span>
+            <span><?= $this->info->getCity(); ?></span>
         </li>
         <li>
             <label>Postal</label>
-            <span><?php echo $this->info->getPostal(); ?></span>
+            <span><?= $this->info->getPostal(); ?></span>
         </li>
         <li>
             <label>Subdivisions</label>
-            <span><?php echo $this->getSubdivionsString($this->info->getSubdivisions()); ?></span>
+            <span><?= $this->getSubdivionsString($this->info->getSubdivisions()); ?></span>
         </li>
         <li>
             <label>Coordinates</label>
-            <span><?php echo $this->getLocationString($this->info->getLocation()); ?></span>
+            <span><?= $this->getLocationString($this->info->getLocation()); ?></span>
         </li>
         <li>
             <label>Time Zone</label>
-            <span><?php echo $this->info->getTimeZone(); ?></span>
+            <span><?= $this->info->getTimeZone(); ?></span>
         </li>
         <li>
             <label>Port</label>
-            <span><?php echo $this->info->getPort(); ?></span>
+            <span><?= $this->info->getPort(); ?></span>
         </li>
         <li>
             <label>Method</label>
-            <span><?php echo $this->info->getMethod(); ?></span>
+            <span><?= $this->info->getMethod(); ?></span>
         </li>
         <li>
             <label>Referer</label>
-            <span><?php echo $this->info->getReferer(); ?></span>
+            <span><?= $this->info->getReferer(); ?></span>
         </li>
         <li class="headers">
             <label>Headers</label>
-            <span><?php echo $this->getHeadersHtml($this->info->getHeaders()); ?></span>
+            <span><?= $this->getHeadersHtml($this->info->getHeaders()); ?></span>
         </li>
     </ul>
 </main>
-
+<?php
+    $otherIpQuery = null;
+    if (array_key_exists('host', $query) && !empty($this->info->getIp())) $otherIpQuery = '/' . $otherIpType . '/ip.txt?q=' . $query['host'];
+    if (empty($query)) {
+        if ($otherIpType === 'v4' && !empty(getenv('HOST_IPV4'))) $otherIpQuery = '//' . getenv('HOST_IPV4') . '/ip.txt';
+        if ($otherIpType === 'v6' && !empty(getenv('HOST_IPV6'))) $otherIpQuery = '//' . getenv('HOST_IPV6') . '/ip.txt';
+    }
+    if (!is_null($otherIpQuery)) {
+?>
+<script>
+    const $otherIp = document.querySelector(`#ip<?= $otherIpType ?>`).querySelector('span');
+    fetch('<?= $otherIpQuery ?>')
+        .then(response => response.ok ? response.text() : '')
+        .then(otherIp => $otherIp.innerHTML = otherIp);
+</script>
+<?php } ?>
 <script>
     function copyText(node) {
         navigator.clipboard.writeText(node.innerHTML.replaceAll('<br>', '\n').replaceAll(/<.*?>/g, ''));

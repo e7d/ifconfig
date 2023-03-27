@@ -138,28 +138,44 @@ class RequestService
         return null;
     }
 
+    private static function parseQuery(array $data): array
+    {
+        if (array_key_exists('ip', $data['query'])) {
+            $data['ip'] = $data['query']['ip'];
+            $data['host'] = DnsService::reverse($data['ip']);
+            return $data;
+        }
+        if (array_key_exists('host', $data['query'])) {
+            $ip = DnsService::resolve($data['query']['host'], self::parseType($data['type']));
+            $data['ip'] = $ip;
+            $data['host'] = $ip ? $data['query']['host'] : null;
+        }
+        return $data;
+    }
+
+
+    private static function parseData(array $data, array $headers): array
+    {
+        if (array_key_exists('query', $data) && !empty($data['query'])) {
+            return self::parseQuery($data);
+        }
+        $ip = IpReader::read($headers);
+        $data['ip'] = $ip;
+        $data['host'] = DnsService::reverse($ip);
+        return $data;
+    }
+
     public static function parse(array $headers): RendererOptions
     {
-        $data = array_merge(
-            ['path' => []],
-            self::parseHeaders($headers),
-            self::parsePath($headers['REDIRECT_URL'] ?? ''),
-            self::parseParams(array_merge($_GET, $_POST))
+        $data = self::parseData(
+            array_merge(
+                ['path' => []],
+                self::parseHeaders($headers),
+                self::parsePath($headers['REDIRECT_URL'] ?? ''),
+                self::parseParams(array_merge($_GET, $_POST))
+            ),
+            $headers
         );
-        if (array_key_exists('query', $data) && !empty($data['query'])) {
-            if (array_key_exists('ip', $data['query'])) {
-                $data['ip'] = $data['query']['ip'];
-                $data['host'] = DnsService::reverse($data['ip']);
-            } else {
-                $ip = DnsService::resolve($data['query']['host'], self::parseType($data['type']));
-                $data['ip'] = $ip;
-                $data['host'] = $ip ? $data['query']['host'] : null;
-            }
-        } else {
-            $ip = IpReader::read($headers);
-            $data['ip'] = $ip;
-            $data['host'] = DnsService::reverse($ip);
-        }
         return new RendererOptions($headers, $data);
     }
 }

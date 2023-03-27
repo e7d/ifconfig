@@ -29,5 +29,6 @@ abstract class ContentTypeRenderer implements RendererInterface
         if (isset($this->info) && is_null($this->info->getIp())) {
             http_response_code(404);
         }
+        header('Access-Control-Allow-Origin: *');
     }
 }

@@ -22,9 +22,9 @@ class HtmlRenderer extends ContentTypeRenderer
         $this->type = $type;
     }
 
-    private function getQuery(): string
+    private function getQuery(): array
     {
-        return $this->query['host'] ?? $this->query['ip'] ?? '';
+        return $this->query ?? [];
     }
 
     private function getType(): string
