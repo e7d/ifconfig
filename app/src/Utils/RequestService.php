@@ -151,8 +151,9 @@ class RequestService
                 $data['ip'] = $data['query']['ip'];
                 $data['host'] = DnsService::reverse($data['ip']);
             } else {
-                $data['host'] = $data['query']['host'];
-                $data['ip'] = DnsService::resolve($data['host'], self::parseType($data['type']));
+                $ip = DnsService::resolve($data['query']['host'], self::parseType($data['type']));
+                $data['ip'] = $ip;
+                $data['host'] = $ip ? $data['query']['host'] : null;
             }
         } else {
             $ip = IpReader::read($headers);

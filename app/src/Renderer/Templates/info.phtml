@@ -200,7 +200,7 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     </h2>
     <ul>
         <li>
-            <label>IP Address</label>
+            <label>IP<?php echo $this->info->getIpVersion(); ?> Address</label>
             <span><?php echo $this->info->getIp(); ?></span>
         </li>
         <li>
