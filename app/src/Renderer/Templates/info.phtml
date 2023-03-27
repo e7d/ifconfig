@@ -45,8 +45,8 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         border-bottom-left-radius: var(--border-radius);
     }
 
-    select[name=type] {
-        background-color: var(--background-color);
+    select[name=ip] {
+        background-color: var(--background-color-alt);
         margin-left: -1px;
     }
 
@@ -180,7 +180,7 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
 <?php } ?>
 <form name="search" action="//<?= $_SERVER["HTTP_HOST"] ?>">
     <input type="text" name="q" placeholder="Search any IP Address, Host or URL" autofocus autocapitalize="off" value="<?= $query ?>">
-    <select name="type">
+    <select name="ip">
         <option value="">-</option>
         <option value="v4" <?= $type === 'v4' ? 'selected' : '' ?>>IPv4</option>
         <option value="v6" <?= $type === 'v6' ? 'selected' : '' ?>>IPv6</option>

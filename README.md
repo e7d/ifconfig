@@ -2,12 +2,28 @@
 
 # ifconfig
 
-Check your online information. Any HTTP compatible client is supported, including your browser, cURL, HTTPie, GNU Wget and FreeBSD fetch.  
-Output available in HTML, plain text, JSON, XML and YAML.
+Check your network link information. Any HTTP compatible client is supported, including your browser, cURL, HTTPie, GNU Wget and FreeBSD fetch.
 
 ## Demo
 
 [ip.e7d.io](https://ip.e7d.io/)
+
+## Output
+
+The returned information can contain:
+- IP address
+- Remote host name
+- ASN information
+- Country, city, postal code, area subdivisions, location coordinates and time zone
+- HTTP request port, method, referer and headers
+
+The output is available in HTML, plain text, JSON, JSON-P, XML and YAML.
+A "pretty" output is also available, with a human-readable format, for JSON, JSON-P and XML formats.
+
+When not in HTML format, a specific field can be requested by adding a query parameter to the URL.
+
+See the [query generator](https://ip.e7d.io/about#query-generator) for more information.
+
 
 ## Docker
 

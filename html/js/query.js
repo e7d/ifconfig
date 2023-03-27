@@ -1,7 +1,7 @@
 const form = document.querySelector("form[name=generator]");
 const $methodSelect = form.querySelector("select[name=method]");
+const $ipSelect = form.querySelector("select[name=ip]");
 const $queryInput = form.querySelector("input[name=q]");
-const $typeSelect = form.querySelector("select[name=type]");
 const $formatSelect = form.querySelector("select[name=format]");
 const $fieldSelect = form.querySelector("select[name=field]");
 const $submitArea = document.querySelector("span#submit");
@@ -47,8 +47,8 @@ function generateQuery() {
   const [format, pretty] = $formatSelect.value.split('-');
   const params = Object.fromEntries(
     Object.entries({
+      ip: $ipSelect.value,
       host: $queryInput.value,
-      type: $typeSelect.value,
       format,
       field: $fieldSelect.value,
     }).filter(([, v]) => !!v)
@@ -69,7 +69,7 @@ function generateQuery() {
   $submitArea.innerHTML = html;
 }
 
-[$methodSelect, $queryInput, $typeSelect, $formatSelect, $fieldSelect].forEach((f) =>
+[$methodSelect, $queryInput, $ipSelect, $formatSelect, $fieldSelect].forEach((f) =>
   f.addEventListener("change", generateQuery)
 );
 generateQuery();
