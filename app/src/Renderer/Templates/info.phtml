@@ -34,7 +34,8 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         margin-bottom: var(--margin);
     }
 
-    input, select {
+    input,
+    select {
         color: var(--text-color);
         padding: var(--margin);
         border: 1px solid var(--border-color);
@@ -260,9 +261,22 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
 ?>
 <script>
     const $otherIp = document.querySelector(`#ip<?= $otherIpType ?>`).querySelector('span');
-    fetch('<?= $otherIpQuery ?>')
+    const controller = new AbortController();
+    const abortTimeout = setTimeout(() => controller.abort(), 10000);
+    fetch('<?= $otherIpQuery ?>', {
+            method: 'GET',
+            cache: 'no-cache',
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+            redirect: 'follow',
+            signal: controller.signal,
+        })
         .then(response => response.ok ? response.text() : '')
-        .then(otherIp => $otherIp.innerHTML = otherIp);
+        .then(otherIp => {
+            $otherIp.innerHTML = otherIp;
+            clearTimeout(abortTimeout);
+        });
 </script>
 <?php } ?>
 <script>
