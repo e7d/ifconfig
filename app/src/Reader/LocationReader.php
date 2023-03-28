@@ -17,6 +17,7 @@ use Utils\StopwatchService;
 
 class LocationReader extends DatabaseReader
 {
+    public const FIELDS = ['country', 'city', 'postal', 'subdivisions', 'location', 'timezone'];
     protected static string $dbName = 'GeoLite2-City.mmdb';
     private ?Country $country = null;
     private ?City $city = null;

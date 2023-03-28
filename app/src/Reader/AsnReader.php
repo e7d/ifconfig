@@ -10,6 +10,7 @@ use Utils\StopwatchService;
 
 class AsnReader extends DatabaseReader
 {
+    public const FIELDS = ['asn'];
     protected static string $dbName = 'GeoLite2-ASN.mmdb';
     private ?ASN $asn = null;
 

@@ -18,6 +18,7 @@ use IfConfig\Types\Field;
 use IfConfig\Types\File;
 use IfConfig\Types\Info;
 use Utils\IpReader;
+use Utils\ParamsService;
 
 class RendererStrategy
 {
@@ -78,20 +79,20 @@ class RendererStrategy
         $infoReader = new InfoReader($options);
         $info = $infoReader->getInfo();
 
-        if (in_array($options->getField(), InfoReader::FIELDS)) {
-            return $info;
+        if (empty($options->getPath()) || !empty(array_intersect($options->getPath(), AsnReader::FIELDS))) {
+            $asnReader = new AsnReader($info->getIp());
+            $info->setAsn($asnReader->getAsn());
         }
 
-        $asnReader = new AsnReader($info->getIp());
-        $info->setAsn($asnReader->getAsn());
-
-        $locationReader = new LocationReader($info->getIp());
-        $info->setCountry($locationReader->getCountry());
-        $info->setCity($locationReader->getCity());
-        $info->setPostal($locationReader->getPostal());
-        $info->setSubdivisions($locationReader->getSubdivisions());
-        $info->setLocation($locationReader->getLocation());
-        $info->setTimezone($locationReader->getTimezone());
+        if (empty($options->getPath()) || !empty(array_intersect($options->getPath(), LocationReader::FIELDS))) {
+            $locationReader = new LocationReader($info->getIp());
+            $info->setCountry($locationReader->getCountry());
+            $info->setCity($locationReader->getCity());
+            $info->setPostal($locationReader->getPostal());
+            $info->setSubdivisions($locationReader->getSubdivisions());
+            $info->setLocation($locationReader->getLocation());
+            $info->setTimezone($locationReader->getTimezone());
+        }
 
         return $info;
     }
