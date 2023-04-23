@@ -3,6 +3,9 @@ services:
     build:
       context: .
       target: dev
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
     environment:
       - DATABASE_AUTO_UPDATE=$DATABASE_AUTO_UPDATE
       - DATABASE_DIR=$DATABASE_DIR
@@ -18,7 +21,7 @@ services:
       - SHOW_ABOUT=$SHOW_ABOUT
       - SHOW_FAQ=$SHOW_FAQ
       - SHOW_SUPPORT=$SHOW_SUPPORT
-    network_mode: host
+    # network_mode: host
     ports:
       - 8080:80
     tmpfs: /tmpfs

@@ -47,8 +47,8 @@ function generateQuery() {
   const [format, pretty] = $formatSelect.value.split('-');
   const params = Object.fromEntries(
     Object.entries({
+      q: $queryInput.value,
       ip: $ipSelect.value,
-      host: $queryInput.value,
       format,
       field: $fieldSelect.value,
     }).filter(([, v]) => !!v)

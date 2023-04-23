@@ -3,7 +3,7 @@
 $query = $this->getQuery();
 $queryString = $query['ip'] ?? $query['host'] ?? '';
 $type = $this->getType();
-$otherIpType = $this->info->getIpVersion() === 'v4' ? 'v6' : 'v4';
+$ipVersion = $this->info->getIpVersion();
 
 function toFormatUri(string $format, string $query, ?string $type): string
 {
@@ -46,6 +46,11 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         width: 400px;
         border-top-left-radius: var(--border-radius);
         border-bottom-left-radius: var(--border-radius);
+    }
+
+    select[name=ip] {
+        background-color: var(--background-color-alt);
+        margin-left: -1px;
     }
 
     input[type=submit] {
@@ -178,11 +183,16 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
 <?php } ?>
 <form name="search" action="//<?= $_SERVER["HTTP_HOST"] ?>">
     <input type="text" name="q" placeholder="Search any IP Address, Host or URL" autofocus autocapitalize="off" value="<?= $queryString ?>">
+    <select name="ip">
+        <option value="">-</option>
+        <option value="v4" <?= $type === 'v4' ? 'selected' : '' ?>>IPv4</option>
+        <option value="v6" <?= $type === 'v6' ? 'selected' : '' ?>>IPv6</option>
+    </select>
     <input type="submit" value="Search">
 </form>
 <main>
     <h2>
-        <span><?= empty($queryString) ? "Your connection" : "$queryString information" ?></span>
+        <span><?= empty($queryString) ? "Your IP$ipVersion connection" : " IP$ipVersion $queryString information" ?></span>
         <div class="links">
             <a target="_blank" href="<?= toFormatUri('json', $queryString, $type) ?>">json</a>
             <a target="_blank" href="<?= toFormatUri('jsonp', $queryString, $type) ?>">jsonp</a>
@@ -192,16 +202,12 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         </div>
     </h2>
     <ul>
-        <li id="ipv4">
-            <label>IPv4 Address</label>
-            <span><?= $this->info->getIpVersion() === 'v4' ? $this->info->getIp() : ''; ?></span>
-        </li>
-        <li id="ipv6">
-            <label>IPv6 Address</label>
-            <span><?= $this->info->getIpVersion() === 'v6' ? $this->info->getIp() : ''; ?></span>
+        <li>
+            <label>Address</label>
+            <span><?= $this->info->getIp(); ?></span>
         </li>
         <li>
-            <label>Remote Host</label>
+            <label>Host</label>
             <span><?= $this->info->getHost(); ?></span>
         </li>
         <li>
@@ -250,35 +256,6 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         </li>
     </ul>
 </main>
-<?php
-    $otherIpQuery = null;
-    if (array_key_exists('host', $query) && !empty($this->info->getIp())) $otherIpQuery = '/' . $otherIpType . '/ip.txt?q=' . $query['host'];
-    if (empty($query)) {
-        if ($otherIpType === 'v4' && !empty(getenv('HOST_IPV4'))) $otherIpQuery = '//' . getenv('HOST_IPV4') . '/ip.txt';
-        if ($otherIpType === 'v6' && !empty(getenv('HOST_IPV6'))) $otherIpQuery = '//' . getenv('HOST_IPV6') . '/ip.txt';
-    }
-    if (!is_null($otherIpQuery)) {
-?>
-<script>
-    const $otherIp = document.querySelector(`#ip<?= $otherIpType ?>`).querySelector('span');
-    const controller = new AbortController();
-    const abortTimeout = setTimeout(() => controller.abort(), 10000);
-    fetch('<?= $otherIpQuery ?>', {
-            method: 'GET',
-            cache: 'no-cache',
-            headers: {
-                'Content-Type': 'text/plain',
-            },
-            redirect: 'follow',
-            signal: controller.signal,
-        })
-        .then(response => response.ok ? response.text() : '')
-        .then(otherIp => {
-            $otherIp.innerHTML = otherIp;
-            clearTimeout(abortTimeout);
-        });
-</script>
-<?php } ?>
 <script>
     function copyText(node) {
         navigator.clipboard.writeText(node.innerHTML.replaceAll('<br>', '\n').replaceAll(/<.*?>/g, ''));
