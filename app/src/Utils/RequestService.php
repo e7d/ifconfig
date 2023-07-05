@@ -70,47 +70,49 @@ class RequestService
         return $data;
     }
 
-    private static function parseEntry(array $data, string $entry): array
+    private static function parseEntry(array $data, string $entry, ?string $key = null): array
     {
-        if ($entry === '') {
-            return $data;
+        if (is_null($key)) {
+            if ($entry === '') {
+                return $data;
+            }
+            if (in_array($entry, RendererStrategy::PAGES)) {
+                return array_merge($data, ['page' =>  $entry]);
+            }
+            if (getenv('MODE') === 'dev' && in_array($entry, RendererStrategy::DEV_PAGES)) {
+                return array_merge($data, ['page' =>  $entry]);
+            }
+            if (preg_match(
+                '/^(?P<entry>.*)\.(?P<format>' . implode('|', RendererStrategy::FORMATS) . ')$/',
+                $entry,
+                $matches
+            )) {
+                $data = array_merge($data, [
+                    'forcedFormat' => true,
+                    'format' => $matches['format']
+                ]);
+                $entry = $matches['entry'];
+            }
         }
-        if (in_array($entry, RendererStrategy::PAGES)) {
-            return array_merge($data, ['page' =>  $entry]);
-        }
-        if (getenv('MODE') === 'dev' && in_array($entry, RendererStrategy::DEV_PAGES)) {
-            return array_merge($data, ['page' =>  $entry]);
-        }
-        if (preg_match(
-            '/^(?P<entry>.*)\.(?P<format>' . implode('|', RendererStrategy::FORMATS) . ')$/',
-            $entry,
-            $matches
-        )) {
-            $data = array_merge($data, [
-                'forcedFormat' => true,
-                'format' => $matches['format']
-            ]);
-            $entry = $matches['entry'];
-        }
-        if (in_array($entry, RendererStrategy::FORMATS)) {
+        if (in_array($key, [NULL, 'format']) && in_array($entry, RendererStrategy::FORMATS)) {
             return array_merge($data, [
                 'forcedFormat' => true,
                 'format' => $entry
             ]);
         }
-        if (in_array($entry, Info::getProperties())) {
+        if (in_array($key, [NULL, 'field']) && in_array($entry, Info::getProperties())) {
             return array_merge_recursive($data, ['path' => [$entry]]);
         }
-        if (in_array($entry, ['v4', 'v6'])) {
+        if (in_array($key, [NULL, 'type']) && in_array($entry, ['v4', 'v6'])) {
             return array_merge($data, ['type' => $entry]);
         }
-        if (filter_var($entry, FILTER_VALIDATE_IP)) {
+        if (in_array($key, [NULL, 'q', 'query', 'ip']) && filter_var($entry, FILTER_VALIDATE_IP)) {
             return array_merge(
                 $data,
                 ['query' => ['ip' => $entry]]
             );
         }
-        if (filter_var($entry, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
+        if (in_array($key, [NULL, 'q', 'query', 'host']) && filter_var($entry, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
             return array_merge(
                 $data,
                 ['query' => ['host' => $entry]]
@@ -121,14 +123,17 @@ class RequestService
 
     private static function parseParams(array $params): array
     {
-        return array_reduce($params, function ($data, $param) {
-            return self::parseEntry($data, $param);
+        return array_reduce(array_keys($params), function ($data, $key) use ($params) {
+            return self::parseEntry($data, $params[$key], $key);
         }, []);
     }
 
     private static function parsePath(string $baseUri): array
     {
-        return self::parseParams(explode('/', substr($baseUri, 1)));
+        $entries = explode('/', substr($baseUri, 1));
+        return array_reduce($entries, function ($data, $entry) {
+            return self::parseEntry($data, $entry);
+        }, []);
     }
 
     private static function parseType(?string $type): ?string
