@@ -5,6 +5,7 @@ namespace Utils;
 use IfConfig\Renderer\RendererOptions;
 use IfConfig\Renderer\RendererStrategy;
 use IfConfig\Types\Info;
+use IfConfig\Types\IP;
 
 class RequestService
 {
@@ -136,24 +137,23 @@ class RequestService
         }, []);
     }
 
-    private static function parseType(?string $type): ?string
+    private static function toResolveType(?string $version): ?string
     {
-        if ($type === 'v4') return DNS_A;
-        if ($type === 'v6') return DNS_AAAA;
-        return null;
+        if (in_array($version, ['4', 'v4', 'A'])) return DNS_A;
+        if (in_array($version, ['6', 'v6', 'AAAA'])) return DNS_AAAA;
+        return DNS_A + DNS_AAAA;
     }
 
     private static function parseQuery(array $data): array
     {
         if (array_key_exists('ip', $data['query'])) {
-            $data['ip'] = $data['query']['ip'];
+            $data['ip'] = [new IP($data['query']['ip'])];
             $data['host'] = DnsService::reverse($data['ip']);
             return $data;
         }
         if (array_key_exists('host', $data['query'])) {
-            $ip = DnsService::resolve($data['query']['host'], self::parseType($data['type']));
-            $data['ip'] = $ip;
-            $data['host'] = $ip ? $data['query']['host'] : null;
+            $data['ip'] = DnsService::resolve($data['query']['host'], self::toResolveType($data['version'] ?? null));
+            $data['host'] = count($data['ip']) ? $data['query']['host'] : null;
         }
         return $data;
     }
@@ -165,7 +165,7 @@ class RequestService
             return self::parseQuery($data);
         }
         $ip = IpReader::read($headers);
-        $data['ip'] = $ip;
+        $data['ip'] = [new IP($ip)];
         $data['host'] = DnsService::reverse($ip);
         return $data;
     }

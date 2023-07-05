@@ -5,14 +5,13 @@ namespace IfConfig\Types;
 class Info extends AbstractType
 {
     protected string $date;
-    protected ?string $ip;
-    protected ?string $ipVersion;
+    protected array $ip;
     protected ?string $host;
     protected ?ASN $asn = null;
     protected ?Country $country = null;
     protected ?City $city = null;
     protected ?Postal $postal = null;
-    protected Subdivisions $subdivisions;
+    protected ?Subdivisions $subdivisions = null;
     protected ?Location $location = null;
     protected ?string $timezone = null;
     protected int $port;
@@ -37,22 +36,14 @@ class Info extends AbstractType
         );
     }
 
-    public function getIp(): ?string
+    public function getIp(): array
     {
         return $this->ip;
     }
 
-    public function setIp(?string $ip): void
+    public function setIp(array $ip): void
     {
         $this->ip = $ip;
-        $this->ipVersion = null;
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) $this->ipVersion = 'v4';
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) $this->ipVersion = 'v6';
-    }
-
-    public function getIpVersion(): ?string
-    {
-        return $this->ipVersion;
     }
 
     public function getHost(): ?string
@@ -105,7 +96,7 @@ class Info extends AbstractType
         $this->postal = $postal;
     }
 
-    public function getSubdivisions(): Subdivisions
+    public function getSubdivisions(): ?Subdivisions
     {
         return $this->subdivisions;
     }

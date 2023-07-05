@@ -51,7 +51,7 @@ fi
 
 if [ "$DNS_CACHE" == "true" ]; then
     echo "nameserver 127.0.0.1" >/etc/resolv.conf
-    service bind9 start
+    service named start
     echo "Enabled local cache service."
 fi
 

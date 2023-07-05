@@ -18,7 +18,6 @@ use IfConfig\Types\Field;
 use IfConfig\Types\File;
 use IfConfig\Types\Info;
 use Utils\IpReader;
-use Utils\ParamsService;
 
 class RendererStrategy
 {
@@ -26,7 +25,7 @@ class RendererStrategy
     public const DEV_PAGES = ['opcache'];
     public const FORMATS = ['html', 'json', 'jsonp', 'text', 'txt', 'xml', 'yaml', 'yml'];
 
-    private function getField(Info $info, array $path, ?string $field): mixed
+    private function getField(Info $info, array $path, ?string $field): ?Field
     {
         if (!is_null($field)) {
             $path = [$field];
@@ -49,7 +48,7 @@ class RendererStrategy
             case 'html':
                 $renderer = isset($field) && !$options->isForcedFormat()
                     ? new TextRenderer($field)
-                    : new HtmlRenderer('info', $options->getQuery(), $options->getType());
+                    : new HtmlRenderer('info', $options->getQuery(), $options->getVersion());
                 break;
             default:
             case 'json':
@@ -78,14 +77,19 @@ class RendererStrategy
 
         $infoReader = new InfoReader($options);
         $info = $infoReader->getInfo();
+        $mainIp = $info->getIp()[0] ?? null;
+
+        if (!$mainIp) {
+            return $info;
+        }
 
         if (empty($options->getPath()) || !empty(array_intersect($options->getPath(), AsnReader::FIELDS))) {
-            $asnReader = new AsnReader($info->getIp());
+            $asnReader = new AsnReader($mainIp);
             $info->setAsn($asnReader->getAsn());
         }
 
         if (empty($options->getPath()) || !empty(array_intersect($options->getPath(), LocationReader::FIELDS))) {
-            $locationReader = new LocationReader($info->getIp());
+            $locationReader = new LocationReader($mainIp);
             $info->setCountry($locationReader->getCountry());
             $info->setCity($locationReader->getCity());
             $info->setPostal($locationReader->getPostal());

@@ -4,20 +4,25 @@ namespace Utils;
 
 use Error;
 use Exception;
+use IfConfig\Types\IP;
 
 class DnsService
 {
-    public static function resolve(string $host, ?int $type = null): ?string
+    public static function resolve(string $host, int $type): array
     {
         try {
             StopwatchService::get('dns')->start();
-            if (!in_array($type, [null, DNS_A, DNS_AAAA])) {
-                throw new Error('Invalid resolve type: Acceptable values are null, DNS_A or DNS_AAAA');
+            if (!in_array($type, [DNS_A, DNS_AAAA, DNS_A + DNS_AAAA])) {
+                throw new Error('Invalid resolve type: Acceptable values are "DNS_A", "DNS_AAAA" or "DNS_A + DNS_AAAA"');
             }
-            $entries = @dns_get_record($host, is_null($type) ? DNS_A + DNS_AAAA : $type);
-            return is_array($entries) && count($entries) ? ($entries[0]['ipv6'] ?? $entries[0]['ip']) : null;
+            return array_map(
+                function ($entry) {
+                    return new IP($entry['ipv6'] ?? $entry['ip']);
+                },
+                dns_get_record($host, $type)
+            );
         } catch (Exception $e) {
-            return null;
+            return [];
         } finally {
             StopwatchService::get('dns')->stop();
         }

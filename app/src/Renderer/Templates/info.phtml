@@ -2,14 +2,13 @@
 
 $query = $this->getQuery();
 $queryString = $query['ip'] ?? $query['host'] ?? '';
-$type = $this->getType();
-$ipVersion = $this->info->getIpVersion();
+$version = $this->getVersion();
 
-function toFormatUri(string $format, string $query, ?string $type): string
+function toFormatUri(string $format, string $query, ?string $version): string
 {
     return '/?' .
         (!empty($query) ? 'q=' . $query . '&' : '') .
-        (!empty($type) ? 'type=' . $type . '&' : '') .
+        (!empty($version) ? 'version=' . $version . '&' : '') .
         'format=' . $format;
 }
 
@@ -106,6 +105,10 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         min-width: 140px;
     }
 
+    label span {
+        float: right;
+    }
+
     a[target="_blank"] {
         background-position: center right;
         background-repeat: no-repeat;
@@ -163,6 +166,11 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
             padding-bottom: 4px;
         }
 
+        label span {
+            margin-right: 0.3em;
+            float: left;
+        }
+
         span {
             padding-top: 0;
         }
@@ -187,20 +195,23 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
 </form>
 <main>
     <h2>
-        <span><?= empty($queryString) ? "Your IP$ipVersion connection" : " IP$ipVersion $queryString information" ?></span>
+        <span><?= empty($queryString) ? "Your connection" : "$queryString information" ?></span>
         <div class="links">
-            <a target="_blank" href="<?= toFormatUri('json', $queryString, $type) ?>">json</a>
-            <a target="_blank" href="<?= toFormatUri('jsonp', $queryString, $type) ?>">jsonp</a>
-            <a target="_blank" href="<?= toFormatUri('txt', $queryString, $type) ?>">txt</a>
-            <a target="_blank" href="<?= toFormatUri('xml', $queryString, $type) ?>">xml</a>
-            <a target="_blank" href="<?= toFormatUri('yaml', $queryString, $type) ?>">yaml</a>
+            <a target="_blank" href="<?= toFormatUri('json', $queryString, $version) ?>">json</a>
+            <a target="_blank" href="<?= toFormatUri('jsonp', $queryString, $version) ?>">jsonp</a>
+            <a target="_blank" href="<?= toFormatUri('txt', $queryString, $version) ?>">txt</a>
+            <a target="_blank" href="<?= toFormatUri('xml', $queryString, $version) ?>">xml</a>
+            <a target="_blank" href="<?= toFormatUri('yaml', $queryString, $version) ?>">yaml</a>
         </div>
     </h2>
     <ul>
-        <li>
-            <label>Address</label>
-            <span><?= $this->info->getIp(); ?></span>
-        </li>
+        <?php foreach ($this->info->getIp() as $ip) { ?>
+            <li>
+                <label>
+                    Address <span>IPv<?= $ip->getVersion(); ?></span></label>
+                <span><?= $ip; ?></span>
+            </li>
+        <?php } ?>
         <li>
             <label>Host</label>
             <span><?= $this->info->getHost(); ?></span>

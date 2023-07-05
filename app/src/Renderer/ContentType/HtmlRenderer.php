@@ -13,13 +13,13 @@ class HtmlRenderer extends ContentTypeRenderer
 {
     private string $page;
     private array $query;
-    private ?string $type;
+    private ?string $version;
 
-    public function __construct(string $page, array $query = [], ?string $type = null)
+    public function __construct(string $page, array $query = [], ?string $version = null)
     {
         $this->page = $page;
         $this->query = $query;
-        $this->type = $type;
+        $this->version = $version;
     }
 
     private function getQuery(): array
@@ -27,9 +27,9 @@ class HtmlRenderer extends ContentTypeRenderer
         return $this->query ?? [];
     }
 
-    private function getType(): string
+    private function getVersion(): string
     {
-        return $this->type ?? '';
+        return $this->version ?? '';
     }
 
     private function getAsnString(?ASN $asn): string
@@ -60,14 +60,16 @@ class HtmlRenderer extends ContentTypeRenderer
             : $this->getCountryFlagString($country) . $country->getName() . ' (' . $country->getIsoCode() . ')';
     }
 
-    private function getSubdivionsString(Subdivisions $subdivisions): string
+    private function getSubdivionsString(?Subdivisions $subdivisions): string
     {
-        return implode(
-            '<br>',
-            array_map(function (Subdivision $subdivision) {
-                return $subdivision->getName() . ' (' . $subdivision->getIsoCode() . ')';
-            }, $subdivisions->getArrayCopy())
-        );
+        return is_null($subdivisions)
+            ? ''
+            : implode(
+                '<br>',
+                array_map(function (Subdivision $subdivision) {
+                    return $subdivision->getName() . ' (' . $subdivision->getIsoCode() . ')';
+                }, $subdivisions->getArrayCopy())
+            );
     }
 
     private function getLocationString(?Location $location): string

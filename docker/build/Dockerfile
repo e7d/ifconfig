@@ -1,4 +1,4 @@
-FROM debian:buster-slim AS dependencies
+FROM debian:stable-slim AS dependencies
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get -qy update \
     && apt-get -qy upgrade
@@ -7,7 +7,7 @@ RUN apt-get install -qy lsb-release apt-transport-https ca-certificates wget \
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" |tee /etc/apt/sources.list.d/php.list \
     && apt-get -qy update \
     && apt-get -qy upgrade \
-    && apt-get install -qy apache2 bind9 cron php8.2-fpm php8.2-mbstring php8.2-opcache php8.2-redis php8.2-xml redis-server \
+    && apt-get install -qy apache2 bind9 cron php8.2-fpm php8.2-gmp php8.2-mbstring php8.2-opcache php8.2-redis php8.2-xml redis-server \
     && apt-get install -qy php8.2-curl php8.2-dev unzip
 RUN sed -i 's/;opcache.memory_consumption=128/opcache.memory_consumption=32/g' /etc/php/8.2/fpm/php.ini
 RUN rm /var/www/html/index.html
