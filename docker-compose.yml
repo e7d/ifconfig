@@ -2,17 +2,20 @@ services:
   ifconfig:
     build:
       context: .
+      dockerfile: docker/build/Dockerfile
       target: dev
     dns:
       - 1.1.1.1
       - 8.8.8.8
     environment:
+      - ASN_LINK=$ASN_LINK
       - DATABASE_AUTO_UPDATE=$DATABASE_AUTO_UPDATE
       - DATABASE_DIR=$DATABASE_DIR
       - DNS_CACHE=$DNS_CACHE
       - HOST_AUTO=$HOST_AUTO
       - HOST_IPV4=$HOST_IPV4
       - HOST_IPV6=$HOST_IPV6
+      - MAP_LINK=$MAP_LINK
       - MAXMIND_ACCOUNT_ID=$MAXMIND_ACCOUNT_ID
       - MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY
       - MODE=$MODE

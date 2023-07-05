@@ -360,7 +360,7 @@ $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
             <p>Yes.</p>
 
             <h4>Is this service rate-limited?</h4>
-            <?php if (getenv('RATE_LIMIT')) {
+            <?php if (getenv('RATE_LIMIT') && getenv('RATE_LIMIT_INTERVAL')) {
                 $rateLimit = (int) getenv('RATE_LIMIT');
                 $rateLimitInterval = (int) getenv('RATE_LIMIT_INTERVAL'); ?>
                 <p>

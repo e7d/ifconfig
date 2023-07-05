@@ -25,8 +25,8 @@ mask() {
     printf "%s%s\n" "${start:0:n}" "${end//?/*}"
 }
 
-if [ ! -z "$DATABASE_AUTO_UPDATE" ]; then
-    echo "Enabling MaxMind GeoLite2 databases autoupdate"
+if [ "$DATABASE_AUTO_UPDATE" == "true" ]; then
+    echo "Enabling MaxMind GeoLite2 databases automatic update"
     if [ -z "$MAXMIND_ACCOUNT_ID" ]; then
         echo "Missing MAXMIND_ACCOUNT_ID env variable."
     elif [ -z "$MAXMIND_LICENSE_KEY" ]; then
@@ -55,10 +55,12 @@ if [ "$DNS_CACHE" == "true" ]; then
     echo "Enabled local cache service."
 fi
 
+echo "SetEnv ASN_LINK $ASN_LINK" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv DATABASE_DIR $DATABASE_DIR" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv HOST_AUTO $HOST_AUTO" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv HOST_IPV4 $HOST_IPV4" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv HOST_IPV6 $HOST_IPV6" >>/etc/apache2/conf-available/environment.conf
+echo "SetEnv MAP_LINK $MAP_LINK" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv MODE $MODE" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv RATE_LIMIT $RATE_LIMIT" >>/etc/apache2/conf-available/environment.conf
 echo "SetEnv RATE_LIMIT_INTERVAL $RATE_LIMIT_INTERVAL" >>/etc/apache2/conf-available/environment.conf

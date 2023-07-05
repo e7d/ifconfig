@@ -32,16 +32,16 @@ class HtmlRenderer extends ContentTypeRenderer
         return $this->type ?? '';
     }
 
-    private function getAsnWithLink(ASN $asn): string
-    {
-        return '<a href="https://ipinfo.io/AS' . $asn->getNumber() . '" target="_blank" rel="noreferrer" title="Find AS number details on IPinfo.io">AS' . $asn->getNumber() . ' ' . $asn->getOrg() . '</a> (' . $asn->getNetwork() . ')';
-    }
-
     private function getAsnString(?ASN $asn): string
     {
-        return is_null($asn)
-            ? ''
-            : $this->getAsnWithLink($asn);
+        if (is_null($asn) || is_null($asn->getOrg()) || is_null($asn->getNetwork())) return '';
+
+        $asnLabel = 'AS' . $asn->getNumber() . ' ' . $asn->getOrg();
+        $networkLabel = '(' . $asn->getNetwork() . ')';
+        if (getenv('ASN_LINK') === 'hurricane-electric') return '<a href="https://bgp.he.net/AS' . $asn->getNumber() . '" target="_blank" rel="noreferrer" title="Find AS number details on IPinfo.io">' . $asnLabel . '</a> ' . $networkLabel . ')';
+        if (getenv('ASN_LINK') === 'ipinfo.io') return '<a href="https://ipinfo.io/AS' . $asn->getNumber() . '" target="_blank" rel="noreferrer" title="Find AS number details on IPinfo.io">' . $asnLabel . '</a> ' . $networkLabel . ')';
+
+        return $asnLabel . ' ' . $networkLabel;
     }
 
     private function getCountryFlagString(Country $country): string
@@ -72,11 +72,13 @@ class HtmlRenderer extends ContentTypeRenderer
 
     private function getLocationString(?Location $location): string
     {
-        if (is_null($location) || is_null($location->getLatitude()) || is_null($location->getLongitude())) {
-            return '';
-        }
-        $coordinates = $location->getLatitude() . ', ' . $location->getLongitude();
-        return '<a href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude() . '&mlon=' . $location->getLongitude() . '" target="_blank" rel="noreferrer" title="View coordinates location on OpenStreetMap (openstreetmap.org)">' . $coordinates . '</a>';
+        if (is_null($location) || is_null($location->getLatitude()) || is_null($location->getLongitude())) return '';
+
+        $label = $location->getLatitude() . ', ' . $location->getLongitude();
+        if (getenv('MAP_LINK') === 'apple-maps') return '<a href="https://maps.apple.com/?q=' . $location->getLatitude() . ',' . $location->getLongitude() . '" target="_blank" rel="noreferrer" title="View coordinates location on OpenStreetMap (openstreetmap.org)">' . $label . '</a>';
+        if (getenv('MAP_LINK') === 'google-maps') return '<a href="https://maps.google.com/?q=' . $location->getLatitude() . ',' . $location->getLongitude() . '" target="_blank" rel="noreferrer" title="View coordinates location on OpenStreetMap (openstreetmap.org)">' . $label . '</a>';
+        if (getenv('MAP_LINK') === 'openstreetmap') return '<a href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude() . '&mlon=' . $location->getLongitude() . '" target="_blank" rel="noreferrer" title="View coordinates location on OpenStreetMap (openstreetmap.org)">' . $label . '</a>';
+        return $label;
     }
 
     private function getHeadersHtml(Headers $headers): string

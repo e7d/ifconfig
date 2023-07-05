@@ -31,6 +31,27 @@ See the [query generator](https://ip.e7d.io/about#query-generator) for more info
 
 ### Settings
 
+Find below the list of available environment variables to customize the service:
+| Key                    | Default Value    | Description |
+| ---------------------- | ---------------- | ----------- |
+| `ASN_LINK`             | `false`          | Display a link on the info page to a third party provider to get further ASN information. Valid values are `ipinfo.io` and `hurricane-electric`. |
+| `DATABASE_AUTO_UPDATE` | `false`          | With `MAXMIND_ACCOUNT_ID` and `MAXMIND_LICENSE_KEY` properly set-up, auto-update the MaxMind GeoLite2 databases. |
+| `DATABASE_DIR`         | `/var/databases` | With `MAXMIND_ACCOUNT_ID` and `MAXMIND_LICENSE_KEY` properly set-up, where to store the databases. |
+| `DNS_CACHE`            | `false`          | When set to `true`, use a local DNS cache resolver ([bind9](https://github.com/isc-projects/bind9)). |
+| `HOST_AUTO`            |                  | Forces the domain name that should be use to access the service wether from an IPv4 or an IPv6. |
+| `HOST_IPV4`            |                  | Forces the domain name that should be use to access the service resolving an IPv4 only. |
+| `HOST_IPV6`            |                  | Forces the domain name that should be use to access the service resolving an IPv6 only. |
+| `MAP_LINK`             | `false`          | Display a link on the info page to a third party provider to get a map from the found coordinates. Valid values are `apple-maps`, `google-maps` and `openstreetmap`. |
+| `MAXMIND_ACCOUNT_ID`   |                  | Fill with your MaxMind account ID to download the latest GeoLite2 databases on startup. |
+| `MAXMIND_LICENSE_KEY`  |                  | Fill with your MaxMind license key to download the latest GeoLite2 databases on startup. |
+| `MODE`                 |                  | Set to `dev` to activate development intended behavior. |
+| `RATE_LIMIT`           |                  | Fill with a positive integer to limit the amount of acceptable requests per `RATE_LIMIT_INTERVAL` for a given IP. |
+| `RATE_LIMIT_INTERVAL`  |                  | Fill with a positive integer to set the window in seconds  |
+| `SHOW_ABOUT`           | `false`          | |
+| `SHOW_FAQ`             | `false`          | |
+| `SHOW_SUPPORT`         | `false`          | |
+
+
 - provide geolocation [MaxMind GeoLite2 databases](#maxmind-geolite2-databases):
   - set your MaxMind license key to download databases on container startup: `-e MAXMIND_LICENSE_KEY=XXX`
   - also set your MaxMind account ID to daily update the databases: `-e DATABASE_AUTO_UPDATE=true -e MAXMIND_ACCOUNT_ID=123456`
