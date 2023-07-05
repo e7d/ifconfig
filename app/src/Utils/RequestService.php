@@ -104,6 +104,9 @@ class RequestService
         if (in_array($key, [NULL, 'field']) && in_array($entry, Info::getProperties())) {
             return array_merge_recursive($data, ['path' => [$entry]]);
         }
+        if (preg_match('/^[0-9]+$/', $entry, $matches)) {
+            return array_merge_recursive($data, ['path' => [$entry]]);
+        }
         if (in_array($key, [NULL, 'type']) && in_array($entry, ['v4', 'v6'])) {
             return array_merge($data, ['type' => $entry]);
         }
@@ -148,7 +151,7 @@ class RequestService
     {
         if (array_key_exists('ip', $data['query'])) {
             $data['ip'] = [new IP($data['query']['ip'])];
-            $data['host'] = DnsService::reverse($data['ip']);
+            $data['host'] = DnsService::reverse($data['query']['ip']);
             return $data;
         }
         if (array_key_exists('host', $data['query'])) {

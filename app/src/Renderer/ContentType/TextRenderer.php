@@ -10,12 +10,10 @@ class TextRenderer extends ContentTypeRenderer
         header('Content-Type: text/plain; charset=UTF-8');
         $data = $this->field ? $this->field->getValue() : $this->info->toArray(false);
         if (is_array($data)) {
-            if (count($data) === 1) {
-                print $data[0];
-                exit;
-            }
             array_walk($data, function ($value, $field) {
-                print $field . ': ' . (is_array($value) ? implode('; ', $value) : $value) . PHP_EOL;
+                print (!is_int($field) ? "$field: " : '')
+                    . (is_array($value) ? implode('; ', $value) : $value)
+                    . PHP_EOL;
             });
             exit;
         }

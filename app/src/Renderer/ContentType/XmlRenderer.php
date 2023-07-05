@@ -31,7 +31,8 @@ class XmlRenderer extends ContentTypeRenderer
     private function appendChildNodes(DOMDocument $document, DOMNode $node, array $data): DOMNode
     {
         foreach ($data as $key => $value) {
-            $childNode = $document->createElement($this->getNodeName($key, $value));
+            $nodeName = $this->getNodeName($key, $value);
+            $childNode = $document->createElement($nodeName);
             $node->appendChild($this->getRecursiveNodes(
                 $document,
                 $childNode,
@@ -49,9 +50,9 @@ class XmlRenderer extends ContentTypeRenderer
 
     private function getRecursiveNodes(DOMDocument $document, DOMNode $node, $data): DOMNode
     {
-        return is_array($data)
-            ? $this->appendChildNodes($document, $node, $data)
-            : $this->appendTextNode($document, $node, $data);
+        if (is_array($data)) return $this->appendChildNodes($document, $node, $data);
+        if ($data instanceof JsonSerializable) return $this->appendChildNodes($document, $node, $data->jsonSerialize());
+        return $this->appendTextNode($document, $node, $data);
     }
 
     public function render(): void
@@ -59,7 +60,7 @@ class XmlRenderer extends ContentTypeRenderer
         parent::render();
         header('Content-Type: text/xml; charset=UTF-8');
         $document = new DOMDocument('1.0');
-        $rootNode = $this->field ? $this->field->getName() : 'xml';
+        $rootNode = $this->field ? $this->getNodeName($this->field->getName(), $this->field->getValue()) : 'xml';
         $document->appendChild(
             $this->getRecursiveNodes(
                 $document,

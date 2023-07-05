@@ -46,6 +46,7 @@ fi
 
 if [ ! -z "$RATE_LIMIT" ]; then
     service redis-server start
+    redis-cli config set stop-writes-on-bgsave-error no
     echo "Enabled Redis-based rate limiter."
 fi
 

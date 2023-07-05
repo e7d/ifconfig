@@ -77,7 +77,7 @@ class RendererStrategy
 
         $infoReader = new InfoReader($options);
         $info = $infoReader->getInfo();
-        $mainIp = $info->getIp()[0] ?? null;
+        $mainIp = $info->getIp()->get(0) ?? null;
 
         if (!$mainIp) {
             return $info;

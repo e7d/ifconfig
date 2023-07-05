@@ -78,8 +78,8 @@ class RateLimiter
             header('Retry-After: ' . $this->getNextCallDate($remaining), false);
             header('Retry-After: ' . $remaining);
         } catch (RedisException $e) {
-            http_response_code(500);
-            die('500 Internal Server Error');
+            print('500 Internal Server Error');
+            throw $e;
         }
 
         http_response_code(429);

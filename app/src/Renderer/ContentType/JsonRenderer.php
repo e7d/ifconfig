@@ -30,9 +30,11 @@ class JsonRenderer extends ContentTypeRenderer
     {
         return json_encode(
             $this->field
-                ? [$this->field->getName() => $this->field->getValue(true)]
+                ? (is_numeric($this->field->getName())
+                    ? $this->field->getValue(true)
+                    : [$this->field->getName() => $this->field->getValue(true)])
                 : $this->info->toArray(),
-            $this->beautify ? JSON_PRETTY_PRINT : 0
+            JSON_NUMERIC_CHECK | ($this->beautify ? JSON_PRETTY_PRINT : 0)
         );
     }
 

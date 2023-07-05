@@ -15,7 +15,7 @@ abstract class AbstractStore
 
     public function get($key): mixed
     {
-        return $this->store[$key];
+        return $this->store[$key] ?? null;
     }
 
     public function getArrayCopy(bool $objectAsArray = false): array

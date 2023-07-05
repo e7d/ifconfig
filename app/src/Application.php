@@ -17,6 +17,7 @@ class Application
 
     private function render(): void
     {
+
         $this->rendererStrategy = new RendererStrategy();
         $headers = $_SERVER;
         ParamsService::parse();
