@@ -105,7 +105,7 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         min-width: 140px;
     }
 
-    label span {
+    label em {
         float: right;
     }
 
@@ -166,7 +166,7 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
             padding-bottom: 4px;
         }
 
-        label span {
+        label em {
             margin-right: 0.3em;
             float: left;
         }
@@ -208,7 +208,7 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         <?php foreach ($this->info->getIp()->getArrayCopy() as $ip) { ?>
             <li>
                 <label>
-                    Address <span>IPv<?= $ip->getVersion(); ?></span></label>
+                    Address <em>IPv<?= $ip->getVersion(); ?></em></label>
                 <span><?= $ip; ?></span>
             </li>
         <?php } ?>
