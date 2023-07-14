@@ -6,7 +6,7 @@ Check your network link information. Any HTTP compatible client is supported, in
 
 ## Demo
 
-Stable : [ip.e7d.io](https://ip.e7d.io/)
+Stable : [ip.e7d.io](https://ip.e7d.io/)  
 Development : [beta.ip.e7d.io](https://beta.ip.e7d.io/)
 
 ## Output
