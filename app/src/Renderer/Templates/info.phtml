@@ -1,7 +1,7 @@
 <?php
 
 $query = $this->getQuery();
-$queryString = $query['ip'] ?? $query['host'] ?? '';
+$queryString = $query['ip'] ?? $query['host'] ?? $query['url'] ?? '';
 $version = $this->getVersion();
 
 function toFormatUri(string $format, string $query, ?string $version): string

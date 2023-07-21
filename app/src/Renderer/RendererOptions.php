@@ -28,7 +28,7 @@ class RendererOptions
         $this->field = $data['field'] ?? null;
         $this->query = $data['query'] ?? [];
         $this->version = $data['version'] ?? null;
-        $this->ip = $data['ip'] ?? null;
+        $this->ip = $data['ip'] ?? [];
         $this->host = $data['host'] ?? null;
     }
 

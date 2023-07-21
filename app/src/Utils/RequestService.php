@@ -64,6 +64,9 @@ class RequestService
             if (in_array($key, ['hostname', 'host']) && filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
                 $data['query'] = ['host' => $value];
             }
+            if (in_array($key, ['url']) && filter_var($value, FILTER_VALIDATE_URL)) {
+                $data['query'] = ['url' => $value];
+            }
             if ($key === 'HTTP_ACCEPT') {
                 $data['format'] = self::acceptHeaderToFormat($value ?? '');
             }
@@ -122,6 +125,12 @@ class RequestService
                 ['query' => ['host' => $entry]]
             );
         }
+        if (in_array($key, [NULL, 'q', 'query', 'url']) && filter_var($entry, FILTER_VALIDATE_URL)) {
+            return array_merge(
+                $data,
+                ['query' => ['url' => $entry]]
+            );
+        }
         return $data;
     }
 
@@ -157,6 +166,11 @@ class RequestService
         if (array_key_exists('host', $data['query'])) {
             $data['ip'] = DnsService::resolve($data['query']['host'], self::toResolveType($data['version'] ?? null));
             $data['host'] = count($data['ip']) ? $data['query']['host'] : null;
+        }
+        if (array_key_exists('url', $data['query'])) {
+            $host = parse_url($data['query']['url'], PHP_URL_HOST);
+            $data['ip'] = DnsService::resolve($host, self::toResolveType($data['version'] ?? null));
+            $data['host'] = count($data['ip']) ? $host : null;
         }
         return $data;
     }
