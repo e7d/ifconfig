@@ -15,12 +15,15 @@ class DnsService
             if (!in_array($type, [DNS_A, DNS_AAAA, DNS_A + DNS_AAAA])) {
                 throw new Error('Invalid resolve type: Acceptable values are "DNS_A", "DNS_AAAA" or "DNS_A + DNS_AAAA"');
             }
-            return array_map(
-                function ($entry) {
-                    return new IP($entry['ipv6'] ?? $entry['ip']);
-                },
-                dns_get_record($host, $type)
-            );
+            $records = dns_get_record($host, $type);
+            return is_array($records)
+                ? array_map(
+                    function ($entry) {
+                        return new IP($entry['ipv6'] ?? $entry['ip']);
+                    },
+                    $records
+                )
+                : [];
         } catch (Exception $e) {
             return [];
         } finally {
