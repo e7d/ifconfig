@@ -4,6 +4,7 @@ namespace IfConfig\Renderer\ContentType;
 
 use DOMDocument;
 use DOMNode;
+use IfConfig\Types\AbstractType;
 use IfConfig\Types\Field;
 use JsonSerializable;
 use ReflectionClass;
@@ -50,6 +51,7 @@ class XmlRenderer extends ContentTypeRenderer
 
     private function getRecursiveNodes(DOMDocument $document, DOMNode $node, $data): DOMNode
     {
+        if ($data instanceof AbstractType) $data = $data->toArray();
         if (is_array($data)) return $this->appendChildNodes($document, $node, $data);
         if ($data instanceof JsonSerializable) return $this->appendChildNodes($document, $node, $data->jsonSerialize());
         return $this->appendTextNode($document, $node, $data);
@@ -60,7 +62,7 @@ class XmlRenderer extends ContentTypeRenderer
         parent::render();
         header('Content-Type: text/xml; charset=UTF-8');
         $document = new DOMDocument('1.0');
-        $rootNode = $this->field ? $this->getNodeName($this->field->getName(), $this->field->getValue()) : 'xml';
+        $rootNode = 'xml';
         $document->appendChild(
             $this->getRecursiveNodes(
                 $document,
