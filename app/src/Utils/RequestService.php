@@ -46,52 +46,52 @@ class RequestService
 
     private static function parseHeaders(array $headers): array
     {
-        $data = [];
-        array_walk($headers, function ($value, $key) use (&$data) {
+        $params = [];
+        array_walk($headers, function ($value, $key) use (&$params) {
             if ($key === 'page' && in_array($value, RendererStrategy::PAGES)) {
-                $data['page'] = $value;
+                $params['page'] = $value;
             }
             if ($key === 'format' && in_array($value, RendererStrategy::FORMATS)) {
-                $data['forcedFormat'] = true;
-                $data['format'] = $value;
+                $params['forcedFormat'] = true;
+                $params['format'] = $value;
             }
             if ($key === 'field' && in_array($value, Info::getProperties())) {
-                $data['field'] = $value;
+                $params['field'] = $value;
             }
             if (in_array($key, ['ip', 'host']) && filter_var($value, FILTER_VALIDATE_IP)) {
-                $data['query'] = ['ip' => $value];
+                $params['query'] = ['ip' => $value];
             }
             if (in_array($key, ['hostname', 'host']) && filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
-                $data['query'] = ['host' => $value];
+                $params['query'] = ['host' => $value];
             }
             if (in_array($key, ['url']) && filter_var($value, FILTER_VALIDATE_URL)) {
-                $data['query'] = ['url' => $value];
+                $params['query'] = ['url' => $value];
             }
             if ($key === 'HTTP_ACCEPT') {
-                $data['format'] = self::acceptHeaderToFormat($value ?? '');
+                $params['format'] = self::acceptHeaderToFormat($value ?? '');
             }
         });
-        return $data;
+        return $params;
     }
 
-    private static function parseEntry(array $data, string $entry, ?string $key = null): array
+    private static function parseEntry(array $params, string $entry, ?string $key = null): array
     {
         if (is_null($key)) {
             if ($entry === '') {
-                return $data;
+                return $params;
             }
             if (in_array($entry, RendererStrategy::PAGES)) {
-                return array_merge($data, ['page' =>  $entry]);
+                return array_merge($params, ['page' =>  $entry]);
             }
             if (getenv('MODE') === 'dev' && in_array($entry, RendererStrategy::DEV_PAGES)) {
-                return array_merge($data, ['page' =>  $entry]);
+                return array_merge($params, ['page' =>  $entry]);
             }
             if (preg_match(
                 '/^(?P<entry>.*)\.(?P<format>' . implode('|', RendererStrategy::FORMATS) . ')$/',
                 $entry,
                 $matches
             )) {
-                $data = array_merge($data, [
+                $params = array_merge($params, [
                     'forcedFormat' => true,
                     'format' => $matches['format']
                 ]);
@@ -99,53 +99,53 @@ class RequestService
             }
         }
         if (in_array($key, [NULL, 'format']) && in_array($entry, RendererStrategy::FORMATS)) {
-            return array_merge($data, [
+            return array_merge($params, [
                 'forcedFormat' => true,
                 'format' => $entry
             ]);
         }
         if (in_array($key, [NULL, 'field']) && in_array($entry, Info::getProperties())) {
-            return array_merge_recursive($data, ['path' => [$entry]]);
+            return array_merge_recursive($params, ['path' => [$entry]]);
         }
         if (preg_match('/^[0-9]+$/', $entry, $matches)) {
-            return array_merge_recursive($data, ['path' => [$entry]]);
+            return array_merge_recursive($params, ['path' => [$entry]]);
         }
         if (in_array($key, [NULL, 'type']) && in_array($entry, ['v4', 'v6'])) {
-            return array_merge($data, ['type' => $entry]);
+            return array_merge($params, ['type' => $entry]);
         }
         if (in_array($key, [NULL, 'q', 'query', 'ip']) && filter_var($entry, FILTER_VALIDATE_IP)) {
             return array_merge(
-                $data,
+                $params,
                 ['query' => ['ip' => $entry]]
             );
         }
         if (in_array($key, [NULL, 'q', 'query', 'host']) && filter_var($entry, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
             return array_merge(
-                $data,
+                $params,
                 ['query' => ['host' => $entry]]
             );
         }
         if (in_array($key, [NULL, 'q', 'query', 'url']) && filter_var($entry, FILTER_VALIDATE_URL)) {
             return array_merge(
-                $data,
+                $params,
                 ['query' => ['url' => $entry]]
             );
         }
-        return $data;
+        return $params;
     }
 
-    private static function parseParams(array $params): array
+    private static function parseParams(array $queryParams): array
     {
-        return array_reduce(array_keys($params), function ($data, $key) use ($params) {
-            return self::parseEntry($data, $params[$key], $key);
+        return array_reduce(array_keys($queryParams), function ($params, $key) use ($queryParams) {
+            return self::parseEntry($params, $queryParams[$key], $key);
         }, []);
     }
 
     private static function parsePath(string $baseUri): array
     {
         $entries = explode('/', substr($baseUri, 1));
-        return array_reduce($entries, function ($data, $entry) {
-            return self::parseEntry($data, $entry);
+        return array_reduce($entries, function ($params, $entry) {
+            return self::parseEntry($params, $entry);
         }, []);
     }
 
@@ -156,40 +156,40 @@ class RequestService
         return DNS_A + DNS_AAAA;
     }
 
-    private static function parseQuery(array $data): array
+    private static function parseQuery(array $params): array
     {
-        if (array_key_exists('ip', $data['query'])) {
-            $data['ip'] = [new IP($data['query']['ip'])];
-            $data['host'] = DnsService::reverse($data['query']['ip']);
-            return $data;
+        if (array_key_exists('ip', $params['query'])) {
+            $params['ipList'] = [new IP($params['query']['ip'])];
+            $params['host'] = DnsService::reverse($params['query']['ip']);
+            return $params;
         }
-        if (array_key_exists('host', $data['query'])) {
-            $data['ip'] = DnsService::resolve($data['query']['host'], self::toResolveType($data['version'] ?? null));
-            $data['host'] = count($data['ip']) ? $data['query']['host'] : null;
+        if (array_key_exists('host', $params['query'])) {
+            $params['ipList'] = DnsService::resolve($params['query']['host'], self::toResolveType($params['version'] ?? null));
+            $params['host'] = count($params['ipList']) ? $params['query']['host'] : null;
         }
-        if (array_key_exists('url', $data['query'])) {
-            $host = parse_url($data['query']['url'], PHP_URL_HOST);
-            $data['ip'] = DnsService::resolve($host, self::toResolveType($data['version'] ?? null));
-            $data['host'] = count($data['ip']) ? $host : null;
+        if (array_key_exists('url', $params['query'])) {
+            $host = parse_url($params['query']['url'], PHP_URL_HOST);
+            $params['ipList'] = DnsService::resolve($host, self::toResolveType($params['version'] ?? null));
+            $params['host'] = count($params['ipList']) ? $host : null;
         }
-        return $data;
+        return $params;
     }
 
 
-    private static function parseData(array $data, array $headers): array
+    private static function toRendererParams(array $params, array $headers): array
     {
-        if (array_key_exists('query', $data) && !empty($data['query'])) {
-            return self::parseQuery($data);
+        if (array_key_exists('query', $params) && !empty($params['query'])) {
+            return self::parseQuery($params);
         }
         $ip = IpReader::read($headers);
-        $data['ip'] = [new IP($ip)];
-        $data['host'] = DnsService::reverse($ip);
-        return $data;
+        $params['ipList'] = [new IP($ip)];
+        $params['host'] = DnsService::reverse($ip);
+        return $params;
     }
 
     public static function parse(array $headers): RendererOptions
     {
-        $data = self::parseData(
+        $params = self::toRendererParams(
             array_merge(
                 ['path' => []],
                 self::parseHeaders($headers),
@@ -198,6 +198,6 @@ class RequestService
             ),
             $headers
         );
-        return new RendererOptions($headers, $data);
+        return new RendererOptions($headers, $params);
     }
 }

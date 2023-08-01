@@ -13,23 +13,23 @@ class RendererOptions
     private ?string $field;
     private array $query;
     private ?string $version;
-    private array $ip;
+    private array $ipList;
     private ?string $host;
 
     public function __construct(
         array $headers,
-        array $data
+        array $params
     ) {
         $this->headers = $headers;
-        $this->page = $data['page'] ?? null;
-        $this->forcedFormat = $data['forcedFormat'] ?? false;
-        $this->format = $data['format'] ?? null;
-        $this->path = $data['path'];
-        $this->field = $data['field'] ?? null;
-        $this->query = $data['query'] ?? [];
-        $this->version = $data['version'] ?? null;
-        $this->ip = $data['ip'] ?? [];
-        $this->host = $data['host'] ?? null;
+        $this->page = $params['page'] ?? null;
+        $this->forcedFormat = $params['forcedFormat'] ?? false;
+        $this->format = $params['format'] ?? null;
+        $this->path = $params['path'];
+        $this->field = $params['field'] ?? null;
+        $this->query = $params['query'] ?? [];
+        $this->version = $params['version'] ?? null;
+        $this->ipList = $params['ipList'] ?? [];
+        $this->host = $params['host'] ?? null;
     }
 
     public function getHeaders(): array
@@ -72,9 +72,9 @@ class RendererOptions
         return $this->version;
     }
 
-    public function getIp(): array
+    public function getIpList(): array
     {
-        return $this->ip;
+        return $this->ipList;
     }
 
     public function getHost(): ?string

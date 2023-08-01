@@ -205,7 +205,7 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         </div>
     </h2>
     <ul>
-        <?php foreach ($this->info->getIp()->getArrayCopy() as $ip) { ?>
+        <?php foreach ($this->info->getIpList()->getArrayCopy() as $ip) { ?>
             <li>
                 <label>
                     Address <em>IPv<?= $ip->getVersion(); ?></em></label>

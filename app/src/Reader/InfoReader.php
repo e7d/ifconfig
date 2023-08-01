@@ -13,7 +13,7 @@ class InfoReader
     public function __construct(RendererOptions $options)
     {
         $this->info = new Info();
-        $this->info->setIp($options->getIp());
+        $this->info->setIpList($options->getIpList());
         $this->info->setHost($options->getHost());
         $this->info->setPort(@$options->getHeaders()['REMOTE_PORT']);
         $this->info->setMethod(@$options->getHeaders()['REQUEST_METHOD']);

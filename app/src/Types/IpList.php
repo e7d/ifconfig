@@ -2,6 +2,6 @@
 
 namespace IfConfig\Types;
 
-class IPs extends AbstractStore
+class IpList extends AbstractStore
 {
 }
