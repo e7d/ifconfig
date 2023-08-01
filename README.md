@@ -6,8 +6,8 @@ Check your network link information. Any HTTP compatible client is supported, in
 
 ## Demo
 
-Stable : [ip.e7d.io](https://ip.e7d.io/)  
-Development : [beta.ip.e7d.io](https://beta.ip.e7d.io/)
+Stable: [ip.e7d.io](https://ip.e7d.io/)  
+Development: [beta.ip.e7d.io](https://beta.ip.e7d.io/)
 
 ## Output
 
@@ -27,6 +27,8 @@ See the [query generator](https://ip.e7d.io/about#query-generator) for more info
 
 
 ## Docker
+
+[![Docker Image CI](https://github.com/e7d/ifconfig/actions/workflows/docker-image.yml/badge.svg)](https://github.com/e7d/ifconfig/actions/workflows/docker-image.yml)
 
 `docker run --name ifconfig -d -p 80:80 e7db/ifconfig`
 
