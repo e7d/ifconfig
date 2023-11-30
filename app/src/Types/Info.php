@@ -5,7 +5,7 @@ namespace IfConfig\Types;
 class Info extends AbstractType
 {
     protected string $date;
-    protected IP $ip;
+    protected ?IP $ip;
     protected IpList $ipList;
     protected ?string $host;
     protected ?ASN $asn = null;
@@ -37,15 +37,15 @@ class Info extends AbstractType
         );
     }
 
-    public function getIp(): IP
+    public function getIp(): ?IP
     {
         return $this->ip;
     }
 
-    public function setIp(IP $ip): void
+    public function setIp(?IP $ip): void
     {
         $this->ip = $ip;
-        $this->ipList = new IpList([$ip]);
+        $this->ipList = new IpList(empty($ip) ? [] : [$ip]);
     }
 
     public function getIpList(): IpList
@@ -55,7 +55,7 @@ class Info extends AbstractType
 
     public function setIpList(array $ipList): void
     {
-        $this->ip = $ipList[0];
+        $this->ip = count($ipList) > 0 ? $ipList[0] : null;
         $this->ipList = new IpList($ipList);
     }
 

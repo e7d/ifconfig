@@ -77,19 +77,19 @@ class RendererStrategy
 
         $infoReader = new InfoReader($options);
         $info = $infoReader->getInfo();
-        $mainIp = $info->getIp()->getValue() ?? null;
+        $mainIp = $info->getIp() ?? null;
 
-        if (!$mainIp) {
+        if (empty($mainIp)) {
             return $info;
         }
 
         if (empty($options->getPath()) || !empty(array_intersect($options->getPath(), AsnReader::FIELDS))) {
-            $asnReader = new AsnReader($mainIp);
+            $asnReader = new AsnReader($mainIp->getValue());
             $info->setAsn($asnReader->getAsn());
         }
 
         if (empty($options->getPath()) || !empty(array_intersect($options->getPath(), LocationReader::FIELDS))) {
-            $locationReader = new LocationReader($mainIp);
+            $locationReader = new LocationReader($mainIp->getValue());
             $info->setCountry($locationReader->getCountry());
             $info->setCity($locationReader->getCity());
             $info->setPostal($locationReader->getPostal());
