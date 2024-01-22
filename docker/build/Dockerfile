@@ -11,7 +11,7 @@ RUN apt-get install -qy --no-install-recommends lsb-release apt-transport-https 
     && apt-get install -qy --no-install-recommends php8.3-curl php8.3-dev unzip
 RUN sed -i 's/;opcache.memory_consumption=128/opcache.memory_consumption=32/g' /etc/php/8.3/fpm/php.ini
 RUN rm /var/www/html/index.html
-RUN a2enmod expires headers proxy_fcgi rewrite setenvif \
+RUN a2enmod expires headers proxy_fcgi remoteip rewrite setenvif \
     && a2enconf php8.3-fpm
 
 FROM golang:1 AS geoipupdate-dependency
