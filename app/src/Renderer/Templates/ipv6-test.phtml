@@ -101,9 +101,9 @@
 
 <script>
     const ENDPOINTS = {
-        'auto': '//<?= getenv('HOST_AUTO') ?>/home.e7d.io/json',
-        4: '//<?= getenv('HOST_IPV4') ?>/ipv4.home.e7d.io/json',
-        6: '//<?= getenv('HOST_IPV6') ?>/ipv6.home.e7d.io/json',
+        'auto': '//<?= getenv('HOST_AUTO') ?>/json',
+        4: '//<?= getenv('HOST_IPV4') ?>/json',
+        6: '//<?= getenv('HOST_IPV6') ?>/json',
         'ping': (ip) => `//<?= getenv('HOST_AUTO') ?>/${ip}/ping`,
     };
     const $browserInfo = document.querySelector('#browser-info');
