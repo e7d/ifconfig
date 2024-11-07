@@ -174,7 +174,7 @@
         $node[ip.version].asn.textContent = toAsnString(country, asn);
         if (ip.version === 6) {
             $node[ip.version].type.textContent = ip.type;
-            $node[ip.version].slaac.textContent = toBooleanEmoji(ip.slaac);
+            $node[ip.version].slaac.textContent = toBooleanEmoji(!ip.slaac);
             $node[ip.version].icmp.textContent = toBooleanEmoji(await ping(ip.address));
         }
     }
