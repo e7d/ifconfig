@@ -25,8 +25,15 @@ services:
       - SHOW_FAQ=$SHOW_FAQ
       - SHOW_SUPPORT=$SHOW_SUPPORT
     # network_mode: host
+    networks:
+      - ifconfig
     ports:
       - 8080:80
     tmpfs: /tmpfs
     volumes:
       - .:/var/www
+
+networks:
+  ifconfig:
+    driver: bridge
+    enable_ipv6: true
