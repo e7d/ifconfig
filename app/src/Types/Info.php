@@ -19,6 +19,7 @@ class Info extends AbstractType
     protected string $method;
     protected ?string $referer = null;
     protected Headers $headers;
+    protected int $ping;
 
     public function __construct()
     {
@@ -178,5 +179,15 @@ class Info extends AbstractType
     {
         ksort($headers);
         $this->headers = new Headers($headers);
+    }
+
+    public function getPing(): int
+    {
+        return $this->ping;
+    }
+
+    public function setPing(int $ping): void
+    {
+        $this->ping = $ping;
     }
 }

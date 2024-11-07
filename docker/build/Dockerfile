@@ -2,7 +2,7 @@ FROM debian:stable-slim AS dependencies
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get -qy update \
     && apt-get -qy upgrade
-RUN apt-get install -qy --no-install-recommends lsb-release apt-transport-https ca-certificates wget \
+RUN apt-get install -qy --no-install-recommends lsb-release apt-transport-https ca-certificates inetutils-ping wget \
     && wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" |tee /etc/apt/sources.list.d/php.list \
     && apt-get -qy update \
@@ -54,13 +54,7 @@ EXPOSE 80
 FROM common AS dev
 ENV MODE dev
 WORKDIR /tmp
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php -r "copy('https://composer.github.io/installer.sig', 'composer-setup.sig');" \
-    && php -r "if (hash_file('sha384', 'composer-setup.php') === file_get_contents('composer-setup.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
-    && php composer-setup.php \
-    && php -r "unlink('composer-setup.php');" \
-    && php -r "unlink('composer-setup.sig');" \
-    && mv composer.phar /usr/local/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 FROM common AS prod
 ENV MODE prod

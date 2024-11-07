@@ -1,0 +1,191 @@
+<style>
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        display: flex;
+        position: relative;
+    }
+
+    li+li {
+        border-top: 1px solid var(--border-color);
+    }
+
+    li>* {
+        overflow: auto;
+        padding: var(--margin);
+    }
+
+    label {
+        display: inline-block;
+        font-weight: bold;
+        min-width: 140px;
+    }
+
+    label em {
+        float: right;
+    }
+</style>
+<main>
+    <section id="browser-info">
+        <h2>Browser</h2>
+        <ul>
+            <li>
+                <label>Default</label>
+                <span class="default"></span>
+            </li>
+            <li>
+                <label>Fallback</label>
+                <span class="fallback"></span>
+            </li>
+        </ul>
+    </section>
+    <section id="ipv4-info">
+        <h2>IPv4 connectivity</h2>
+        <ul>
+            <li>
+                <label>IPv4</label>
+                <span class="ip"></span>
+            </li>
+            <li>
+                <label>Address</label>
+                <span class="address"></span>
+            </li>
+            <li>
+                <label>Hostname</label>
+                <span class="hostname"></span>
+            </li>
+            <li>
+                <label>ASN</label>
+                <span class="asn"></span>
+            </li>
+        </ul>
+    </section>
+    <section id="ipv6-info">
+        <h2>IPv6 connectivity</h2>
+        <ul>
+            <li>
+                <label>IPv6</label>
+                <span class="ip"></span>
+            </li>
+            <li>
+                <label>Address</label>
+                <span class="address"></span>
+            </li>
+            <li>
+                <label>Hostname</label>
+                <span class="hostname"></span>
+            </li>
+            <li>
+                <label>ASN</label>
+                <span class="asn"></span>
+            </li>
+            <li>
+                <label>Type</label>
+                <span class="type"></span>
+            </li>
+            <li>
+                <label>SLAAC</label>
+                <span class="slaac"></span>
+            </li>
+            <li>
+                <label>ICMP</label>
+                <span class="icmp"></span>
+            </li>
+        </ul>
+    </section>
+</main>
+
+<script>
+    const ENDPOINTS = {
+        'auto': '//<?= getenv('HOST_AUTO') ?>/home.e7d.io/json',
+        4: '//<?= getenv('HOST_IPV4') ?>/ipv4.home.e7d.io/json',
+        6: '//<?= getenv('HOST_IPV6') ?>/ipv6.home.e7d.io/json',
+        'ping': (ip) => `//<?= getenv('HOST_AUTO') ?>/${ip}/ping`,
+    };
+    const $browserInfo = document.querySelector('#browser-info');
+    const $ipv4Info = document.querySelector('#ipv4-info');
+    const $ipv6Info = document.querySelector('#ipv6-info');
+    const $node = {
+        browser: {
+            default: $browserInfo.querySelector('.default'),
+            fallback: $browserInfo.querySelector('.fallback'),
+        },
+        4: {
+            ip: $ipv4Info.querySelector('.ip'),
+            address: $ipv4Info.querySelector('.address'),
+            hostname: $ipv4Info.querySelector('.hostname'),
+            asn: $ipv4Info.querySelector('.asn'),
+        },
+        6: {
+            ip: $ipv6Info.querySelector('.ip'),
+            address: $ipv6Info.querySelector('.address'),
+            hostname: $ipv6Info.querySelector('.hostname'),
+            asn: $ipv6Info.querySelector('.asn'),
+            type: $ipv6Info.querySelector('.type'),
+            slaac: $ipv6Info.querySelector('.slaac'),
+            icmp: $ipv6Info.querySelector('.icmp'),
+        },
+    }
+
+    async function getInfo(ipVersion) {
+        const response = await fetch(ENDPOINTS[ipVersion]);
+        return response.json();
+    }
+
+    async function ping(ip) {
+        const response = await fetch(ENDPOINTS['ping'](ip));
+        const ping = (await response.text()).trim();
+        console.log(ping);
+        return ping !== '-1';
+    }
+
+    function setBrowserResults(defaultInfo, fallbackInfo) {
+        $node.browser.default.textContent = `IPv${defaultInfo.ip.version}`;
+        $node.browser.fallback.textContent = `IPv${fallbackInfo.ip.version}`;
+        const resources = performance.getEntriesByType("resource");
+        const fallbackPerformance = resources.find(({
+            name
+        }) => name.endsWith(ENDPOINTS[fallbackInfo.ip.version]));
+        $node.browser.fallback.textContent += ` ${fallbackPerformance ? `in ${fallbackPerformance.duration}` : 'N/A'} ms`;
+    }
+
+    function toBooleanEmoji(value) {
+        return !!value ? '✅' : '❌';
+    }
+
+    function toAsnString(country, asn) {
+        return asn ? `${country.flag.emoji ?? ''} AS${asn.number} ${asn.org}` : 'N/A';
+    }
+
+    async function setConnectivityResults(results) {
+        const {
+            ip,
+            host,
+            asn,
+            country
+        } = results;
+        $node[ip.version].ip.textContent = toBooleanEmoji(ip.address);
+        $node[ip.version].address.textContent = ip.address;
+        $node[ip.version].hostname.textContent = host ?? ip.address;
+        $node[ip.version].asn.textContent = toAsnString(country, asn);
+        if (ip.version === 6) {
+            $node[ip.version].type.textContent = ip.type;
+            $node[ip.version].slaac.textContent = toBooleanEmoji(ip.slaac);
+            $node[ip.version].icmp.textContent = toBooleanEmoji(await ping(ip.address));
+        }
+    }
+
+    async function ipv6Test() {
+        const defaultInfo = await getInfo('auto');
+        setConnectivityResults(defaultInfo);
+        const fallbackInfo = await getInfo(defaultInfo.ip.version === 4 ? 6 : 4);
+        setConnectivityResults(fallbackInfo);
+        setBrowserResults(defaultInfo, fallbackInfo);
+    }
+
+    ipv6Test();
+</script>

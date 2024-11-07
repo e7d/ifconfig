@@ -81,10 +81,10 @@ class RequestService
                 return $params;
             }
             if (in_array($entry, RendererStrategy::PAGES)) {
-                return array_merge($params, ['page' =>  $entry]);
+                return array_merge($params, ['page' => $entry]);
             }
             if (getenv('MODE') === 'dev' && in_array($entry, RendererStrategy::DEV_PAGES)) {
-                return array_merge($params, ['page' =>  $entry]);
+                return array_merge($params, ['page' => $entry]);
             }
             if (preg_match(
                 '/^(?P<entry>.*)\.(?P<format>' . implode('|', RendererStrategy::FORMATS) . ')$/',
