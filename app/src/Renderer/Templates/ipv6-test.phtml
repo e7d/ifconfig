@@ -157,7 +157,7 @@
         'auto': '//<?= getenv('HOST_AUTO') ?>/json',
         4: '//<?= getenv('HOST_IPV4') ?>/json',
         6: '//<?= getenv('HOST_IPV6') ?>/json',
-        'ping': (ip) => `//<?= getenv('HOST_AUTO') ?>/${ip}/ping`,
+        'ping6': '//<?= getenv('HOST_IPV6') ?>/ping',
     };
     const $browserInfo = document.querySelector('#browser-info');
     const $ipv4Info = document.querySelector('#ipv4-info');
@@ -192,8 +192,8 @@
         return response.json();
     }
 
-    async function ping(ip) {
-        const response = await fetch(ENDPOINTS['ping'](ip));
+    async function ping6() {
+        const response = await fetch(ENDPOINTS['ping6']);
         const ping = (await response.text()).trim();
         return ping !== '-1';
     }
@@ -239,7 +239,7 @@
                 $node[ip.version].macAddress.textContent = ip.mac.address;
                 $node[ip.version].macVendor.textContent = ip.mac.vendor;
             }
-            $node[ip.version].icmp.innerHTML = await ping(ip.address) ? '✅' : toLabel('Filtered', 'warning');
+            $node[ip.version].icmp.innerHTML = await ping6() ? '✅' : toLabel('Filtered', 'warning');
         }
     }
 
