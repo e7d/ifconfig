@@ -28,21 +28,21 @@ COPY . /build
 RUN ./docker/build/minify.sh
 
 FROM dependencies AS common
-ENV ASN_LINK false
-ENV DATABASE_AUTO_UPDATE false
-ENV DATABASE_DIR /var/databases
-ENV DNS_CACHE false
-ENV HOST_AUTO ""
-ENV HOST_IPV4 ""
-ENV HOST_IPV6 ""
-ENV MAP_LINK false
-ENV MAXMIND_ACCOUNT_ID ""
-ENV MAXMIND_LICENSE_KEY ""
-ENV RATE_LIMIT ""
-ENV RATE_LIMIT_INTERVAL 1
-ENV SHOW_ABOUT false
-ENV SHOW_FAQ false
-ENV SHOW_SUPPORT false
+ENV ASN_LINK=false
+ENV DATABASE_AUTO_UPDATE=false
+ENV DATABASE_DIR=/var/databases
+ENV DNS_CACHE=false
+ENV HOST_AUTO=""
+ENV HOST_IPV4=""
+ENV HOST_IPV6=""
+ENV MAP_LINK=false
+ENV MAXMIND_ACCOUNT_ID=""
+ENV MAXMIND_LICENSE_KEY=""
+ENV RATE_LIMIT=""
+ENV RATE_LIMIT_INTERVAL=1
+ENV SHOW_ABOUT=false
+ENV SHOW_FAQ=false
+ENV SHOW_SUPPORT=false
 COPY ./docker/resources /
 RUN a2enconf environment
 COPY --from=geoipupdate-dependency /go/bin/geoipupdate /usr/bin/geoipupdate
@@ -52,11 +52,11 @@ STOPSIGNAL SIGWINCH
 EXPOSE 80
 
 FROM common AS dev
-ENV MODE dev
+ENV MODE=dev
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 FROM common AS prod
-ENV MODE prod
+ENV MODE=prod
 HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 CMD [ "curl", "-sf", "http://localhost/ip.txt" ]
 COPY --chown=www-data:www-data --from=build-dependencies /build/app /var/www/app
 COPY --chown=www-data:www-data --from=build-dependencies /build/vendor /var/www/vendor
