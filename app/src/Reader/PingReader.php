@@ -30,8 +30,7 @@ class PingReader extends AbstractType
 
     private function ping(string $ip): int
     {
-        $binary = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ? 'ping6' : 'ping';
-        exec("$binary -c 1 --timeout=1 $ip", $output, $result);
+        exec("ping -c 1 -w 1 $ip", $output, $result);
         return $result === 0
             ? $this->parseOutput(implode("\n", $output))
             : -1;
