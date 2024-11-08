@@ -2,7 +2,7 @@ FROM debian:stable-slim AS dependencies
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get -qy update \
     && apt-get -qy upgrade
-RUN apt-get install -qy --no-install-recommends lsb-release apt-transport-https ca-certificates inetutils-ping wget \
+RUN apt-get install -qy --no-install-recommends lsb-release apt-transport-https ca-certificates iputils-ping wget \
     && wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" |tee /etc/apt/sources.list.d/php.list \
     && apt-get -qy update \
@@ -53,7 +53,6 @@ EXPOSE 80
 
 FROM common AS dev
 ENV MODE dev
-WORKDIR /tmp
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 FROM common AS prod
