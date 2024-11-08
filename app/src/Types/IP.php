@@ -13,6 +13,7 @@ class IP extends AbstractType implements JsonSerializable
     protected int $version;
     protected ?string $type;
     protected ?bool $slaac;
+    protected ?Mac $mac = null;
 
     public function __construct(string $address)
     {
@@ -23,8 +24,11 @@ class IP extends AbstractType implements JsonSerializable
         $this->version = filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ? 6 : 4;
         $this->decimal = $this->version === 6 ? $this->ip2long_v6($address) : ip2long($address);
         if ($this->version === 6) {
-            $this->type =$this->toIpv6Type($address);
-            $this->slaac =$this->isSlaacAddress($address);
+            $this->type = $this->toIpv6Type($address);
+            $this->slaac = $this->isSlaacAddress($address);
+            if ($this->slaac) {
+                $this->mac = new Mac($this->slaacAddressToMacAddress($address));
+            }
         }
     }
 
@@ -81,6 +85,17 @@ class IP extends AbstractType implements JsonSerializable
         return ord($binaryIPv6[11]) == 0xFF && ord($binaryIPv6[12]) == 0xFE;
     }
 
+    private function slaacAddressToMacAddress($ipv6)
+    {
+        if (filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
+            return false;
+        }
+        $interfaceId = str_replace('fffe', '', implode('', array_slice(explode(':', $ipv6), -4)));
+        $hexPairs = str_split(substr($interfaceId, 0, 12), 2);
+        $hexPairs[0] = dechex(hexdec($hexPairs[0]) ^ 2);
+        return implode(':', $hexPairs);
+    }
+
     public function __toString(): string
     {
         return $this->getValue();
@@ -88,11 +103,14 @@ class IP extends AbstractType implements JsonSerializable
 
     public function jsonSerialize(): array
     {
-        return [
+        return array_filter([
             'address' => $this->address,
             'decimal' => $this->decimal,
-            'version' => $this->version
-        ];
+            'version' => $this->version,
+            'type' => $this->version === 6 ? $this->type : null,
+            'slaac' => $this->version === 6 ? $this->slaac : null,
+            'mac' => ($this->version === 6 && $this->slaac) ? $this->mac : null,
+        ], fn($value) => !is_null($value));
     }
 
     public function getValue(): string

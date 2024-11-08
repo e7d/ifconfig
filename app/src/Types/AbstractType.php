@@ -61,7 +61,7 @@ abstract class AbstractType
                 ? $this->expandValue($value, $serialize)
                 : $value;
         }
-        return $array;
+        return array_filter($array, fn($value) => !is_null($value));
     }
 
     public function toArray(bool $recursive = true, bool $serialize = false): array

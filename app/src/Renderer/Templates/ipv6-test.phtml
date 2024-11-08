@@ -28,6 +28,51 @@
     label em {
         float: right;
     }
+
+    .label {
+        padding: 0.25em 0.5em;
+        border-radius: 0.25em;
+
+        --default-color: white;
+        --default-text-color: black;
+        --success-color: green;
+        --success-text-color: white;
+        --warning-color: orange;
+        --warning-text-color: black;
+        --danger-color: red;
+        --danger-text-color: white;
+        --info-color: blue;
+        --info-text-color: white;
+    }
+
+    .label-success {
+        background-color: var(--success-color);
+        color: var(--success-text-color);
+    }
+
+    .label-warning {
+        background-color: var(--warning-color);
+        color: var(--warning-text-color);
+    }
+
+    .label-danger {
+        background-color: var(--danger-color);
+        color: var(--danger-text-color);
+    }
+
+    .label-info {
+        background-color: var(--info-color);
+        color: var(--info-text-color);
+    }
+
+    .label-default {
+        background-color: var(--default-color);
+        color: var(--default-text-color);
+    }
+
+    .mac {
+        display: none;
+    }
 </style>
 <main>
     <section id="browser-info">
@@ -91,6 +136,14 @@
                 <label>SLAAC</label>
                 <span class="slaac">-</span>
             </li>
+            <li class="mac">
+                <label>MAC Address</label>
+                <span class="mac-address">-</span>
+            </li>
+            <li class="mac">
+                <label>MAC Vendor</label>
+                <span class="mac-vendor">-</span>
+            </li>
             <li>
                 <label>ICMP</label>
                 <span class="icmp">-</span>
@@ -127,6 +180,9 @@
             asn: $ipv6Info.querySelector('.asn'),
             type: $ipv6Info.querySelector('.type'),
             slaac: $ipv6Info.querySelector('.slaac'),
+            mac: $ipv6Info.querySelectorAll('.mac'),
+            macAddress: $ipv6Info.querySelector('.mac-address'),
+            macVendor: $ipv6Info.querySelector('.mac-vendor'),
             icmp: $ipv6Info.querySelector('.icmp'),
         },
     }
@@ -139,7 +195,6 @@
     async function ping(ip) {
         const response = await fetch(ENDPOINTS['ping'](ip));
         const ping = (await response.text()).trim();
-        console.log(ping);
         return ping !== '-1';
     }
 
@@ -161,6 +216,10 @@
         return asn ? `${country.flag.emoji ?? ''} AS${asn.number} ${asn.org}` : 'N/A';
     }
 
+    function toLabel(text, color) {
+        return `<span class="label label-${color}">${text}</span>`;
+    }
+
     async function setConnectivityResults(results) {
         const {
             ip,
@@ -174,8 +233,13 @@
         $node[ip.version].asn.textContent = toAsnString(country, asn);
         if (ip.version === 6) {
             $node[ip.version].type.textContent = ip.type;
-            $node[ip.version].slaac.textContent = toBooleanEmoji(!ip.slaac);
-            $node[ip.version].icmp.textContent = toBooleanEmoji(await ping(ip.address));
+            $node[ip.version].slaac.innerHTML = ip.slaac ? toLabel('Yes', 'warning') : toLabel('No', 'success');
+            if (ip.slaac) {
+                $node[ip.version].mac.forEach($mac => $mac.style.display = 'flex');
+                $node[ip.version].macAddress.textContent = ip.mac.address;
+                $node[ip.version].macVendor.textContent = ip.mac.vendor;
+            }
+            $node[ip.version].icmp.innerHTML = await ping(ip.address) ? '✅' : toLabel('Filtered', 'warning');
         }
     }
 
