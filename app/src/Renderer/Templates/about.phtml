@@ -1,9 +1,11 @@
 <?php
 
 use IfConfig\Reader\DatabaseReader;
+use IfConfig\Reader\MacReader;
 
 $domain = $_SERVER["HTTP_HOST"];
-$dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
+$geoDbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
+$macVendorsDbLatestUpdate = MacReader::getDbFileLatestUpdate();
 ?>
 <style>
     @media (prefers-color-scheme: light) {
@@ -139,7 +141,7 @@ $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
                 <li><a href="#specific-field-query">Specific field query</a></li>
                 <li><a href="#query-generator">Query generator</a></li>
                 <?php if (getenv('SHOW_FAQ') === 'true') { ?><li><a href="#faq">FAQ</a></li><?php } ?>
-                <?php if ($dbLatestUpdate) { ?><li><a href="#external-resources">External resources</a></li><?php } ?>
+                <?php if ($geoDbLatestUpdate || $macVendorsDbLatestUpdate) { ?><li><a href="#external-resources">External resources</a></li><?php } ?>
                 <li><a href="#references">References</a></li>
                 <?php if (getenv('SHOW_SUPPORT') === 'true') { ?><li><a href="#support">Support the project</a></li><?php } ?>
             </ul>
@@ -386,9 +388,16 @@ $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
             <p>Yes, the source code is available on <a href="https://github.com/e7d/ifconfig" target="_blank" rel="noreferrer">GitHub</a>.</p>
         <?php } ?>
 
-        <?php if ($dbLatestUpdate) { ?>
+        <?php if ($geoDbLatestUpdate || $macVendorsDbLatestUpdate) { ?>
             <h3 id="external-resources">External resources</h3>
-            <p>This product includes GeoLite2 data created by MaxMind, available from <a href="https://dev.maxmind.com/geoip" target="_blank" rel="noreferrer">https://www.maxmind.com</a>.</p>
+            <ul>
+            <?php if ($geoDbLatestUpdate) { ?>
+                <li>This product includes GeoLite2 data created by MaxMind, available from <a href="https://dev.maxmind.com/geoip" target="_blank" rel="noreferrer">https://www.maxmind.com</a>.</li>
+            <?php } ?>
+            <?php if ($geoDbLatestUpdate) { ?>
+                <li>This product includes a MAC Vendor JSON database created by MAC Address Lookup, available from <a href="https://maclookup.app/downloads/json-database" target="_blank" rel="noreferrer">https://maclookup.app</a>.</li>
+            <?php } ?>
+            </ul>
         <?php } ?>
 
         <h3 id="references">References</h3>

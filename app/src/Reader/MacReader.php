@@ -1,26 +1,46 @@
 <?php
 
-namespace IfConfig\Types;
+namespace IfConfig\Reader;
 
 use Error;
+use Utils\StopwatchService;
 
-class MacReader extends AbstractType
+class MacReader extends DatabaseReader
 {
+    protected static string $dbName = 'mac_vendors.json';
     protected string $address;
-    protected string $vendor;
+    protected ?string $vendor = null;
 
     public function __construct(?string $address)
     {
-        if (!filter_var($address, FILTER_VALIDATE_MAC)) {
-            throw new Error('Invalid MAC address');
+        if (is_null($address)) {
+            return;
         }
+
+        if (!filter_var($address, FILTER_VALIDATE_MAC)) {
+            return;
+        }
+
         $this->address = $address;
-        $this->vendor =$this->toVendor($address);
+
+        $dbFile = self::getDbFilePath();
+        if (is_null($dbFile)) {
+            return;
+        }
+
+        try {
+            StopwatchService::get('mac-vendors')->start();
+            $this->vendor =$this->toVendor($address);
+        } catch (AddressNotFoundException $e) {
+            return;
+        } finally {
+            StopwatchService::get('mac-vendors')->stop();
+        }
     }
 
     function toVendor($address)
     {
-        $data = json_decode(file_get_contents(__DIR__ . '/mac.json'), true);
+        $data = json_decode(file_get_contents(self::getDbFilePath()), true);
         if (!$data) {
             throw new Error('Unable to load MAC address vendor data');
         }
@@ -39,7 +59,7 @@ class MacReader extends AbstractType
         return $this->address;
     }
 
-    public function getVendor(): string
+    public function getVendor(): ?string
     {
         return $this->vendor;
     }

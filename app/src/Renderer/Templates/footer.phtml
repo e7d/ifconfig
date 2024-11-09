@@ -1,7 +1,9 @@
 <footer>
 <?php
 
-use IfConfig\Reader\DatabaseReader;
+use IfConfig\Reader\AsnReader;
+use IfConfig\Reader\LocationReader;
+use IfConfig\Reader\MacReader;
 use Utils\StopwatchService;
 
 function toTime($timestamp): string
@@ -15,6 +17,7 @@ function toStopwatchStats(): string
     $total = StopwatchService::get('total')->get();
     $dns = StopwatchService::get('dns')->get();
     $database = StopwatchService::get('database')->get();
+    // $database += StopwatchService::get('mac-vendors')->get();
     $php = $total - $dns - $database;
     $totalMs = toTime($total);
     $dnsMs = toTime($dns);
@@ -23,9 +26,16 @@ function toStopwatchStats(): string
     return " - <span title=\"PHP: $phpMs&#13;&#10;DNS: $dnsMs&#13;&#10;Database: $databaseMs\">$totalMs</span>";
 }
 
-$dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
+$geodbLatestUpdate = max(LocationReader::getDbFileLatestUpdate(), AsnReader::getDbFileLatestUpdate());
+$macVendorsLatestUpdate = MacReader::getDbFileLatestUpdate();
 $stopwatch = toStopwatchStats();
-if (getenv('SHOW_ABOUT') === 'true') echo '<p><a href="about">About</a>' . ($dbLatestUpdate ? " - Database: $dbLatestUpdate" : '') . ($stopwatch ?? '') . '</p>';
-elseif ($dbLatestUpdate) echo '<p>This product includes GeoLite2 data created by MaxMind, available from <a href="https://dev.maxmind.com/geoip" target="_blank" rel="noreferrer">https://www.maxmind.com</a>.</p>';
+if (getenv('SHOW_ABOUT') === 'true') {
+    echo '<p><a href="about">About</a>'
+        . ($geodbLatestUpdate ? " - GeoIP Database: $geodbLatestUpdate" : '')
+        . ($macVendorsLatestUpdate ? " - MAC Vendor Database: $macVendorsLatestUpdate" : '')
+        . ($stopwatch ?? '') . '</p>';
+}
+if ($geodbLatestUpdate) echo '<p>This product includes GeoLite2 data created by MaxMind, available from <a href="https://dev.maxmind.com/geoip" target="_blank" rel="noreferrer">https://www.maxmind.com</a>.</p>';
+if ($macVendorsLatestUpdate) echo '<p>This product includes a MAC Vendor JSON database created by MAC Address Lookup, available from <a href="https://maclookup.app/downloads/json-database" target="_blank" rel="noreferrer">https://maclookup.app</a>.</p>';
 ?>
 </footer>

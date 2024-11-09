@@ -11,8 +11,17 @@ if [ ! -z "$MAXMIND_LICENSE_KEY" ]; then
 	echo "Done."
 fi
 
+if [ "$MAC_VENDORS" == "true" ]; then
+	export DATABASE_DIR='/var/databases'
+	mkdir -p $DATABASE_DIR
+	echo -ne "Downloading MAC address vendors database... "
+	wget -qO- "https://maclookup.app/downloads/json-database/get-db" >$DATABASE_DIR/mac_vendors.json
+	echo "Done."
+fi
+
 if [ -d "/tmpfs" ]; then
 	mv $DATABASE_DIR/*.mmdb /tmpfs/
+	mv $DATABASE_DIR/*.json /tmpfs/
 	export DATABASE_DIR='/tmpfs'
 	export TMPFS_USE='true'
 	echo "Enabled tmpfs mode."
@@ -26,21 +35,29 @@ mask() {
 }
 
 if [ "$DATABASE_AUTO_UPDATE" == "true" ]; then
-	echo "Enabling MaxMind GeoLite2 databases automatic update"
 	if [ -z "$MAXMIND_ACCOUNT_ID" ]; then
 		echo "Missing MAXMIND_ACCOUNT_ID env variable."
 	elif [ -z "$MAXMIND_LICENSE_KEY" ]; then
 		echo "Missing MAXMIND_LICENSE_KEY env variable."
 	else
+		echo "Enabling MaxMind GeoLite2 databases automatic update..."
 		echo "AccountID: $MAXMIND_ACCOUNT_ID"
 		echo "LicenseKey: $(mask $MAXMIND_LICENSE_KEY)"
 		sed -i "s/ACCOUNT_ID/$MAXMIND_ACCOUNT_ID/g" /usr/local/etc/GeoIP.conf
 		sed -i "s/LICENSE_KEY/$MAXMIND_LICENSE_KEY/g" /usr/local/etc/GeoIP.conf
-		echo "0 5 * * * geoipupdate -f /usr/local/etc/GeoIP.conf -d $DATABASE_DIR/" >/tmp/cron
+		echo "0 5 * * * geoipupdate -f /usr/local/etc/GeoIP.conf -d $DATABASE_DIR/" >>/tmp/cron
+	fi
+
+	if [ "$MAC_VENDORS" == "true" ]; then
+		echo "Enabling MAC address vendors database automatic update..."
+		echo "0 5 * * * wget -qO- 'https://maclookup.app/downloads/json-database/get-db' >$DATABASE_DIR/mac_vendors.json" >>/tmp/cron
+	fi
+
+	if [ -f "/tmp/cron" ]; then
 		crontab /tmp/cron
 		rm /tmp/cron
 		service cron start
-		echo "Done."
+		echo "Enabled automatic updates."
 	fi
 fi
 

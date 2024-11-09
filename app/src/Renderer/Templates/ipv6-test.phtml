@@ -1,4 +1,8 @@
 <style>
+    section + section h2 {
+        border-top: 1px solid var(--border-color);
+    }
+
     ul {
         list-style-type: none;
         margin: 0;
@@ -25,8 +29,53 @@
         min-width: 140px;
     }
 
+    label[title] {
+        text-decoration: underline dotted;
+        cursor: help;
+    }
+
     label em {
         float: right;
+    }
+
+    .progress {
+        display: block;
+        margin: calc(var(--margin) * 2);
+        padding: 0;
+        flex: 1;
+        height: 2em;
+        background-color: var(--border-color);
+        border-radius: 0.5em;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        --success-color: green;
+        --warning-color: orange;
+        --danger-color: #bb0000;
+
+        display: block;
+        height: 100%;
+        border-radius: 0.5em;
+
+        transition: width 0.5s, background-color 0.2s;
+    }
+    .progress-bar.success {
+        background-color: var(--success-color);
+    }
+    .progress-bar.warning {
+        background-color: var(--warning-color);
+    }
+    .progress-bar.danger {
+        background-color: var(--danger-color);
+    }
+
+    .progress-value {
+        color: white;
+        width: auto;
+        font-size: 1.5em;
+        font-weight: bold;
+        line-height: 2em;
     }
 
     .label {
@@ -39,7 +88,7 @@
         --success-text-color: white;
         --warning-color: orange;
         --warning-text-color: black;
-        --danger-color: red;
+        --danger-color: #bb0000;
         --danger-text-color: white;
         --info-color: blue;
         --info-text-color: white;
@@ -75,15 +124,26 @@
     }
 </style>
 <main>
+    <section id="score-info">
+        <h2>Score</h2>
+        <ul>
+            <li>
+                <span class="progress">
+                    <span class="progress-bar" style="width: 0%;">&nbsp;</span>
+                </span>
+                <span class="progress-value">0 / 20</span>
+            </li>
+        </ul>
+    </section>
     <section id="browser-info">
         <h2>Browser</h2>
         <ul>
             <li>
-                <label>Default</label>
+                <label title="The protocol selected by your browser when a website advertises both IPv4 and IPV6 addresses.">Default</label>
                 <span class="default">-</span>
             </li>
             <li>
-                <label>Fallback</label>
+                <label title="The ability for your browser to fallback to the other protocol.">Fallback</label>
                 <span class="fallback">-</span>
             </li>
         </ul>
@@ -92,19 +152,19 @@
         <h2>IPv4 connectivity</h2>
         <ul>
             <li>
-                <label>IPv4</label>
+                <label title="The IPv4 protocol support.">IPv4</label>
                 <span class="ip">-</span>
             </li>
             <li>
-                <label>Address</label>
+                <label title="The public IPv4 address of your connection.">Address</label>
                 <span class="address">-</span>
             </li>
             <li>
-                <label>Hostname</label>
+                <label title="The public IPv4 hostname of your connection.">Hostname</label>
                 <span class="hostname">-</span>
             </li>
             <li>
-                <label>ASN</label>
+                <label title="The public information available about your Internet sevice provider.">ASN</label>
                 <span class="asn">-</span>
             </li>
         </ul>
@@ -113,39 +173,39 @@
         <h2>IPv6 connectivity</h2>
         <ul>
             <li>
-                <label>IPv6</label>
+                <label title="The IPv6 protocol support.">IPv6</label>
                 <span class="ip">-</span>
             </li>
             <li>
-                <label>Address</label>
+                <label title="The public IPv6 address of your connection.">Address</label>
                 <span class="address">-</span>
             </li>
             <li>
-                <label>Hostname</label>
+                <label title="The public IPv6 hostname of your connection.">Hostname</label>
                 <span class="hostname">-</span>
             </li>
             <li>
-                <label>ASN</label>
+                <label title="The public information available about your Internet sevice provider.">ASN</label>
                 <span class="asn">-</span>
             </li>
             <li>
-                <label>Type</label>
+                <label title="The type type of public IPv6 of your connection, native meaning a direct IPv6 connectivity, 6to4 and Teredo meaning the of use IPv4 to IPv6 tunnels to provide IPv6 support in networks that don't fully support IPv6 yet.">Type</label>
                 <span class="type">-</span>
             </li>
             <li>
-                <label>SLAAC</label>
+                <label title="The use of stateless address autoconfiguration (SLAAC) to get your IPv6 or not. SLAAC is a mean for an IPv6 host to assign itself an address based on its hardware MAC without asking a DHCP server. Using SLAAC without privacy extensions (RFC4941) is not recommended.">SLAAC</label>
                 <span class="slaac">-</span>
             </li>
             <li class="mac">
-                <label>MAC Address</label>
+                <label title="The MAC address used to construct your SLAAC IPv6.">MAC Address</label>
                 <span class="mac-address">-</span>
             </li>
             <li class="mac">
-                <label>MAC Vendor</label>
+                <label title="The vendor that the used MAC address originated from.">MAC Vendor</label>
                 <span class="mac-vendor">-</span>
             </li>
             <li>
-                <label>ICMP</label>
+                <label title="The availbility to contact your device using ICMPv6. IPv6 relies heavily on the ICMPv6 protocol to signal error and information conditions.">ICMPv6</label>
                 <span class="icmp">-</span>
             </li>
         </ul>
@@ -157,7 +217,7 @@
         'auto': '//<?= getenv('HOST_AUTO') ?>/json',
         4: '//<?= getenv('HOST_IPV4') ?>/json',
         6: '//<?= getenv('HOST_IPV6') ?>/json',
-        'ping6': '//<?= getenv('HOST_IPV6') ?>/ping',
+        'ping6': '//<?= getenv('HOST_AUTO') ?>/ping',
     };
     const $browserInfo = document.querySelector('#browser-info');
     const $ipv4Info = document.querySelector('#ipv4-info');
@@ -187,51 +247,100 @@
         },
     }
 
+    const scoreKeys = [];
+    const scoreValues = {
+        'ipv4': 5,
+        'ipv6': 5,
+        'fast_fallback': 5,
+        'slow_fallback': 2,
+        'ipv6_native': 3,
+        'ipv6_6to4': 2,
+        'ipv6_teredo': 2,
+        'ipv6_not_slaac': 1,
+        'icmpv6': 1,
+    };
+    function updateScore(key) {
+        scoreKeys.push(scoreValues[key]);
+        let score = scoreKeys.reduce((acc, value) => acc + value, 0);
+        if (score < 0) score = 0;
+        if (score > 20) score = 20;
+        const $progress = document.querySelector('.progress-bar');
+        const $value = document.querySelector('.progress-value');
+        $progress.style.width = `${score * 5}%`;
+        $progress.className = `progress-bar ${score < 10 ? 'danger' : score < 19 ? 'warning' : 'success'}`;
+        $value.textContent = `${score} / 20`;
+    }
+
     async function getInfo(ipVersion) {
-        const response = await fetch(ENDPOINTS[ipVersion]);
-        return response.json();
+        try {
+            const response = await fetch(ENDPOINTS[ipVersion]);
+            return response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
     }
 
     async function ping6() {
-        const response = await fetch(ENDPOINTS['ping6']);
-        const ping = (await response.text()).trim();
-        return ping !== '-1';
+        try {
+            const response = await fetch(ENDPOINTS['ping6']);
+            const ping = (await response.text()).trim();
+            return ping !== '-1';
+        } catch (error) {
+            return false;
+        }
     }
 
-    function setBrowserResults(defaultInfo, fallbackInfo) {
-        $node.browser.default.textContent = `IPv${defaultInfo.ip.version}`;
-        $node.browser.fallback.textContent = `IPv${fallbackInfo.ip.version}`;
+    function setBrowserResults(type, info) {
+        if (type === 'default') {
+            $node.browser.default.innerHTML = info ? toLabel(`IPv${info.ip.version}`, 'success') : toLabel('None', 'danger');
+            return;
+        }
+        if (!info) {
+            $node.browser.fallback.innerHTML = toLabel('None', 'danger');
+            return;
+        }
         const resources = performance.getEntriesByType("resource");
-        const fallbackPerformance = resources.find(({
-            name
-        }) => name.endsWith(ENDPOINTS[fallbackInfo.ip.version]));
-        $node.browser.fallback.textContent += ` ${fallbackPerformance ? `in ${fallbackPerformance.duration}` : 'N/A'} ms`;
-    }
-
-    function toBooleanEmoji(value) {
-        return !!value ? '✅' : '❌';
+        const fallbackPerformance = info
+            ? resources.find(({
+                name
+            }) => name.endsWith(ENDPOINTS[info.ip.version]))
+            : null;
+        const fallbackTime = fallbackPerformance ? Math.round(fallbackPerformance.duration) : null;
+        const fallbackColor = fallbackTime < 1000 ? 'success' : 'warning';
+        $node.browser.fallback.innerHTML = info
+            ? `${toLabel(`IPv${info.ip.version}`, fallbackColor)} ${fallbackTime ? `in ${fallbackTime} ms` : ''}`
+            : toLabel('None', 'danger');
+        updateScore(fallbackTime < 1000 ? 'fast_fallback' : 'slow_fallback');
     }
 
     function toAsnString(country, asn) {
         return asn ? `${country.flag.emoji ?? ''} AS${asn.number} ${asn.org}` : 'N/A';
     }
 
-    function toLabel(text, color) {
-        return `<span class="label label-${color}">${text}</span>`;
+    function toLabel(text, color, big) {
+        return `<span class="label label-${color} ${big ? 'label-big' : ''}">${text}</span>`;
     }
 
-    async function setConnectivityResults(results) {
+    async function setConnectivityResults(results, ipVersion) {
+        if (!results) {
+            $node[ipVersion].ip.innerHTML = toLabel('X', 'danger');
+            return;
+        }
+        updateScore(`ipv${results.ip.version}`);
         const {
             ip,
             host,
             asn,
             country
         } = results;
-        $node[ip.version].ip.textContent = toBooleanEmoji(ip.address);
+        $node[ip.version].ip.innerHTML = toLabel('✓', 'success');
         $node[ip.version].address.textContent = ip.address;
         $node[ip.version].hostname.textContent = host ?? ip.address;
         $node[ip.version].asn.textContent = toAsnString(country, asn);
         if (ip.version === 6) {
+            updateScore(`ipv6_${ip.type}`);
+            if (!ip.slaac) updateScore('ipv6_not_slaac');
             $node[ip.version].type.textContent = ip.type;
             $node[ip.version].slaac.innerHTML = ip.slaac ? toLabel('Yes', 'warning') : toLabel('No', 'success');
             if (ip.slaac) {
@@ -239,16 +348,20 @@
                 $node[ip.version].macAddress.textContent = ip.mac.address;
                 $node[ip.version].macVendor.textContent = ip.mac.vendor;
             }
-            $node[ip.version].icmp.innerHTML = await ping6() ? '✅' : toLabel('Filtered', 'warning');
+            const ping = await ping6();
+            $node[ip.version].icmp.innerHTML = ping ? toLabel('Success', 'success') : toLabel('Filtered', 'warning');
+            if (ping) updateScore('icmpv6');
         }
     }
 
     async function ipv6Test() {
         const defaultInfo = await getInfo('auto');
         setConnectivityResults(defaultInfo);
-        const fallbackInfo = await getInfo(defaultInfo.ip.version === 4 ? 6 : 4);
-        setConnectivityResults(fallbackInfo);
-        setBrowserResults(defaultInfo, fallbackInfo);
+        setBrowserResults('default', defaultInfo);
+        const fallbackIpVersion = defaultInfo.ip.version === 4 ? 6 : 4;
+        const fallbackInfo = await getInfo(fallbackIpVersion);
+        setConnectivityResults(fallbackInfo, fallbackIpVersion);
+        setBrowserResults('fallback', fallbackInfo);
     }
 
     ipv6Test();

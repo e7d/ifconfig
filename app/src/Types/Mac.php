@@ -3,6 +3,7 @@
 namespace IfConfig\Types;
 
 use Error;
+use IfConfig\Reader\MacReader;
 use IfConfig\Types\AbstractType;
 use JsonSerializable;
 
