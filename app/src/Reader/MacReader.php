@@ -3,6 +3,7 @@
 namespace IfConfig\Reader;
 
 use Error;
+use Throwable;
 use Utils\StopwatchService;
 
 class MacReader extends DatabaseReader
@@ -31,7 +32,7 @@ class MacReader extends DatabaseReader
         try {
             StopwatchService::get('mac-vendors')->start();
             $this->vendor =$this->toVendor($address);
-        } catch (AddressNotFoundException $e) {
+        } catch (Throwable $e) {
             return;
         } finally {
             StopwatchService::get('mac-vendors')->stop();

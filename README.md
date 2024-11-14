@@ -93,22 +93,26 @@ To get a license key:
 - [Log in](https://www.maxmind.com/en/account/login) with your account
 - Go to "My License Key" and then click "Generate new license key"  
 
-#### With a databases folder mount
+#### With a databases folder
 
 You can provide your own databases stored in a folder, using `-v /path/to/databases:/var/databases`.
 To download the databases:
-- [Sign up](https://www.maxmind.com/en/geolite2/signup) with MaxMind for a GeoLite2 account  
+- [Sign up](https://www.maxmind.com/en/geolite2/signup) with MaxMind for a GeoLite2 account
 - [Log in](https://www.maxmind.com/en/account/login) with your account
 - Go to "Download Files"
 - Download the "GeoLite2 ASN" and "GeoLite2 City" databases using their "Download GZIP" link.
 - Extract `GeoLite2-ASN.mmdb` and `GeoLite2-City.mmdb` to the `/path/to/databases` folder.
+
+> **Important Note:**  
+> This "folder" method is entirely compatible with the "license key" method and the following "in-memory databases" feature.  
+> In this scenario, the provided folder acts as a cache for the downloaded databases.
 
 ### In-memory databases
 
 The use of an in-memory database provides much faster access to the data, at the cost of an increased usage of about 100 MB of RAM.  
 It requires Docker version 17.0.6 minimum.
 
-Provided a `/tmpfs` mount point is available, the MaxMind GeoLite2 databases are moved there on container start.
+Provided a `/tmpfs` mount point is available, the MaxMind GeoLite2 databases are copied there on container start.
 
 ### Rate-limiting
 
@@ -121,7 +125,7 @@ X-RateLimit-Remaining: 483
 X-RateLimit-Reset: 47
 X-RateLimit-Reset: Tue, 23 Jun 2020 13:49:57 +0000
 ```
-They comply to the draft opened at IETF website, regarding the [RateLimit Header Fields for HTTP](https://tools.ietf.org/id/draft-polli-ratelimit-headers-00.html), but prefixed with an `X-` tag, pending validation.
+They comply to the draft opened at IETF website, regarding the [RateLimit Header Fields for HTTP](https://www.ietf.org/archive/id/draft-polli-ratelimit-headers-02.html), but prefixed with an `X-` tag, pending validation.
 
 When the limit is reached, the service answers with a `429 Too Many Requests` status code. It comes with a set of additional headers, indicating when the next successfully accepted request can be issued:
 ```

@@ -182,6 +182,10 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     }
 </style>
 
+<header>
+    <h1><a class="h1" href="/">ifconfig</a></h1>
+</header>
+
 <?php if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     <div class="force-ip">
         <?php if (getenv('HOST_AUTO')) { ?><span><a href="//<?= getenv('HOST_AUTO') . $_SERVER['REQUEST_URI']; ?>">Auto</a></span><?php } ?>

@@ -17,6 +17,7 @@ services:
     tmpfs: /tmpfs
     volumes:
       - .:/var/www
+      - ./resources:${DATABASE_DIR}
 
 networks:
   ifconfig:

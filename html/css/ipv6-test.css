@@ -1,0 +1,217 @@
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"]:checked~.modal,
+input[type="checkbox"]:checked~.modal-background {
+    display: block;
+}
+
+.modal-open {
+    cursor: pointer;
+}
+
+.modal-background {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    z-index: 9998;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 320px;
+    max-width: min(600px, 90vw);
+    width: auto;
+    transform: translate(-50%, -50%);
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    z-index: 9999;
+}
+
+.modal>p {
+    padding: 15px;
+    margin: 0;
+}
+
+.modal-header {
+    display: flex;
+    background-color: var(--background-color-alt);
+    border-bottom: 1px solid var(--border-color);
+    box-sizing: border-box;
+    height: 50px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    box-sizing: border-box;
+    padding-left: 15px;
+    line-height: 50px;
+    color: var(--text-color-alt);
+    font-size: 16px;
+    display: inline-block;
+    flex: 1;
+}
+
+.modal-header .modal-close {
+    box-sizing: border-box;
+    border-left: 1px solid var(--border-color);
+    line-height: 50px;
+    padding: 0 15px 0 15px;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+.modal-header label:hover img {
+    opacity: 0.6;
+}
+
+section+section h2 {
+    border-top: 1px solid var(--border-color);
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    align-items: center;
+    display: flex;
+    position: relative;
+}
+
+li+li {
+    border-top: 1px solid var(--border-color);
+}
+
+li>* {
+    overflow: auto;
+    padding: var(--margin);
+}
+
+ul label {
+    display: inline-block;
+    font-weight: bold;
+    min-width: 140px;
+}
+
+ul label[title] {
+    text-decoration: underline dotted;
+    cursor: help;
+}
+
+ul label em {
+    float: right;
+}
+
+.progress {
+    background-color: var(--border-color);
+    border-radius: 0.5em;
+    display: block;
+    flex: 1;
+    height: 2em;
+    margin: calc(var(--margin) * 2);
+    overflow: hidden;
+    padding: 0;
+}
+
+.progress-bar {
+    --success-color: green;
+    --warning-color: orange;
+    --danger-color: #bb0000;
+
+    border-radius: 0.5em;
+    display: block;
+    height: 100%;
+    transition: width 0.5s, background-color 0.2s;
+}
+
+.progress-bar.success {
+    background-color: var(--success-color);
+}
+
+.progress-bar.warning {
+    background-color: var(--warning-color);
+}
+
+.progress-bar.danger {
+    background-color: var(--danger-color);
+}
+
+.score-details {
+    border-top-width: 0;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.2s, border-width 0.2s;
+}
+
+.score-details.visible {
+    border-top-width: 1px;
+    height: 2em;
+}
+
+.score-value {
+    color: white;
+    cursor: pointer;
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 2em;
+    margin-right: calc(var(--margin) * 2);
+    padding: 0;
+    text-align: right;
+    width: 73px;
+}
+
+.label {
+    --default-color: white;
+    --default-text-color: black;
+    --success-color: green;
+    --success-text-color: white;
+    --warning-color: orange;
+    --warning-text-color: black;
+    --danger-color: #bb0000;
+    --danger-text-color: white;
+    --info-color: blue;
+    --info-text-color: white;
+
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+}
+
+.label-success {
+    background-color: var(--success-color);
+    color: var(--success-text-color);
+}
+
+.label-warning {
+    background-color: var(--warning-color);
+    color: var(--warning-text-color);
+}
+
+.label-danger {
+    background-color: var(--danger-color);
+    color: var(--danger-text-color);
+}
+
+.label-info {
+    background-color: var(--info-color);
+    color: var(--info-text-color);
+}
+
+.label-default {
+    background-color: var(--default-color);
+    color: var(--default-text-color);
+}
+
+.mac {
+    display: none;
+}

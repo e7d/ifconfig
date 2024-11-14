@@ -17,7 +17,7 @@ function toStopwatchStats(): string
     $total = StopwatchService::get('total')->get();
     $dns = StopwatchService::get('dns')->get();
     $database = StopwatchService::get('database')->get();
-    // $database += StopwatchService::get('mac-vendors')->get();
+    $database += StopwatchService::get('mac-vendors')->get();
     $php = $total - $dns - $database;
     $totalMs = toTime($total);
     $dnsMs = toTime($dns);
@@ -31,11 +31,12 @@ $macVendorsLatestUpdate = MacReader::getDbFileLatestUpdate();
 $stopwatch = toStopwatchStats();
 if (getenv('SHOW_ABOUT') === 'true') {
     echo '<p><a href="about">About</a>'
-        . ($geodbLatestUpdate ? " - GeoIP Database: $geodbLatestUpdate" : '')
-        . ($macVendorsLatestUpdate ? " - MAC Vendor Database: $macVendorsLatestUpdate" : '')
+        . ($geodbLatestUpdate ? " - GeoIP DB: $geodbLatestUpdate" : '')
+        . ($macVendorsLatestUpdate ? " - MAC Vendor DB: $macVendorsLatestUpdate" : '')
         . ($stopwatch ?? '') . '</p>';
+} else {
+    if ($geodbLatestUpdate) echo '<p>This product includes GeoLite2 data created by MaxMind, available from <a href="https://dev.maxmind.com/geoip" target="_blank" rel="noreferrer">https://www.maxmind.com</a>.</p>';
+    if ($macVendorsLatestUpdate) echo '<p>This product includes a MAC Vendor JSON database created by MAC Address Lookup, available from <a href="https://maclookup.app/downloads/json-database" target="_blank" rel="noreferrer">https://maclookup.app</a>.</p>';
 }
-if ($geodbLatestUpdate) echo '<p>This product includes GeoLite2 data created by MaxMind, available from <a href="https://dev.maxmind.com/geoip" target="_blank" rel="noreferrer">https://www.maxmind.com</a>.</p>';
-if ($macVendorsLatestUpdate) echo '<p>This product includes a MAC Vendor JSON database created by MAC Address Lookup, available from <a href="https://maclookup.app/downloads/json-database" target="_blank" rel="noreferrer">https://maclookup.app</a>.</p>';
 ?>
 </footer>

@@ -1,27 +1,48 @@
 #!/bin/bash
 
-if [ ! -z "$MAXMIND_LICENSE_KEY" ]; then
-	export DATABASE_DIR='/var/databases'
+function stop() {
+	service cron stop
+	service redis-server stop
+	service named stop
+	service php8.3-fpm stop
+	service apache-htcacheclean stop
+	killall -9 apache2ctl
+	exit 0
+}
+trap stop SIGTERM
+
+export DATABASE_DIR=${DATABASE_DIR:-"/var/databases"}
+
+if [ ! -z "$MAXMIND_LICENSE_KEY" ] && { [ ! -f "$DATABASE_DIR/GeoLite2-ASN.mmdb" ] || [ ! -z "$(find "$DATABASE_DIR/GeoLite2-ASN.mmdb" -mtime +1)" ]; }; then
 	mkdir -p $DATABASE_DIR
-	echo -ne "Downloading MaxMind GeoLite2 databases... "
-	wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-ASN&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz --directory /tmp
-	mv /tmp/GeoLite2-ASN_*/GeoLite2-ASN.mmdb $DATABASE_DIR/
-	wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz --directory /tmp
-	mv /tmp/GeoLite2-City_*/GeoLite2-City.mmdb $DATABASE_DIR/
+	echo -ne "Downloading MaxMind GeoLite2 ASN database... "
+	wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-ASN&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz --directory $DATABASE_DIR/
 	echo "Done."
+else
+	echo "A recent enough MaxMind GeoLite2 ASN database already exists. Skipping download."
 fi
 
-if [ "$MAC_VENDORS" == "true" ]; then
-	export DATABASE_DIR='/var/databases'
+if [ ! -z "$MAXMIND_LICENSE_KEY" ] && { [ ! -f "$DATABASE_DIR/GeoLite2-ASN.mmdb" ] || [ ! -z "$(find "$DATABASE_DIR/GeoLite2-ASN.mmdb" -mtime +1)" ]; }; then
+	mkdir -p $DATABASE_DIR
+	echo -ne "Downloading MaxMind GeoLite2 City database... "
+	wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz --directory $DATABASE_DIR/
+	echo "Done."
+else
+	echo "A recent enough MaxMind GeoLite2 City database already exists. Skipping download."
+fi
+
+if [ "$MAC_VENDORS" == "true" ] && { [ ! -f "$DATABASE_DIR/mac_vendors.json" ] || [ ! -z "$(find "$DATABASE_DIR/mac_vendors.json" -mtime +1)" ]; }; then
 	mkdir -p $DATABASE_DIR
 	echo -ne "Downloading MAC address vendors database... "
 	wget -qO- "https://maclookup.app/downloads/json-database/get-db" >$DATABASE_DIR/mac_vendors.json
 	echo "Done."
+else
+	echo "A recent enough MAC address vendors database already exists. Skipping download."
 fi
 
 if [ -d "/tmpfs" ]; then
-	mv $DATABASE_DIR/*.mmdb /tmpfs/
-	mv $DATABASE_DIR/*.json /tmpfs/
+	cp $DATABASE_DIR/*.mmdb /tmpfs/
+	cp $DATABASE_DIR/*.json /tmpfs/
 	export DATABASE_DIR='/tmpfs'
 	export TMPFS_USE='true'
 	echo "Enabled tmpfs mode."
@@ -41,8 +62,8 @@ if [ "$DATABASE_AUTO_UPDATE" == "true" ]; then
 		echo "Missing MAXMIND_LICENSE_KEY env variable."
 	else
 		echo "Enabling MaxMind GeoLite2 databases automatic update..."
-		echo "AccountID: $MAXMIND_ACCOUNT_ID"
-		echo "LicenseKey: $(mask $MAXMIND_LICENSE_KEY)"
+		echo "- AccountID: $MAXMIND_ACCOUNT_ID"
+		echo "- LicenseKey: $(mask $MAXMIND_LICENSE_KEY)"
 		sed -i "s/ACCOUNT_ID/$MAXMIND_ACCOUNT_ID/g" /usr/local/etc/GeoIP.conf
 		sed -i "s/LICENSE_KEY/$MAXMIND_LICENSE_KEY/g" /usr/local/etc/GeoIP.conf
 		echo "0 5 * * * geoipupdate -f /usr/local/etc/GeoIP.conf -d $DATABASE_DIR/" >>/tmp/cron

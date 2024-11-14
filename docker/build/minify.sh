@@ -1,13 +1,26 @@
 #!/bin/bash
 
 echo Minify JavaScript
-npx uglify-es html/js/query.js >html/js/query.min.js
-CHECKSUM=$(cksum html/js/query.min.js | cut -d' ' -f 1)
-mv html/js/query.min.js html/js/query.${CHECKSUM}.js
-sed -i "s/query\.js/query.${CHECKSUM}.js/g" app/src/Renderer/Templates/about.phtml
-rm html/js/query.js
+JS_FILES=$(find html/js -type f -name '*.js')
+for JS_FILE in $JS_FILES; do
+    npx uglify-js $JS_FILE >$JS_FILE.min
+    CHECKSUM=$(cksum $JS_FILE.min | cut -d' ' -f 1)
+    mv $JS_FILE.min $JS_FILE.${CHECKSUM}.js
+    sed -i "s/$(basename $JS_FILE)/$(basename $JS_FILE).${CHECKSUM}.js/g" app/src/Renderer/Templates/about.phtml
+    sed -i "s/$(basename $JS_FILE)/$(basename $JS_FILE).${CHECKSUM}.js/g" app/src/Renderer/Templates/ipv6-test.phtml
+done
 
-echo Minify HTML Templates and CSS
+echo Minify CSS
+CSS_FILES=$(find html/css -type f -name '*.css')
+for CSS_FILE in $CSS_FILES; do
+    npx clean-css $CSS_FILE >$CSS_FILE.min
+    CHECKSUM=$(cksum $CSS_FILE.min | cut -d' ' -f 1)
+    mv $CSS_FILE.min $CSS_FILE.${CHECKSUM}.css
+    sed -i "s/$(basename $CSS_FILE)/$(basename $CSS_FILE).${CHECKSUM}.css/g" app/src/Renderer/Templates/about.phtml
+    sed -i "s/$(basename $CSS_FILE)/$(basename $CSS_FILE).${CHECKSUM}.css/g" app/src/Renderer/Templates/ipv6-test.phtml
+done
+
+echo Minify HTML Templates
 npx html-minifier \
     --collapse-boolean-attributes \
     --collapse-whitespace \

@@ -51,6 +51,9 @@ class RequestService
             if ($key === 'page' && in_array($value, RendererStrategy::PAGES)) {
                 $params['page'] = $value;
             }
+            if (getenv('MODE') === 'dev' && $key === 'page' && in_array($value, RendererStrategy::PAGES)) {
+                $params['page'] = $value;
+            }
             if ($key === 'format' && in_array($value, RendererStrategy::FORMATS)) {
                 $params['forcedFormat'] = true;
                 $params['format'] = $value;
