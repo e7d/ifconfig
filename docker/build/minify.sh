@@ -5,9 +5,9 @@ JS_FILES=$(find html/js -type f -name '*.js')
 for JS_FILE in $JS_FILES; do
     JS_MIN_FILE=$(echo $JS_FILE | sed 's/\.js$/.min.js/')
     npx uglify-js $JS_FILE >$JS_MIN_FILE
-    CHECKSUM=$(cksum $JS_FILE.min | cut -d' ' -f 1)
-    JS_CHECKSUM_FILE=$(echo $JS_FILE | sed "s/\.js/.${CHECKSUM}.js/")
-    mv $JS_FILE.min $JS_CHECKSUM_FILE
+    CHECKSUM=$(cksum $JS_MIN_FILE | cut -d' ' -f 1)
+    JS_CHECKSUM_FILE=$(echo $JS_FILE | sed "s/\.js/.${CHECKSUM}.min.js/")
+    mv $JS_MIN_FILE $JS_CHECKSUM_FILE
     sed -i "s/$(basename $JS_FILE)/$(basename $JS_CHECKSUM_FILE)/g" app/src/Renderer/Templates/about.phtml
     sed -i "s/$(basename $JS_FILE)/$(basename $JS_CHECKSUM_FILE)/g" app/src/Renderer/Templates/ipv6-test.phtml
 done
@@ -19,7 +19,7 @@ for CSS_FILE in $CSS_FILES; do
     CSS_MIN_FILE=$(echo $CSS_FILE | sed 's/\.css$/.min.css/')
     npx css-minify -f $CSS_FILE -o $CSS_FILE_DIR
     CHECKSUM=$(cksum $CSS_MIN_FILE | cut -d' ' -f 1)
-    CSS_CHECKSUM_FILE=$(echo $CSS_MIN_FILE | sed "s/\.min\.css/.${CHECKSUM}.min.css/")
+    CSS_CHECKSUM_FILE=$(echo $CSS_FILE | sed "s/\.css/.${CHECKSUM}.min.css/")
     mv $CSS_MIN_FILE $CSS_CHECKSUM_FILE
     sed -i "s/$(basename $CSS_FILE)/$(basename $CSS_CHECKSUM_FILE)/g" app/src/Renderer/Templates/about.phtml
     sed -i "s/$(basename $CSS_FILE)/$(basename $CSS_CHECKSUM_FILE)/g" app/src/Renderer/Templates/ipv6-test.phtml
