@@ -23,7 +23,7 @@ else
 	echo "A recent enough MaxMind GeoLite2 ASN database already exists. Skipping download."
 fi
 
-if [ ! -z "$MAXMIND_LICENSE_KEY" ] && { [ ! -f "$DATABASE_DIR/GeoLite2-ASN.mmdb" ] || [ ! -z "$(find "$DATABASE_DIR/GeoLite2-ASN.mmdb" -mtime +1)" ]; }; then
+if [ ! -z "$MAXMIND_LICENSE_KEY" ] && { [ ! -f "$DATABASE_DIR/GeoLite2-City.mmdb" ] || [ ! -z "$(find "$DATABASE_DIR/GeoLite2-City.mmdb" -mtime +1)" ]; }; then
 	mkdir -p $DATABASE_DIR
 	echo -ne "Downloading MaxMind GeoLite2 City database... "
 	wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz --directory /tmp
