@@ -36,7 +36,6 @@ npx html-minifier \
     --remove-attribute-quotes \
     --remove-comments \
     --remove-empty-attributes \
-    --remove-empty-elements \
     --remove-optional-tags \
     --remove-redundant-attributes \
     --remove-script-type-attributes \
