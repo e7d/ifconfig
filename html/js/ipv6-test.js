@@ -113,15 +113,15 @@
             return;
         }
         const resources = performance.getEntriesByType("resource");
-        const fallbackPerformance = defaultInfo
+        const fallbackPerformance = fallbackInfo
             ? resources.find(({
                 name
-            }) => name.endsWith(ENDPOINTS[defaultInfo.ip.version]))
+            }) => name.endsWith(ENDPOINTS[fallbackInfo.ip.version]))
             : null;
         const fallbackTime = fallbackPerformance ? Math.round(fallbackPerformance.duration) : null;
         const fallbackColor = fallbackTime < 1000 ? 'success' : 'warning';
-        $node.browser.fallback.innerHTML = defaultInfo
-            ? `${toLabel(`IPv${defaultInfo.ip.version}`, fallbackColor)} ${fallbackTime ? `in ${fallbackTime} ms` : ''}`
+        $node.browser.fallback.innerHTML = fallbackInfo
+            ? `${toLabel(`IPv${fallbackInfo.ip.version}`, fallbackColor)} ${fallbackTime ? `in ${fallbackTime} ms` : ''}`
             : toLabel('None', 'danger');
         updateScore(fallbackTime < 1000 ? 'fast_fallback' : 'slow_fallback');
     }
