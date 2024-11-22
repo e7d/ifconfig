@@ -127,29 +127,30 @@
     }
 
     function toAsnString(country, asn) {
-        return asn ? `${country.flag.emoji ?? ''} AS${asn.number} ${asn.org}` : 'N/A';
+        return asn ? `${country.flag.emoji ?? ''} AS${asn.number} ${asn.org}` : toLabel('N/A', 'warning');
     }
 
     function toLabel(text, color, big) {
         return `<span class="label label-${color} ${big ? 'label-big' : ''}">${text}</span>`;
     }
 
-    async function setConnectivityResults(results, ipVersion) {
-        if (!results?.ip) {
-            $node[ipVersion].ip.innerHTML = toLabel('✗', 'danger');
-            return;
+    function setConnectivityResultsValues(ipVersion, results, ping) {
+        $node[ipVersion].ip.innerHTML = results ? toLabel('✓', 'success') : toLabel('✗', 'danger');
+        if (!results) {
+            $node[ipVersion].address.textContent = '-';
+            $node[ipVersion].hostname.textContent = '-';
+            $node[ipVersion].asn.textContent = '-';
+            if (ipVersion === 6) {
+                $node[ipVersion].type.textContent = '-';
+                $node[ipVersion].slaac.textContent = '-';
+                $node[ipVersion].mac.forEach($mac => $mac.style.display = 'none');
+                $node[ipVersion].icmp.textContent = '-';
+            }
         }
-        updateScore(`ipv${results.ip.version}`);
-        const {
-            ip,
-            host,
-            asn,
-            country
-        } = results;
-        $node[ip.version].ip.innerHTML = toLabel('✓', 'success');
+        const { ip, host, asn, country } = results;
         $node[ip.version].address.textContent = ip.address;
         $node[ip.version].hostname.textContent = host ?? ip.address;
-        $node[ip.version].asn.textContent = toAsnString(country, asn);
+        $node[ip.version].asn.innerHTML = toAsnString(country, asn);
         if (ip.version === 6) {
             if (ip.type === 'native') updateScore('ipv6_native');
             if (!ip.slaac) updateScore('ipv6_not_slaac');
@@ -160,10 +161,26 @@
                 $node[ip.version].macAddress.textContent = ip.mac.address;
                 $node[ip.version].macVendor.textContent = ip.mac.vendor;
             }
-            const ping = await ping6();
             $node[ip.version].icmp.innerHTML = ping ? toLabel('Success', 'success') : toLabel('Filtered', 'warning');
             if (ping) updateScore('icmpv6');
         }
+    }
+
+    async function setConnectivityResults(results, ipVersion) {
+        if (!results?.ip) {
+            setConnectivityResultsValues(ipVersion, null);
+            return;
+        }
+        updateScore(`ipv${results.ip.version}`);
+        const { ip } = results;
+        let ping = false;
+        if (ip.version === 6) {
+            if (ip.type === 'native') updateScore('ipv6_native');
+            if (!ip.slaac) updateScore('ipv6_not_slaac');
+            ping = await ping6();
+            if (ping) updateScore('icmpv6');
+        }
+        setConnectivityResultsValues(ip.version, results, ping);
     }
 
     async function ipv6Test() {

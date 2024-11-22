@@ -55,11 +55,11 @@ $domain = $_SERVER["HTTP_HOST"];
         <ul>
             <li>
                 <label for="modal" title="The protocol selected by your browser when a website advertises both IPv4 and IPV6 addresses.">Default</label>
-                <span class="default">-</span>
+                <span class="default"></span>
             </li>
             <li>
                 <label for="modal" title="The ability for your browser to fallback to the other protocol.">Fallback</label>
-                <span class="fallback">-</span>
+                <span class="fallback"></span>
             </li>
         </ul>
     </section>
@@ -68,19 +68,19 @@ $domain = $_SERVER["HTTP_HOST"];
         <ul>
             <li>
                 <label for="modal" title="The IPv4 protocol support.">IPv4</label>
-                <span class="ip">-</span>
+                <span class="ip"></span>
             </li>
             <li>
                 <label for="modal" title="The public IPv4 address of your connection.">Address</label>
-                <span class="address">-</span>
+                <span class="address"></span>
             </li>
             <li>
                 <label for="modal" title="The public IPv4 hostname of your connection.">Hostname</label>
-                <span class="hostname">-</span>
+                <span class="hostname"></span>
             </li>
             <li>
                 <label for="modal" title="The public information available about your Internet sevice provider.">ASN</label>
-                <span class="asn">-</span>
+                <span class="asn"></span>
             </li>
         </ul>
     </section>
@@ -89,39 +89,39 @@ $domain = $_SERVER["HTTP_HOST"];
         <ul>
             <li>
                 <label for="modal" title="The IPv6 protocol support.">IPv6</label>
-                <span class="ip">-</span>
+                <span class="ip"></span>
             </li>
             <li>
                 <label for="modal" title="The public IPv6 address of your connection.">Address</label>
-                <span class="address">-</span>
+                <span class="address"></span>
             </li>
             <li>
                 <label for="modal" title="The public IPv6 hostname of your connection.">Hostname</label>
-                <span class="hostname">-</span>
+                <span class="hostname"></span>
             </li>
             <li>
                 <label for="modal" title="The public information available about your Internet sevice provider.">ASN</label>
-                <span class="asn">-</span>
+                <span class="asn"></span>
             </li>
             <li>
                 <label for="modal" title="The type type of public IPv6 of your connection, native meaning a direct IPv6 connectivity, 6to4 and Teredo meaning the of use IPv4 to IPv6 tunnels to provide IPv6 support in networks that don't fully support IPv6 yet.">Type</label>
-                <span class="type">-</span>
+                <span class="type"></span>
             </li>
             <li>
                 <label for="modal" title="The use of stateless address autoconfiguration (SLAAC) to get your IPv6 or not. SLAAC is a mean for an IPv6 host to assign itself an address based on its hardware MAC without asking a DHCP server. Using SLAAC without privacy extensions (RFC4941) is not recommended.">SLAAC</label>
-                <span class="slaac">-</span>
+                <span class="slaac"></span>
             </li>
             <li class="mac">
                 <label for="modal" title="The MAC address used to construct your SLAAC IPv6.">MAC Address</label>
-                <span class="mac-address">-</span>
+                <span class="mac-address"></span>
             </li>
             <li class="mac">
                 <label for="modal" title="The vendor that the used MAC address originated from.">MAC Vendor</label>
-                <span class="mac-vendor">-</span>
+                <span class="mac-vendor"></span>
             </li>
             <li>
                 <label for="modal" title="The availbility to contact your device using ICMPv6. IPv6 relies heavily on the ICMPv6 protocol to signal error and information conditions.">ICMPv6</label>
-                <span class="icmp">-</span>
+                <span class="icmp"></span>
             </li>
         </ul>
     </section>
@@ -129,10 +129,14 @@ $domain = $_SERVER["HTTP_HOST"];
 
 <script>
     const ENDPOINTS = {
-        'auto': '//<?= getenv('HOST_AUTO') ?>/json',
-        4: '//<?= getenv('HOST_IPV4') ?>/json',
-        6: '//<?= getenv('HOST_IPV6') ?>/json',
-        'ping6': '//<?= getenv('HOST_IPV6') ?>/ping',
+        'auto': '//<?= getenv('HOST_AUTO') ?>/nl.e7d.io/json',
+        4: '//<?= getenv('HOST_IPV4') ?>/ipv4.nl.e7d.io/json',
+        6: '//<?= getenv('HOST_IPV6') ?>/ipv6.nl.e7d.io/json',
+        'ping6': '//<?= getenv('HOST_IPV6') ?>/ipv6.nl.e7d.io/ping',
+        // 'auto': '//<?= getenv('HOST_AUTO') ?>/json',
+        // 4: '//<?= getenv('HOST_IPV4') ?>/json',
+        // 6: '//<?= getenv('HOST_IPV6') ?>/json',
+        // 'ping6': '//<?= getenv('HOST_IPV6') ?>/ping',
     };
 </script>
 <script src="//<?= $domain ?>/js/ipv6-test.js"></script>
