@@ -13,7 +13,7 @@ trap stop SIGTERM
 
 export DATABASE_DIR=${DATABASE_DIR:-"/var/databases"}
 
-if [ ! -z "$MAXMIND_LICENSE_KEY" ] && { [ ! -f "$DATABASE_DIR/GeoLite2-ASN.mmdb" ] || [ ! -z "$(find "$DATABASE_DIR/GeoLite2-ASN.mmdb" -mtime +1)" ]; }; then
+if [ ! -z "$MAXMIND_LICENSE_KEY" ] && { [ ! -f "$DATABASE_DIR/GeoLite2-ASN.mmdb" ] || [ ! -z "$(find "$DATABASE_DIR/GeoLite2-ASN.mmdb" -ctime +1)" ]; }; then
 	mkdir -p $DATABASE_DIR
 	echo -ne "Downloading MaxMind GeoLite2 ASN database... "
 	wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-ASN&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz --directory /tmp
@@ -23,7 +23,7 @@ else
 	echo "A recent enough MaxMind GeoLite2 ASN database already exists. Skipping download."
 fi
 
-if [ ! -z "$MAXMIND_LICENSE_KEY" ] && { [ ! -f "$DATABASE_DIR/GeoLite2-City.mmdb" ] || [ ! -z "$(find "$DATABASE_DIR/GeoLite2-City.mmdb" -mtime +1)" ]; }; then
+if [ ! -z "$MAXMIND_LICENSE_KEY" ] && { [ ! -f "$DATABASE_DIR/GeoLite2-City.mmdb" ] || [ ! -z "$(find "$DATABASE_DIR/GeoLite2-City.mmdb" -ctime +1)" ]; }; then
 	mkdir -p $DATABASE_DIR
 	echo -ne "Downloading MaxMind GeoLite2 City database... "
 	wget -qO- "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz" | tar xz --directory /tmp
@@ -33,7 +33,7 @@ else
 	echo "A recent enough MaxMind GeoLite2 City database already exists. Skipping download."
 fi
 
-if [ "$MAC_VENDORS" == "true" ] && { [ ! -f "$DATABASE_DIR/mac_vendors.json" ] || [ ! -z "$(find "$DATABASE_DIR/mac_vendors.json" -mtime +1)" ]; }; then
+if [ "$MAC_VENDORS" == "true" ] && { [ ! -f "$DATABASE_DIR/mac_vendors.json" ] || [ ! -z "$(find "$DATABASE_DIR/mac_vendors.json" -ctime +1)" ]; }; then
 	mkdir -p $DATABASE_DIR
 	echo -ne "Downloading MAC address vendors database... "
 	wget -qO- "https://maclookup.app/downloads/json-database/get-db" >$DATABASE_DIR/mac_vendors.json

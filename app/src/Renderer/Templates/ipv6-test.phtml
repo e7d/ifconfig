@@ -129,14 +129,10 @@ $domain = $_SERVER["HTTP_HOST"];
 
 <script>
     const ENDPOINTS = {
-        'auto': '//<?= getenv('HOST_AUTO') ?>/nl.e7d.io/json',
-        4: '//<?= getenv('HOST_IPV4') ?>/ipv4.nl.e7d.io/json',
-        6: '//<?= getenv('HOST_IPV6') ?>/ipv6.nl.e7d.io/json',
-        'ping6': '//<?= getenv('HOST_IPV6') ?>/ipv6.nl.e7d.io/ping',
-        // 'auto': '//<?= getenv('HOST_AUTO') ?>/json',
-        // 4: '//<?= getenv('HOST_IPV4') ?>/json',
-        // 6: '//<?= getenv('HOST_IPV6') ?>/json',
-        // 'ping6': '//<?= getenv('HOST_IPV6') ?>/ping',
+        'auto': '//<?= getenv('HOST_AUTO') ?>/json',
+        4: '//<?= getenv('HOST_IPV4') ?>/json',
+        6: '//<?= getenv('HOST_IPV6') ?>/json',
+        'ping6': '//<?= getenv('HOST_IPV6') ?>/ping'
     };
 </script>
 <script src="//<?= $domain ?>/js/ipv6-test.js"></script>
