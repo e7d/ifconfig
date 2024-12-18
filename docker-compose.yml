@@ -22,4 +22,4 @@ services:
 networks:
   ifconfig:
     driver: bridge
-    enable_ipv6: true
+    # enable_ipv6: true

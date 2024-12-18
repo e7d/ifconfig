@@ -161,7 +161,9 @@
                 $node[ip.version].macAddress.textContent = ip.mac.address;
                 $node[ip.version].macVendor.textContent = ip.mac.vendor;
             }
-            $node[ip.version].icmp.innerHTML = ping ? toLabel('Success', 'success') : toLabel('Filtered', 'warning');
+            if (ping !== undefined) {
+                $node[ip.version].icmp.innerHTML = ping ? toLabel('Success', 'success') : toLabel('Filtered', 'warning');
+            }
             if (ping) updateScore('icmpv6');
         }
     }
@@ -173,14 +175,16 @@
         }
         updateScore(`ipv${results.ip.version}`);
         const { ip } = results;
-        let ping = false;
+        setConnectivityResultsValues(ip.version, results);
+        let ping;
         if (ip.version === 6) {
             if (ip.type === 'native') updateScore('ipv6_native');
             if (!ip.slaac) updateScore('ipv6_not_slaac');
+            setConnectivityResultsValues(ip.version, results);
             ping = await ping6();
             if (ping) updateScore('icmpv6');
+            setConnectivityResultsValues(ip.version, results, ping);
         }
-        setConnectivityResultsValues(ip.version, results, ping);
     }
 
     async function ipv6Test() {
