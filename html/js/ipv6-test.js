@@ -78,7 +78,8 @@
         if (score < 0) score = 0;
         if (score > 20) score = 20;
         $progressBar.style.width = `${score * 5}%`;
-        $progressBar.className = `progress-bar ${score < 10 ? 'danger' : score < 20 ? 'warning' : 'success'}`;
+        $progressBar.classList.remove('danger', 'warning', 'success');
+        $progressBar.classList.add(score < 10 ? 'danger' : score < 20 ? 'warning' : 'success');
         $scoreValue.textContent = `${score} / 20`;
         for (const [detail, keys] of Object.entries(scoreDetails)) {
             $scoreValues[detail].textContent = keys.reduce((acc, key) => acc + scoreKeys.includes(key) * scoreValues[key], 0);
@@ -157,6 +158,7 @@
                 }
                 $node[ipVersion].icmp.textContent = '-';
             }
+            return;
         }
         const { ip, host, asn, country } = results;
         $node[ip.version].address.textContent = ip.address;
@@ -206,6 +208,7 @@
         const fallbackInfo = await getInfo(fallbackIpVersion);
         setConnectivityResults(fallbackInfo, fallbackIpVersion);
         setBrowserResults('fallback', defaultInfo, fallbackInfo);
+        $progressBar.classList.remove('active');
     }
 
     ipv6Test();

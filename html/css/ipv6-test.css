@@ -7,6 +7,7 @@ input[type="checkbox"] {
 }
 
 @media (hover: none) or (pointer: coarse) {
+
     input[type="checkbox"]:checked~.modal,
     input[type="checkbox"]:checked~.modal-background {
         display: block;
@@ -129,27 +130,64 @@ ul label em {
     padding: 0;
 }
 
+.progress-bar.active {
+    animation: slide 10s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 45px 0;
+    }
+}
+
 .progress-bar {
     --success-color: green;
+    --success-color-alt: #009900;
     --warning-color: orange;
+    --warning-color-alt: #ffbb00;
     --danger-color: #bb0000;
+    --danger-color-alt: #dd0000;
 
+    background-size: 45px 45px;
     border-radius: 0.5em;
     display: block;
     height: 100%;
     transition: width 0.5s, background-color 0.2s;
 }
 
+.progress-bar.active {
+    animation: progress-bar-stripes 2s linear infinite;
+}
+
 .progress-bar.success {
-    background-color: var(--success-color);
+    background-image:
+        repeating-linear-gradient(-45deg,
+            var(--success-color-alt),
+            var(--success-color-alt) 16px,
+            var(--success-color) 16px,
+            var(--success-color) 32px);
 }
 
 .progress-bar.warning {
-    background-color: var(--warning-color);
+    background-image:
+        repeating-linear-gradient(-45deg,
+            var(--warning-color-alt),
+            var(--warning-color-alt) 16px,
+            var(--warning-color) 16px,
+            var(--warning-color) 32px);
 }
 
 .progress-bar.danger {
-    background-color: var(--danger-color);
+    background-image:
+        repeating-linear-gradient(-45deg,
+            var(--danger-color-alt),
+            var(--danger-color-alt) 16px,
+            var(--danger-color) 16px,
+            var(--danger-color) 32px);
 }
 
 .score-details {
