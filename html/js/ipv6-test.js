@@ -1,4 +1,4 @@
-(function () {
+(() => {
     const $modal = document.querySelector('.modal');
     const $modalTitle = $modal.querySelector('.modal-title');
     const $modalContent = $modal.querySelector('.modal-content');
@@ -41,15 +41,17 @@
     }
 
     $scoreValue.addEventListener('click', () => {
-        $scoreDetails.forEach($scoreDetail => $scoreDetail.classList.toggle('visible'));
+        for (const $scoreDetail of $scoreDetails) {
+            $scoreDetail.classList.toggle('visible');
+        }
     });
 
-    document.querySelectorAll('label[for="modal"]').entries().forEach(([, $label]) => {
+    for (const [, $label] of document.querySelectorAll('label[for="modal"]').entries()) {
         $label.addEventListener('click', () => {
             $modalTitle.textContent = $label.textContent;
             $modalContent.textContent = $label.title;
         });
-    });
+    }
 
     const scoreKeys = [];
     const scoreValues = {
@@ -78,9 +80,9 @@
         $progressBar.style.width = `${score * 5}%`;
         $progressBar.className = `progress-bar ${score < 10 ? 'danger' : score < 20 ? 'warning' : 'success'}`;
         $scoreValue.textContent = `${score} / 20`;
-        Object.entries(scoreDetails).forEach(([detail, keys]) => {
+        for (const [detail, keys] of Object.entries(scoreDetails)) {
             $scoreValues[detail].textContent = keys.reduce((acc, key) => acc + scoreKeys.includes(key) * scoreValues[key], 0);
-        });
+        }
     }
 
     async function getInfo(ipVersion) {
@@ -95,7 +97,7 @@
 
     async function ping6() {
         try {
-            const response = await fetch(ENDPOINTS['ping6']);
+            const response = await fetch(ENDPOINTS.ping6);
             const ping = (await response.text()).trim();
             return ping !== '-1';
         } catch (error) {
@@ -134,6 +136,13 @@
         return `<span class="label label-${color} ${big ? 'label-big' : ''}">${text}</span>`;
     }
 
+    function toPingStatus(ping) {
+        return {
+            undefined: '<span class="loader"></span>',
+            false: toLabel('Filtered', 'warning')
+        }[ping] || `${toLabel('Success', 'success')} in ${ping} ms`;
+    }
+
     function setConnectivityResultsValues(ipVersion, results, ping) {
         $node[ipVersion].ip.innerHTML = results ? toLabel('✓', 'success') : toLabel('✗', 'danger');
         if (!results) {
@@ -143,7 +152,9 @@
             if (ipVersion === 6) {
                 $node[ipVersion].type.textContent = '-';
                 $node[ipVersion].slaac.textContent = '-';
-                $node[ipVersion].mac.forEach($mac => $mac.style.display = 'none');
+                for (const $mac of $node[ipVersion].mac) {
+                    $mac.style.display = 'none';
+                }
                 $node[ipVersion].icmp.textContent = '-';
             }
         }
@@ -154,16 +165,16 @@
         if (ip.version === 6) {
             if (ip.type === 'native') updateScore('ipv6_native');
             if (!ip.slaac) updateScore('ipv6_not_slaac');
-            $node[ip.version].type.innerHTML = ip.type === 'native' ? toLabel('Native', 'success') : toLabel(ip.type, 'warning');;
+            $node[ip.version].type.innerHTML = ip.type === 'native' ? toLabel('Native', 'success') : toLabel(ip.type, 'warning');
             $node[ip.version].slaac.innerHTML = ip.slaac ? toLabel('Yes', 'warning') : toLabel('No', 'success');
             if (ip.slaac) {
-                $node[ip.version].mac.forEach($mac => $mac.style.display = 'flex');
+                for (const $mac of $node[ip.version].mac) {
+                    $mac.style.display = 'flex';
+                }
                 $node[ip.version].macAddress.textContent = ip.mac.address;
                 $node[ip.version].macVendor.textContent = ip.mac.vendor;
             }
-            if (ping !== undefined) {
-                $node[ip.version].icmp.innerHTML = ping ? toLabel('Success', 'success') : toLabel('Filtered', 'warning');
-            }
+            $node[ip.version].icmp.innerHTML = toPingStatus(ping);
             if (ping) updateScore('icmpv6');
         }
     }
