@@ -89,7 +89,9 @@
     async function getInfo(ipVersion) {
         try {
             const response = await fetch(ENDPOINTS[ipVersion]);
-            return response.json();
+            const results = await response.json();
+            if (results.ip.version === 6) results.ping = await ping6();
+            return results;
         } catch (error) {
             console.error(error);
             return null;
@@ -144,7 +146,7 @@
         }[ping] || `${toLabel('Success', 'success')} in ${ping} ms`;
     }
 
-    function setConnectivityResultsValues(ipVersion, results, ping) {
+    function setConnectivityResultsValues(ipVersion, results) {
         $node[ipVersion].ip.innerHTML = results ? toLabel('✓', 'success') : toLabel('✗', 'danger');
         if (!results) {
             $node[ipVersion].address.textContent = '-';
@@ -160,7 +162,7 @@
             }
             return;
         }
-        const { ip, host, asn, country } = results;
+        const { ip, host, asn, country, ping } = results;
         $node[ip.version].address.textContent = ip.address;
         $node[ip.version].hostname.textContent = host ?? ip.address;
         $node[ip.version].asn.innerHTML = toAsnString(country, asn);
@@ -189,15 +191,6 @@
         updateScore(`ipv${results.ip.version}`);
         const { ip } = results;
         setConnectivityResultsValues(ip.version, results);
-        let ping;
-        if (ip.version === 6) {
-            if (ip.type === 'native') updateScore('ipv6_native');
-            if (!ip.slaac) updateScore('ipv6_not_slaac');
-            setConnectivityResultsValues(ip.version, results);
-            ping = await ping6();
-            if (ping) updateScore('icmpv6');
-            setConnectivityResultsValues(ip.version, results, ping);
-        }
     }
 
     async function ipv6Test() {
