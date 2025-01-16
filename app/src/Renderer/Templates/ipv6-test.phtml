@@ -24,7 +24,7 @@ $domain = $_SERVER["HTTP_HOST"];
         <ul>
             <li>
                 <span class="progress">
-                    <span class="progress-bar active" style="width: 0%;"></span>
+                    <span class="progress-bar" style="width: 0%;"></span>
                 </span>
                 <span class="score-value">0 / 20</span>
             </li>
@@ -55,11 +55,11 @@ $domain = $_SERVER["HTTP_HOST"];
         <ul>
             <li>
                 <label for="modal" title="The protocol selected by your browser when a website advertises both IPv4 and IPV6 addresses.">Default</label>
-                <span class="default"></span>
+                <span class="default"><span class="loader"></span></span>
             </li>
             <li>
                 <label for="modal" title="The ability for your browser to fallback to the other protocol.">Fallback</label>
-                <span class="fallback"></span>
+                <span class="fallback"><span class="loader"></span></span>
             </li>
         </ul>
     </section>
@@ -68,7 +68,7 @@ $domain = $_SERVER["HTTP_HOST"];
         <ul>
             <li>
                 <label for="modal" title="The IPv4 protocol support.">IPv4</label>
-                <span class="ip"></span>
+                <span class="ip"><span class="loader"></span></span>
             </li>
             <li>
                 <label for="modal" title="The public IPv4 address of your connection.">Address</label>
@@ -89,7 +89,7 @@ $domain = $_SERVER["HTTP_HOST"];
         <ul>
             <li>
                 <label for="modal" title="The IPv6 protocol support.">IPv6</label>
-                <span class="ip"></span>
+                <span class="ip"><span class="loader"></span></span>
             </li>
             <li>
                 <label for="modal" title="The public IPv6 address of your connection.">Address</label>

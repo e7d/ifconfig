@@ -90,7 +90,6 @@
         try {
             const response = await fetch(ENDPOINTS[ipVersion]);
             const results = await response.json();
-            if (results.ip.version === 6) results.ping = await ping6();
             return results;
         } catch (error) {
             console.error(error);
@@ -119,9 +118,7 @@
         }
         const resources = performance.getEntriesByType("resource");
         const fallbackPerformance = fallbackInfo
-            ? resources.find(({
-                name
-            }) => name.endsWith(ENDPOINTS[fallbackInfo.ip.version]))
+            ? resources.find(({ name }) => name.endsWith(ENDPOINTS[fallbackInfo.ip.version]))
             : null;
         const fallbackTime = fallbackPerformance ? Math.round(fallbackPerformance.duration) : null;
         const fallbackColor = fallbackTime < 1000 ? 'success' : 'warning';
@@ -162,7 +159,7 @@
             }
             return;
         }
-        const { ip, host, asn, country, ping } = results;
+        const { ip, host, asn, country } = results;
         $node[ip.version].address.textContent = ip.address;
         $node[ip.version].hostname.textContent = host ?? ip.address;
         $node[ip.version].asn.innerHTML = toAsnString(country, asn);
@@ -178,8 +175,6 @@
                 $node[ip.version].macAddress.textContent = ip.mac.address;
                 $node[ip.version].macVendor.textContent = ip.mac.vendor;
             }
-            $node[ip.version].icmp.innerHTML = toPingStatus(ping);
-            if (ping) updateScore('icmpv6');
         }
     }
 
@@ -193,15 +188,24 @@
         setConnectivityResultsValues(ip.version, results);
     }
 
+    async function icmpv6Test() {
+        $node[6].icmp.innerHTML = toPingStatus();
+        const ping = await ping6();
+        if (ping) updateScore('icmpv6');
+        $node[6].icmp.innerHTML = toPingStatus(ping);
+    }
+
     async function ipv6Test() {
         const defaultInfo = await getInfo('auto');
+        const defaultIpVersion = defaultInfo.ip.version;
         setConnectivityResults(defaultInfo);
         setBrowserResults('default', defaultInfo);
-        const fallbackIpVersion = defaultInfo.ip.version === 4 ? 6 : 4;
+        const fallbackIpVersion = defaultIpVersion === 4 ? 6 : 4;
         const fallbackInfo = await getInfo(fallbackIpVersion);
         setConnectivityResults(fallbackInfo, fallbackIpVersion);
         setBrowserResults('fallback', defaultInfo, fallbackInfo);
-        $progressBar.classList.remove('active');
+        if (defaultIpVersion === 6 || fallbackInfo) await icmpv6Test();
+        $progressBar.classList.add('paused');
     }
 
     ipv6Test();

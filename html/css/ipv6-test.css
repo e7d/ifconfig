@@ -157,10 +157,12 @@ ul label em {
     display: block;
     height: 100%;
     transition: width 0.5s, background-color 0.2s;
+    animation: progress-bar-stripes 2s linear infinite;
+    animation-play-state: running;
 }
 
-.progress-bar.active {
-    animation: progress-bar-stripes 2s linear infinite;
+.progress-bar.paused {
+    animation-play-state: paused;
 }
 
 .progress-bar.success {
