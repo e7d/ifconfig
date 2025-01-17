@@ -6,9 +6,10 @@
     const $scoreValue = document.querySelector('.score-value');
     const $scoreDetails = document.querySelectorAll('.score-details');
     const $scoreValues = {
+        'default': document.querySelector('.score-default .value'),
+        'fallback': document.querySelector('.score-fallback .value'),
         'ipv4': document.querySelector('.score-ipv4 .value'),
         'ipv6': document.querySelector('.score-ipv6 .value'),
-        'fallback': document.querySelector('.score-fallback .value'),
         'ipv6-type': document.querySelector('.score-ipv6-type .value'),
         'icmpv6': document.querySelector('.score-icmpv6 .value')
     };
@@ -55,8 +56,9 @@
 
     const scoreKeys = [];
     const scoreValues = {
+        'default': 5,
         'ipv4': 2,
-        'ipv6': 10,
+        'ipv6': 5,
         'fast_fallback': 3,
         'slow_fallback': 1,
         'ipv6_native': 3,
@@ -64,15 +66,19 @@
         'icmpv6': 1,
     };
     const scoreDetails = {
+        'default': ['default'],
+        'fallback': ['fast_fallback', 'slow_fallback'],
         'ipv4': ['ipv4'],
         'ipv6': ['ipv6'],
-        'fallback': ['fast_fallback', 'slow_fallback'],
         'ipv6-type': ['ipv6_native', 'ipv6_not_slaac'],
         'icmpv6': ['icmpv6'],
     };
 
     function toScoreColor() {
-        if (!scoreKeys.includes('ipv6')) return 'danger';
+        if (
+            !scoreKeys.includes('default') ||
+            !scoreKeys.includes('ipv6')
+        ) return 'danger';
         if (
             !scoreKeys.includes('ipv4') ||
             !scoreKeys.includes('fast_fallback') ||
@@ -117,40 +123,45 @@
         }
     }
 
-    function setBrowserResults(type, defaultInfo, fallbackInfo) {
-        if (type === 'default') {
-            $node.browser.default.innerHTML = defaultInfo ? toLabel(`IPv${defaultInfo.ip.version}`, 'success') : toLabel('None', 'danger');
-            return;
-        }
-        if (!defaultInfo?.ip || !fallbackInfo?.ip || defaultInfo.ip.version === fallbackInfo.ip.version) {
-            $node.browser.fallback.innerHTML = toLabel('None', 'danger');
-            return;
-        }
-        const resources = performance.getEntriesByType("resource");
-        const fallbackPerformance = fallbackInfo
-            ? resources.find(({ name }) => name.endsWith(ENDPOINTS[fallbackInfo.ip.version]))
-            : null;
-        const fallbackTime = fallbackPerformance ? Math.round(fallbackPerformance.duration) : null;
-        const fallbackColor = fallbackTime < 1000 ? 'success' : 'warning';
-        $node.browser.fallback.innerHTML = fallbackInfo
-            ? `${toLabel(`IPv${fallbackInfo.ip.version}`, fallbackColor)} ${fallbackTime ? `in ${fallbackTime} ms` : ''}`
-            : toLabel('None', 'danger');
-        updateScore(fallbackTime < 1000 ? 'fast_fallback' : 'slow_fallback');
+    function toLabel(text, color, big) {
+        return `<span class="label label-${color} ${big ? 'label-big' : ''}">${text}</span>`;
     }
 
     function toAsnString(country, asn) {
         return asn ? `${country.flag.emoji ?? ''} AS${asn.number} ${asn.org}` : toLabel('N/A', 'warning');
     }
 
-    function toLabel(text, color, big) {
-        return `<span class="label label-${color} ${big ? 'label-big' : ''}">${text}</span>`;
+    function setFallbackResults(fallbackInfo) {
+        $node.browser.fallback.innerHTML = toLabel(`IPv${fallbackInfo.ip.version}`, 'success');
+        const fallbackInfoIpVersion = fallbackInfo.ip.version;
+        const resources = performance.getEntriesByType("resource");
+        const fallbackPerformance = fallbackInfoIpVersion
+            ? resources.find(({ name }) => name.endsWith(ENDPOINTS[fallbackInfoIpVersion]))
+            : null;
+        const fallbackTime = fallbackPerformance ? Math.round(fallbackPerformance.duration) : null;
+        if (fallbackTime === null) return;
+        const fallbackColor = fallbackTime < 1000 ? 'success' : 'warning';
+        $node.browser.fallback.innerHTML = fallbackInfoIpVersion
+            ? `${toLabel(`IPv${fallbackInfoIpVersion}`, fallbackColor)} ${fallbackTime ? `in ${fallbackTime} ms` : ''}`
+            : toLabel('None', 'danger');
+        updateScore(fallbackTime < 1000 ? 'fast_fallback' : 'slow_fallback');
     }
 
-    function toPingStatus(ping) {
-        return {
-            undefined: '<span class="loader"></span>',
-            false: toLabel('Filtered', 'warning')
-        }[ping] || `${toLabel('Success', 'success')} in ${ping} ms`;
+
+    function setBrowserResults(autoInfo, ipv4Info, ipv6Info) {
+        if (autoInfo === null) {
+            $node.browser.default.innerHTML = toLabel('None', 'danger');
+            $node.browser.fallback.innerHTML = toLabel('None', 'danger');
+            return;
+        }
+        updateScore('default');
+        $node.browser.default.innerHTML = toLabel(`IPv${autoInfo.ip.version}`, 'success');
+        const fallbackInfo = autoInfo.ip.version === 4 ? ipv6Info : ipv4Info;
+        if (!fallbackInfo) {
+            $node.browser.fallback.innerHTML = toLabel('None', 'danger');
+            return;
+        }
+        setFallbackResults(fallbackInfo);
     }
 
     function setConnectivityResultsValues(ipVersion, results) {
@@ -188,34 +199,50 @@
         }
     }
 
-    async function setConnectivityResults(results, ipVersion) {
-        if (!results?.ip) {
-            setConnectivityResultsValues(ipVersion, null);
-            return;
-        }
-        updateScore(`ipv${results.ip.version}`);
-        const { ip } = results;
-        setConnectivityResultsValues(ip.version, results);
+    function toPingStatus(ping) {
+        return {
+            undefined: '<span class="loader"></span>',
+            false: toLabel('Filtered', 'warning')
+        }[ping] || `${toLabel('Success', 'success')} in ${ping} ms`;
     }
 
     async function icmpv6Test() {
-        $node[6].icmp.innerHTML = toPingStatus();
+        $node[6].icmp.innerHTML = toPingStatus(undefined);
         const ping = await ping6();
         if (ping) updateScore('icmpv6');
         $node[6].icmp.innerHTML = toPingStatus(ping);
     }
 
+    async function setConnectivityResults(info, ipVersion) {
+        if (!info?.ip) {
+            setConnectivityResultsValues(ipVersion, null);
+            return;
+        }
+        updateScore(`ipv${info.ip.version}`);
+        const { ip } = info;
+        setConnectivityResultsValues(ip.version, info);
+        if (ip.version === 6) await icmpv6Test();
+    }
+
+    async function setPingResults(ipv6Info, ping) {
+        if (!ipv6Info) return;
+        $node[6].icmp.innerHTML = toPingStatus(ping);
+        if (ping) updateScore('icmpv6');
+    }
+
     async function ipv6Test() {
-        const defaultInfo = await getInfo('auto');
-        const defaultIpVersion = defaultInfo.ip.version;
-        setConnectivityResults(defaultInfo);
-        setBrowserResults('default', defaultInfo);
-        const fallbackIpVersion = defaultIpVersion === 4 ? 6 : 4;
-        const fallbackInfo = await getInfo(fallbackIpVersion);
-        setConnectivityResults(fallbackInfo, fallbackIpVersion);
-        setBrowserResults('fallback', defaultInfo, fallbackInfo);
-        if (defaultIpVersion === 6 || fallbackInfo) await icmpv6Test();
-        $progressBar.classList.add('paused');
+        const autoInfoPromise = getInfo('auto');
+        const ipv4InfoPromise = getInfo(4);
+        const ipv6InfoPromise = getInfo(6);
+        const ping6Promise = ping6();
+        ipv4InfoPromise.then((ipv4Info) => setConnectivityResults(ipv4Info, 4));
+        ipv6InfoPromise.then((ipv6Info) => setConnectivityResults(ipv6Info, 6));
+        Promise.all([ipv6InfoPromise, ping6Promise])
+            .then(([ipv6Info, ping]) => setPingResults(ipv6Info, ping));
+        Promise.all([autoInfoPromise, ipv4InfoPromise, ipv6InfoPromise])
+            .then(([autoInfo, ipv4Info, ipv6Info]) => setBrowserResults(autoInfo, ipv4Info, ipv6Info));
+        Promise.all([autoInfoPromise, ipv4InfoPromise, ipv6InfoPromise, ping6Promise])
+            .then(() => $progressBar.classList.add('paused'));
     }
 
     ipv6Test();
