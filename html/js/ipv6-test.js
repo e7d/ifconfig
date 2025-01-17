@@ -59,9 +59,9 @@
         'ipv6': 10,
         'fast_fallback': 3,
         'slow_fallback': 1,
-        'ipv6_native': 2,
+        'ipv6_native': 3,
         'ipv6_not_slaac': 1,
-        'icmpv6': 2,
+        'icmpv6': 1,
     };
     const scoreDetails = {
         'ipv4': ['ipv4'],
@@ -71,6 +71,16 @@
         'icmpv6': ['icmpv6'],
     };
 
+    function toScoreColor() {
+        if (!scoreKeys.includes('ipv6')) return 'danger';
+        if (
+            !scoreKeys.includes('ipv4') ||
+            !scoreKeys.includes('fast_fallback') ||
+            !scoreKeys.includes('ipv6_native')
+        ) return 'warning';
+        return 'success';
+    }
+
     function updateScore(key) {
         if (scoreKeys.includes(key)) return;
         scoreKeys.push(key);
@@ -79,7 +89,7 @@
         if (score > 20) score = 20;
         $progressBar.style.width = `${score * 5}%`;
         $progressBar.classList.remove('danger', 'warning', 'success');
-        $progressBar.classList.add(score < 10 ? 'danger' : score < 20 ? 'warning' : 'success');
+        $progressBar.classList.add(toScoreColor());
         $scoreValue.textContent = `${score} / 20`;
         for (const [detail, keys] of Object.entries(scoreDetails)) {
             $scoreValues[detail].textContent = keys.reduce((acc, key) => acc + scoreKeys.includes(key) * scoreValues[key], 0);
@@ -101,7 +111,7 @@
         try {
             const response = await fetch(ENDPOINTS.ping6);
             const ping = (await response.text()).trim();
-            return ping !== '-1';
+            return ping === '-1' ? false : parseInt(ping);
         } catch (error) {
             return false;
         }

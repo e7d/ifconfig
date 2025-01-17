@@ -45,14 +45,46 @@ class IP extends AbstractType implements JsonSerializable
         return gmp_strval(gmp_init($bin, 2), 10);
     }
 
+    private function toIpv6Bytes($ipv6): array
+    {
+        return unpack("n*", inet_pton($ipv6));
+    }
+
+    private function is6in4Address($ipv6)
+    {
+        if (filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
+            return false;
+        }
+        return filter_var(substr($ipv6, strrpos($ipv6, ':') + 1), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+    }
+
     private function is6to4Address($ipv6)
     {
         if (filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
             return false;
         }
-        $binaryIPv6 = inet_pton($ipv6);
-        $firstTwoBytes = unpack("n", $binaryIPv6)[1];
-        return ($firstTwoBytes === 0x2002);
+        $ipv6Bytes = $this->toIpv6Bytes($ipv6);
+        return $ipv6Bytes[1] === 0x2002;
+    }
+
+    private function is6over4Address($ipv6)
+    {
+        if (filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
+            return false;
+        }
+        $ipv6Bytes = $this->toIpv6Bytes($ipv6);
+        return $ipv6Bytes[1] === 0xFE80;
+    }
+
+    private function isIsatapAddress($ipv6)
+    {
+        if (filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
+            return false;
+        }
+        $ipv6Bytes = $this->toIpv6Bytes($ipv6);
+        return $ipv6Bytes[1] === 0x2001
+            && $ipv6Bytes[2] === 0x0000
+            && $ipv6Bytes[3] === 0x5EFE;
     }
 
     private function isTeredoAddress($ipv6)
@@ -60,19 +92,18 @@ class IP extends AbstractType implements JsonSerializable
         if (filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
             return false;
         }
-        $binaryIPv6 = inet_pton($ipv6);
-        $firstFourBytes = unpack("N", $binaryIPv6)[1];
-        return ($firstFourBytes === 0x20010000);
+        $ipv6Bytes = $this->toIpv6Bytes($ipv6);
+        return $ipv6Bytes[1] === 0x2001
+            && $ipv6Bytes[2] === 0x0000;
     }
 
     private function toIpv6Type($ip): string
     {
-        if ($this->is6to4Address($ip)) {
-            return '6to4';
-        }
-        if ($this->isTeredoAddress($ip)) {
-            return 'teredo';
-        }
+        if ($this->is6in4Address($ip)) return '6in4';
+        if ($this->is6to4Address($ip)) return '6to4';
+        if ($this->is6over4Address($ip)) return '6over4';
+        if ($this->isIsatapAddress($ip)) return 'isatap';
+        if ($this->isTeredoAddress($ip)) return 'teredo';
         return 'native';
     }
 

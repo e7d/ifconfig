@@ -29,24 +29,24 @@ $domain = $_SERVER["HTTP_HOST"];
                 <span class="score-value">0 / 20</span>
             </li>
             <li class="score-details">
-                <label>IPv4</label>
+                <label for="modal" title="The IPv4 connectivity will remain necessary as long as the transition to IPv6 is not fully executed.">IPv4</label>
                 <span class="score-ipv4"><span class="value">0</span> / 2</span>
             </li>
             <li class="score-details">
-                <label>IPv6</label>
+                <label for="modal" title="The IPv6 connectivity is the main requirement.">IPv6</label>
                 <span class="score-ipv6"><span class="value">0</span> / 10</span>
             </li>
             <li class="score-details">
-                <label>Fallback</label>
+                <label for="modal" title="A fast fallback from one protocol to the other is necessary to prevent navigation issues.">Fallback</label>
                 <span class="score-fallback"><span class="value">0</span> / 3</span>
             </li>
             <li class="score-details">
-                <label>IPv6 Type</label>
-                <span class="score-ipv6-type"><span class="value">0</span> / 3</span>
+                <label for="modal" title="A native IPv6 is preferred over any IPv4 to IPv6 tunnel or translation technique. Also, using a public IPv6 assigned using SLAAC without privacy extensions (RFC4941) is discouraged, as it presents some security risks.">IPv6 Type</label>
+                <span class="score-ipv6-type"><span class="value">0</span> / 4</span>
             </li>
             <li class="score-details">
-                <label>ICMPv6</label>
-                <span class="score-icmpv6"><span class="value">0</span> / 2</span>
+                <label for="modal" title="A working public ICMPv6 connectivity is not a requirement, but ensures smooth IPv6 operation.">ICMPv6</label>
+                <span class="score-icmpv6"><span class="value">0</span> / 1</span>
             </li>
         </ul>
     </section>
@@ -104,7 +104,7 @@ $domain = $_SERVER["HTTP_HOST"];
                 <span class="asn"></span>
             </li>
             <li>
-                <label for="modal" title="The type type of public IPv6 of your connection, native meaning a direct IPv6 connectivity, 6to4 and Teredo meaning the of use IPv4 to IPv6 tunnels to provide IPv6 support in networks that don't fully support IPv6 yet.">Type</label>
+                <label for="modal" title="The type type of public IPv6 of your connection. Native means a direct IPv6 connectivity. Other values are IPv4 to IPv6 tunnels or translation techniques to provide IPv6 support in networks that don't fully support IPv6 yet.">Type</label>
                 <span class="type"></span>
             </li>
             <li>
@@ -129,10 +129,14 @@ $domain = $_SERVER["HTTP_HOST"];
 
 <script>
     const ENDPOINTS = {
-        'auto': '//<?= getenv('HOST_AUTO') ?>/json',
-        4: '//<?= getenv('HOST_IPV4') ?>/json',
-        6: '//<?= getenv('HOST_IPV6') ?>/json',
-        'ping6': '//<?= getenv('HOST_IPV6') ?>/ping'
+        'auto': '//<?= getenv('HOST_AUTO') ?>/ip.home.e7d.io/json',
+        4: '//<?= getenv('HOST_AUTO') ?>/ipv4.home.e7d.io/json',
+        6: '//<?= getenv('HOST_AUTO') ?>/ipv6.home.e7d.io/json',
+        'ping6': '//<?= getenv('HOST_AUTO') ?>/ipv6.home.e7d.io/ping'
+        // 'auto': '//<?= getenv('HOST_AUTO') ?>/json',
+        // 4: '//<?= getenv('HOST_IPV4') ?>/json',
+        // 6: '//<?= getenv('HOST_IPV6') ?>/json',
+        // 'ping6': '//<?= getenv('HOST_IPV6') ?>/ping'
     };
 </script>
 <script src="//<?= $domain ?>/js/ipv6-test.js"></script>

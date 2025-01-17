@@ -156,7 +156,7 @@ ul label em {
     border-radius: 0.5em;
     display: block;
     height: 100%;
-    transition: width 0.5s, background-color 0.2s;
+    transition: width 0.5s, background-color 0.5s;
     animation: progress-bar-stripes 2s linear infinite;
     animation-play-state: running;
 }
@@ -225,8 +225,6 @@ ul label em {
     --warning-text-color: black;
     --danger-color: #bb0000;
     --danger-text-color: white;
-    --info-color: blue;
-    --info-text-color: white;
 
     border-radius: 0.25em;
     padding: 0.25em 0.5em;
@@ -278,6 +276,7 @@ ul label em {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
