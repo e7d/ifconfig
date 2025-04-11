@@ -37,7 +37,7 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     select {
         color: var(--text-color);
         padding: var(--margin);
-        border: 1px solid var(--border-color);
+        border: var(--border-width) solid var(--border-color);
     }
 
     input[name=q] {
@@ -68,13 +68,21 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         flex: 1;
     }
 
+    h2 .links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        margin-left: var(--margin);
+    }
+
     h2 .links a {
         background-color: var(--blue-color);
         background-image: none;
-        border-radius: 4px;
+        border-radius: calc(var(--margin) * 0.5);
         color: var(--background-color);
         font-size: small;
-        padding: 2px 4px;
+        margin: calc(var(--margin) * 0.25);
+        padding: calc(var(--margin) * 0.25) calc(var(--margin) * 0.5);
         text-decoration: none;
         text-transform: uppercase;
     }
@@ -163,11 +171,11 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         }
 
         label {
-            padding-bottom: 4px;
+            padding-bottom: calc(var(--margin) * 0.5);
         }
 
         label em {
-            margin-right: 0.3em;
+            margin-right: calc(var(--margin) * 0.5);
             float: left;
         }
 
