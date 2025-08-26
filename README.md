@@ -38,6 +38,7 @@ Find below the list of available environment variables to customize the service:
 | Key                    | Default Value    | Description |
 | ---------------------- | ---------------- | ----------- |
 | `ASN_LINK`             | `false`          | Display a link on the info page to a third party provider to get further ASN information. Valid values are `ipinfo.io` and `hurricane-electric`. |
+| `CORS_ALLOWED_ORIGINS` |                  | Comma-separated list of allowed origins for CORS requests. Leave empty for same-origin only (most secure). Use `*` to allow all origins (not recommended). Example: `https://example.com,https://app.example.com` |
 | `DATABASE_AUTO_UPDATE` | `false`          | With `MAXMIND_ACCOUNT_ID` and `MAXMIND_LICENSE_KEY` properly set-up, auto-update the MaxMind GeoLite2 databases. |
 | `DATABASE_DIR`         | `/var/databases` | With `MAXMIND_ACCOUNT_ID` and `MAXMIND_LICENSE_KEY` properly set-up, where to store the databases. |
 | `DNS_CACHE`            | `false`          | When set to `true`, use a local DNS cache resolver ([bind9](https://github.com/isc-projects/bind9)). |
@@ -64,6 +65,10 @@ Find below the list of available environment variables to customize the service:
 - add a link to an ipv6-only domain: `-e HOST_IPV6=ipv6.my.domain`
 - display the footer link to the "about" page: `-e SHOW_ABOUT=true`
 - display the FAQ section on the "about" page: `-e SHOW_FAQ=true`
+- configure CORS (Cross-Origin Resource Sharing):
+  - allow specific origins: `-e CORS_ALLOWED_ORIGINS="https://example.com,https://app.example.com"`
+  - allow all origins: `-e CORS_ALLOWED_ORIGINS="*"`
+  - default: same-origin only
 - read the MaxMind databases [from memory](#in-memory-databases): `--mount type=tmpfs,destination=/tmpfs`
 - activate [rate-limiting](#rate-limiting):
   - maximum requests per time window: `-e RATE_LIMIT=500`
