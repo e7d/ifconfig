@@ -7,9 +7,9 @@ $version = $this->getVersion();
 function toFormatUri(string $format, string $query, ?string $version): string
 {
     return '/?' .
-        (!empty($query) ? 'q=' . $query . '&' : '') .
-        (!empty($version) ? 'version=' . $version . '&' : '') .
-        'format=' . $format;
+        (!empty($query) ? 'q=' . urlencode($query) . '&' : '') .
+        (!empty($version) ? 'version=' . urlencode($version) . '&' : '') .
+        'format=' . urlencode($format);
 }
 
 if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
@@ -184,18 +184,18 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
 
 <?php if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
     <div class="force-ip">
-        <?php if (getenv('HOST_AUTO')) { ?><span><a href="//<?= getenv('HOST_AUTO') . $_SERVER['REQUEST_URI']; ?>">Auto</a></span><?php } ?>
-        <?php if (getenv('HOST_IPV4')) { ?><span><a href="//<?= getenv('HOST_IPV4') . $_SERVER['REQUEST_URI']; ?>">IPv4</a></span><?php } ?>
-        <?php if (getenv('HOST_IPV6')) { ?><span><a href="//<?= getenv('HOST_IPV6') . $_SERVER['REQUEST_URI']; ?>">IPv6</a></span><?php } ?>
+        <?php if (getenv('HOST_AUTO')) { ?><span><a href="//<?= e(getenv('HOST_AUTO')) . e($_SERVER['REQUEST_URI']); ?>">Auto</a></span><?php } ?>
+        <?php if (getenv('HOST_IPV4')) { ?><span><a href="//<?= e(getenv('HOST_IPV4')) . e($_SERVER['REQUEST_URI']); ?>">IPv4</a></span><?php } ?>
+        <?php if (getenv('HOST_IPV6')) { ?><span><a href="//<?= e(getenv('HOST_IPV6')) . e($_SERVER['REQUEST_URI']); ?>">IPv6</a></span><?php } ?>
     </div>
 <?php } ?>
-<form name="search" action="//<?= $_SERVER["HTTP_HOST"] ?>">
-    <input type="text" name="q" placeholder="Search any IP Address, Host or URL" autofocus autocapitalize="off" value="<?= $queryString ?>">
+<form name="search" action="//<?= e($_SERVER["HTTP_HOST"]) ?>">
+    <input type="text" name="q" placeholder="Search any IP Address, Host or URL" autofocus autocapitalize="off" value="<?= e($queryString) ?>">
     <input type="submit" value="Search">
 </form>
 <main>
     <h2>
-        <span><?= empty($queryString) ? "Your connection" : "$queryString information" ?></span>
+        <span><?= empty($queryString) ? "Your connection" : e($queryString) . " information" ?></span>
         <div class="links">
             <a target="_blank" href="<?= toFormatUri('json', $queryString, $version) ?>">json</a>
             <a target="_blank" href="<?= toFormatUri('jsonp', $queryString, $version) ?>">jsonp</a>
@@ -214,7 +214,7 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         <?php } ?>
         <li>
             <label>Host</label>
-            <span><?= $this->info->getHost(); ?></span>
+            <span><?= e($this->info->getHost()); ?></span>
         </li>
         <li>
             <label>ASN</label>
@@ -226,11 +226,11 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         </li>
         <li>
             <label>City</label>
-            <span><?= $this->info->getCity(); ?></span>
+            <span><?= e($this->info->getCity()); ?></span>
         </li>
         <li>
             <label>Postal</label>
-            <span><?= $this->info->getPostal(); ?></span>
+            <span><?= e($this->info->getPostal()); ?></span>
         </li>
         <li>
             <label>Subdivisions</label>
@@ -242,19 +242,19 @@ if (getenv('HOST_AUTO') || getenv('HOST_IPV4') || getenv('HOST_IPV6')) { ?>
         </li>
         <li>
             <label>Time Zone</label>
-            <span><?= $this->info->getTimeZone(); ?></span>
+            <span><?= e($this->info->getTimeZone()); ?></span>
         </li>
         <li>
             <label>Port</label>
-            <span><?= $this->info->getPort(); ?></span>
+            <span><?= e($this->info->getPort()); ?></span>
         </li>
         <li>
             <label>Method</label>
-            <span><?= $this->info->getMethod(); ?></span>
+            <span><?= e($this->info->getMethod()); ?></span>
         </li>
         <li>
             <label>Referer</label>
-            <span><?= $this->info->getReferer(); ?></span>
+            <span><?= e($this->info->getReferer()); ?></span>
         </li>
         <li class="headers">
             <label>Headers</label>

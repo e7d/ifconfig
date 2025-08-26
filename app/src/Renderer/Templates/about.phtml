@@ -2,7 +2,7 @@
 
 use IfConfig\Reader\DatabaseReader;
 
-$domain = $_SERVER["HTTP_HOST"];
+$domain = htmlspecialchars($_SERVER["HTTP_HOST"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
 $dbLatestUpdate = DatabaseReader::getDbFileLatestUpdate();
 ?>
 <style>
