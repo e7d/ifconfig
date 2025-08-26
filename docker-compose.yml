@@ -7,24 +7,7 @@ services:
     dns:
       - 1.1.1.1
       - 8.8.8.8
-    environment:
-      - ASN_LINK=$ASN_LINK
-      - DATABASE_AUTO_UPDATE=$DATABASE_AUTO_UPDATE
-      - DATABASE_DIR=$DATABASE_DIR
-      - DNS_CACHE=$DNS_CACHE
-      - HOST_AUTO=$HOST_AUTO
-      - HOST_IPV4=$HOST_IPV4
-      - HOST_IPV6=$HOST_IPV6
-      - MAP_LINK=$MAP_LINK
-      - MAXMIND_ACCOUNT_ID=$MAXMIND_ACCOUNT_ID
-      - MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY
-      - MODE=$MODE
-      - RATE_LIMIT_INTERVAL=$RATE_LIMIT_INTERVAL
-      - RATE_LIMIT=$RATE_LIMIT
-      - SHOW_ABOUT=$SHOW_ABOUT
-      - SHOW_FAQ=$SHOW_FAQ
-      - SHOW_SUPPORT=$SHOW_SUPPORT
-    # network_mode: host
+    env_file: .env
     ports:
       - 8080:80
     tmpfs: /tmpfs
