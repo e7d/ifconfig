@@ -1,4 +1,5 @@
 FROM debian:stable-slim AS dependencies
+ARG PHP_MIN_VERSION=8.4.27
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get -qy update \
     && apt-get -qy upgrade
@@ -8,7 +9,9 @@ RUN apt-get install -qy --no-install-recommends lsb-release apt-transport-https 
     && apt-get -qy update \
     && apt-get -qy upgrade \
     && apt-get install -qy --no-install-recommends apache2 bind9 cron curl php8.4-fpm php8.4-gmp php8.4-mbstring php8.4-opcache php8.4-redis php8.4-xml redis-server \
-    && apt-get install -qy --no-install-recommends php8.4-curl php8.4-dev unzip
+    && apt-get install -qy --no-install-recommends php8.4-curl php8.4-dev unzip \
+    && PHP_VERSION=$(dpkg-query -W -f='${Version}' php8.4-fpm) \
+    && if ! dpkg --compare-versions "$PHP_VERSION" ge "$PHP_MIN_VERSION"; then echo "php8.4-fpm $PHP_VERSION < $PHP_MIN_VERSION" >&2; exit 1; fi
 RUN sed -i 's/;opcache.memory_consumption=128/opcache.memory_consumption=32/g' /etc/php/8.4/fpm/php.ini
 RUN rm /var/www/html/index.html
 RUN a2enmod expires headers proxy_fcgi remoteip rewrite setenvif \
