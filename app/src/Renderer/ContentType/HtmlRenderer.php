@@ -22,6 +22,12 @@ class HtmlRenderer extends ContentTypeRenderer
         $this->version = $version;
     }
 
+    public function escape($value): string
+    {
+        if (!is_string($value)) return '';
+        return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+
     private function getQuery(): array
     {
         return $this->query ?? [];
@@ -36,10 +42,10 @@ class HtmlRenderer extends ContentTypeRenderer
     {
         if (is_null($asn) || is_null($asn->getOrg()) || is_null($asn->getNetwork())) return '';
 
-        $asnLabel = 'AS' . $asn->getNumber() . ' ' . $asn->getOrg();
-        $networkLabel = '(' . $asn->getNetwork() . ')';
-        if (getenv('ASN_LINK') === 'hurricane-electric') return '<a href="https://bgp.he.net/AS' . $asn->getNumber() . '" target="_blank" rel="noreferrer" title="Find AS number details on IPinfo.io">' . $asnLabel . '</a> ' . $networkLabel . ')';
-        if (getenv('ASN_LINK') === 'ipinfo.io') return '<a href="https://ipinfo.io/AS' . $asn->getNumber() . '" target="_blank" rel="noreferrer" title="Find AS number details on IPinfo.io">' . $asnLabel . '</a> ' . $networkLabel . ')';
+        $asnLabel = 'AS' . $this->escape($asn->getNumber()) . ' ' . $this->escape($asn->getOrg());
+        $networkLabel = '(' . $this->escape($asn->getNetwork()) . ')';
+        if (getenv('ASN_LINK') === 'hurricane-electric') return '<a href="https://bgp.he.net/AS' . urlencode($asn->getNumber()) . '" target="_blank" rel="noreferrer" title="Find AS number details on hurricane-electric">' . $asnLabel . '</a> ' . $networkLabel;
+        if (getenv('ASN_LINK') === 'ipinfo.io') return '<a href="https://ipinfo.io/AS' . urlencode($asn->getNumber()) . '" target="_blank" rel="noreferrer" title="Find AS number details on IPinfo.io">' . $asnLabel . '</a> ' . $networkLabel;
 
         return $asnLabel . ' ' . $networkLabel;
     }
@@ -49,15 +55,15 @@ class HtmlRenderer extends ContentTypeRenderer
         $flag = $country->getFlag();
         return is_null($flag) || is_null($flag->getImage())
             ? ''
-            : '<img width="16" height="11" src="' . $flag->getImage()->getBase64()
-            . '" title="' . $country->getIsoCode() . '"> ';
+            : '<img width="16" height="11" src="' . $this->escape($flag->getImage()->getBase64())
+            . '" title="' . $this->escape($country->getIsoCode()) . '"> ';
     }
 
     private function getCountryString(?Country $country): string
     {
         return is_null($country) || is_null($country->getName())
             ? ''
-            : $this->getCountryFlagString($country) . $country->getName() . ' (' . $country->getIsoCode() . ')';
+            : $this->getCountryFlagString($country) . $this->escape($country->getName()) . ' (' . $this->escape($country->getIsoCode()) . ')';
     }
 
     private function getSubdivionsString(?Subdivisions $subdivisions): string
@@ -67,7 +73,7 @@ class HtmlRenderer extends ContentTypeRenderer
             : implode(
                 '<br>',
                 array_map(function (Subdivision $subdivision) {
-                    return $subdivision->getName() . ' (' . $subdivision->getIsoCode() . ')';
+                    return $this->escape($subdivision->getName()) . ' (' . $this->escape($subdivision->getIsoCode()) . ')';
                 }, $subdivisions->getArrayCopy())
             );
     }
@@ -76,10 +82,13 @@ class HtmlRenderer extends ContentTypeRenderer
     {
         if (is_null($location) || is_null($location->getLatitude()) || is_null($location->getLongitude())) return '';
 
-        $label = $location->getLatitude() . ', ' . $location->getLongitude();
-        if (getenv('MAP_LINK') === 'apple-maps') return '<a href="https://maps.apple.com/?q=' . $location->getLatitude() . ',' . $location->getLongitude() . '" target="_blank" rel="noreferrer" title="View coordinates location on OpenStreetMap (openstreetmap.org)">' . $label . '</a>';
-        if (getenv('MAP_LINK') === 'google-maps') return '<a href="https://maps.google.com/?q=' . $location->getLatitude() . ',' . $location->getLongitude() . '" target="_blank" rel="noreferrer" title="View coordinates location on OpenStreetMap (openstreetmap.org)">' . $label . '</a>';
-        if (getenv('MAP_LINK') === 'openstreetmap') return '<a href="https://www.openstreetmap.org/?mlat=' . $location->getLatitude() . '&mlon=' . $location->getLongitude() . '" target="_blank" rel="noreferrer" title="View coordinates location on OpenStreetMap (openstreetmap.org)">' . $label . '</a>';
+        $lat = $this->escape($location->getLatitude());
+        $lng = $this->escape($location->getLongitude());
+        $label = $lat . ', ' . $lng;
+
+        if (getenv('MAP_LINK') === 'apple-maps') return '<a href="https://maps.apple.com/?q=' . urlencode($location->getLatitude() . ',' . $location->getLongitude()) . '" target="_blank" rel="noreferrer" title="View coordinates location on Apple Maps">' . $label . '</a>';
+        if (getenv('MAP_LINK') === 'google-maps') return '<a href="https://maps.google.com/?q=' . urlencode($location->getLatitude() . ',' . $location->getLongitude()) . '" target="_blank" rel="noreferrer" title="View coordinates location on Google Maps">' . $label . '</a>';
+        if (getenv('MAP_LINK') === 'openstreetmap') return '<a href="https://www.openstreetmap.org/?mlat=' . urlencode($location->getLatitude()) . '&mlon=' . urlencode($location->getLongitude()) . '" target="_blank" rel="noreferrer" title="View coordinates location on OpenStreetMap">' . $label . '</a>';
         return $label;
     }
 
@@ -87,7 +96,7 @@ class HtmlRenderer extends ContentTypeRenderer
     {
         $headersArr = $headers->getArrayCopy();
         return implode('<br>', \array_map(function (string $name, string $value) {
-            return $name . ': ' . $value;
+            return $this->escape($name) . ': ' . $this->escape($value);
         }, array_keys($headersArr), $headersArr));
     }
 
