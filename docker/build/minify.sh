@@ -4,7 +4,7 @@ echo Minify JavaScript
 JS_FILES=$(find html/js -type f -name '*.js')
 for JS_FILE in $JS_FILES; do
     JS_MIN_FILE=$(echo $JS_FILE | sed 's/\.js$/.min.js/')
-    npx uglify-js $JS_FILE >$JS_MIN_FILE
+    npx uglify-js@3.19.3 $JS_FILE >$JS_MIN_FILE
     CHECKSUM=$(cksum $JS_MIN_FILE | cut -d' ' -f 1)
     JS_CHECKSUM_FILE=$(echo $JS_FILE | sed "s/\.js/.${CHECKSUM}.min.js/")
     mv $JS_MIN_FILE $JS_CHECKSUM_FILE
@@ -17,7 +17,7 @@ CSS_FILES=$(find html/css -type f -name '*.css')
 for CSS_FILE in $CSS_FILES; do
     CSS_FILE_DIR=$(dirname $CSS_FILE)
     CSS_MIN_FILE=$(echo $CSS_FILE | sed 's/\.css$/.min.css/')
-    npx css-minify -f $CSS_FILE -o $CSS_FILE_DIR
+    npx css-minify@2.1.0 -f $CSS_FILE -o $CSS_FILE_DIR
     CHECKSUM=$(cksum $CSS_MIN_FILE | cut -d' ' -f 1)
     CSS_CHECKSUM_FILE=$(echo $CSS_FILE | sed "s/\.css/.${CHECKSUM}.min.css/")
     mv $CSS_MIN_FILE $CSS_CHECKSUM_FILE
@@ -26,7 +26,7 @@ for CSS_FILE in $CSS_FILES; do
 done
 
 echo Minify HTML Templates
-npx html-minifier \
+npx html-minifier@4.0.0 \
     --collapse-boolean-attributes \
     --collapse-whitespace \
     --decode-entities \
