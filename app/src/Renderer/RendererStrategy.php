@@ -17,11 +17,12 @@ use IfConfig\Renderer\Error\ErrorRenderer;
 use IfConfig\Types\Field;
 use IfConfig\Types\File;
 use IfConfig\Types\Info;
+use IfConfig\Types\PingReader;
 use Utils\IpReader;
 
 class RendererStrategy
 {
-    public const PAGES = ['about'];
+    public const PAGES = ['about', 'ipv6-test'];
     public const DEV_PAGES = ['opcache'];
     public const FORMATS = ['html', 'json', 'jsonp', 'text', 'txt', 'xml', 'yaml', 'yml'];
 
@@ -80,6 +81,12 @@ class RendererStrategy
         $mainIp = $info->getIp() ?? null;
 
         if (empty($mainIp)) {
+            return $info;
+        }
+
+        if (!empty(array_intersect($options->getPath(), ['ping']))) {
+            $pingReader = new PingReader($mainIp->getValue());
+            $info->setPing($pingReader->getPing());
             return $info;
         }
 

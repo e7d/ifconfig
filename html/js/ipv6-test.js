@@ -1,0 +1,249 @@
+(() => {
+    const $modal = document.querySelector('.modal');
+    const $modalTitle = $modal.querySelector('.modal-title');
+    const $modalContent = $modal.querySelector('.modal-content');
+    const $progressBar = document.querySelector('.progress-bar');
+    const $scoreValue = document.querySelector('.score-value');
+    const $scoreDetails = document.querySelectorAll('.score-details');
+    const $scoreValues = {
+        'default': document.querySelector('.score-default .value'),
+        'fallback': document.querySelector('.score-fallback .value'),
+        'ipv4': document.querySelector('.score-ipv4 .value'),
+        'ipv6': document.querySelector('.score-ipv6 .value'),
+        'ipv6-type': document.querySelector('.score-ipv6-type .value'),
+        'icmpv6': document.querySelector('.score-icmpv6 .value')
+    };
+    const $browserInfo = document.querySelector('#browser-info');
+    const $ipv4Info = document.querySelector('#ipv4-info');
+    const $ipv6Info = document.querySelector('#ipv6-info');
+    const $node = {
+        browser: {
+            default: $browserInfo.querySelector('.default'),
+            fallback: $browserInfo.querySelector('.fallback'),
+        },
+        4: {
+            ip: $ipv4Info.querySelector('.ip'),
+            address: $ipv4Info.querySelector('.address'),
+            hostname: $ipv4Info.querySelector('.hostname'),
+            asn: $ipv4Info.querySelector('.asn'),
+        },
+        6: {
+            ip: $ipv6Info.querySelector('.ip'),
+            address: $ipv6Info.querySelector('.address'),
+            hostname: $ipv6Info.querySelector('.hostname'),
+            asn: $ipv6Info.querySelector('.asn'),
+            type: $ipv6Info.querySelector('.type'),
+            slaac: $ipv6Info.querySelector('.slaac'),
+            mac: $ipv6Info.querySelectorAll('.mac'),
+            macAddress: $ipv6Info.querySelector('.mac-address'),
+            macVendor: $ipv6Info.querySelector('.mac-vendor'),
+            icmp: $ipv6Info.querySelector('.icmp'),
+        },
+    }
+
+    $scoreValue.addEventListener('click', () => {
+        for (const $scoreDetail of $scoreDetails) {
+            $scoreDetail.classList.toggle('visible');
+        }
+    });
+
+    for (const [, $label] of document.querySelectorAll('label[for="modal"]').entries()) {
+        $label.addEventListener('click', () => {
+            $modalTitle.textContent = $label.textContent;
+            $modalContent.textContent = $label.title;
+        });
+    }
+
+    const scoreKeys = [];
+    const scoreValues = {
+        'default': 5,
+        'ipv4': 2,
+        'ipv6': 5,
+        'fast_fallback': 3,
+        'slow_fallback': 1,
+        'ipv6_native': 3,
+        'ipv6_not_slaac': 1,
+        'icmpv6': 1,
+    };
+    const scoreDetails = {
+        'default': ['default'],
+        'fallback': ['fast_fallback', 'slow_fallback'],
+        'ipv4': ['ipv4'],
+        'ipv6': ['ipv6'],
+        'ipv6-type': ['ipv6_native', 'ipv6_not_slaac'],
+        'icmpv6': ['icmpv6'],
+    };
+
+    function toScoreColor() {
+        if (
+            !scoreKeys.includes('default') ||
+            !scoreKeys.includes('ipv6')
+        ) return 'danger';
+        if (
+            !scoreKeys.includes('ipv4') ||
+            !scoreKeys.includes('fast_fallback') ||
+            !scoreKeys.includes('ipv6_native')
+        ) return 'warning';
+        return 'success';
+    }
+
+    function updateScore(key) {
+        if (scoreKeys.includes(key)) return;
+        scoreKeys.push(key);
+        let score = scoreKeys.reduce((acc, key) => acc + scoreValues[key], 0);
+        if (score < 0) score = 0;
+        if (score > 20) score = 20;
+        $progressBar.style.width = `${score * 5}%`;
+        $progressBar.classList.remove('danger', 'warning', 'success');
+        $progressBar.classList.add(toScoreColor());
+        $scoreValue.textContent = `${score} / 20`;
+        for (const [detail, keys] of Object.entries(scoreDetails)) {
+            $scoreValues[detail].textContent = keys.reduce((acc, key) => acc + scoreKeys.includes(key) * scoreValues[key], 0);
+        }
+    }
+
+    async function getInfo(ipVersion) {
+        try {
+            const response = await fetch(ENDPOINTS[ipVersion]);
+            const results = await response.json();
+            return results;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    async function ping6() {
+        try {
+            const response = await fetch(ENDPOINTS.ping6);
+            const ping = (await response.text()).trim();
+            return ping === '-1' ? false : parseInt(ping);
+        } catch (error) {
+            return false;
+        }
+    }
+
+    function toLabel(text, color, big) {
+        return `<span class="label label-${color} ${big ? 'label-big' : ''}">${text}</span>`;
+    }
+
+    function toAsnString(country, asn) {
+        return asn ? `${country.flag.emoji ?? ''} AS${asn.number} ${asn.org}` : toLabel('N/A', 'warning');
+    }
+
+    function setFallbackResults(fallbackInfo) {
+        $node.browser.fallback.innerHTML = toLabel(`IPv${fallbackInfo.ip.version}`, 'success');
+        const fallbackInfoIpVersion = fallbackInfo.ip.version;
+        const resources = performance.getEntriesByType("resource");
+        const fallbackPerformance = fallbackInfoIpVersion
+            ? resources.find(({ name }) => name.endsWith(ENDPOINTS[fallbackInfoIpVersion]))
+            : null;
+        const fallbackTime = fallbackPerformance ? Math.round(fallbackPerformance.duration) : null;
+        if (fallbackTime === null) return;
+        const fallbackColor = fallbackTime < 1000 ? 'success' : 'warning';
+        $node.browser.fallback.innerHTML = fallbackInfoIpVersion
+            ? `${toLabel(`IPv${fallbackInfoIpVersion}`, fallbackColor)} ${fallbackTime ? `in ${fallbackTime} ms` : ''}`
+            : toLabel('None', 'danger');
+        updateScore(fallbackTime < 1000 ? 'fast_fallback' : 'slow_fallback');
+    }
+
+
+    function setBrowserResults(autoInfo, ipv4Info, ipv6Info) {
+        if (autoInfo === null) {
+            $node.browser.default.innerHTML = toLabel('None', 'danger');
+            $node.browser.fallback.innerHTML = toLabel('None', 'danger');
+            return;
+        }
+        updateScore('default');
+        $node.browser.default.innerHTML = toLabel(`IPv${autoInfo.ip.version}`, 'success');
+        const fallbackInfo = autoInfo.ip.version === 4 ? ipv6Info : ipv4Info;
+        if (!fallbackInfo) {
+            $node.browser.fallback.innerHTML = toLabel('None', 'danger');
+            return;
+        }
+        setFallbackResults(fallbackInfo);
+    }
+
+    function setConnectivityResultsValues(ipVersion, results) {
+        $node[ipVersion].ip.innerHTML = results ? toLabel('✓', 'success') : toLabel('✗', 'danger');
+        if (!results) {
+            $node[ipVersion].address.textContent = '-';
+            $node[ipVersion].hostname.textContent = '-';
+            $node[ipVersion].asn.textContent = '-';
+            if (ipVersion === 6) {
+                $node[ipVersion].type.textContent = '-';
+                $node[ipVersion].slaac.textContent = '-';
+                for (const $mac of $node[ipVersion].mac) {
+                    $mac.style.display = 'none';
+                }
+                $node[ipVersion].icmp.textContent = '-';
+            }
+            return;
+        }
+        const { ip, host, asn, country } = results;
+        $node[ip.version].address.textContent = ip.address;
+        $node[ip.version].hostname.textContent = host ?? ip.address;
+        $node[ip.version].asn.innerHTML = toAsnString(country, asn);
+        if (ip.version === 6) {
+            if (ip.type === 'native') updateScore('ipv6_native');
+            if (!ip.slaac) updateScore('ipv6_not_slaac');
+            $node[ip.version].type.innerHTML = ip.type === 'native' ? toLabel('Native', 'success') : toLabel(ip.type, 'warning');
+            $node[ip.version].slaac.innerHTML = ip.slaac ? toLabel('Yes', 'warning') : toLabel('No', 'success');
+            if (ip.slaac) {
+                for (const $mac of $node[ip.version].mac) {
+                    $mac.style.display = 'flex';
+                }
+                $node[ip.version].macAddress.textContent = ip.mac.address;
+                $node[ip.version].macVendor.textContent = ip.mac.vendor;
+            }
+        }
+    }
+
+    function toPingStatus(ping) {
+        return {
+            undefined: '<span class="loader"></span>',
+            false: toLabel('Filtered', 'warning')
+        }[ping] || `${toLabel('Success', 'success')} in ${ping} ms`;
+    }
+
+    async function icmpv6Test() {
+        $node[6].icmp.innerHTML = toPingStatus(undefined);
+        const ping = await ping6();
+        if (ping) updateScore('icmpv6');
+        $node[6].icmp.innerHTML = toPingStatus(ping);
+    }
+
+    async function setConnectivityResults(info, ipVersion) {
+        if (!info?.ip) {
+            setConnectivityResultsValues(ipVersion, null);
+            return;
+        }
+        updateScore(`ipv${info.ip.version}`);
+        const { ip } = info;
+        setConnectivityResultsValues(ip.version, info);
+        if (ip.version === 6) await icmpv6Test();
+    }
+
+    async function setPingResults(ipv6Info, ping) {
+        if (!ipv6Info) return;
+        $node[6].icmp.innerHTML = toPingStatus(ping);
+        if (ping) updateScore('icmpv6');
+    }
+
+    async function ipv6Test() {
+        const autoInfoPromise = getInfo('auto');
+        const ipv4InfoPromise = getInfo(4);
+        const ipv6InfoPromise = getInfo(6);
+        const ping6Promise = ping6();
+        ipv4InfoPromise.then((ipv4Info) => setConnectivityResults(ipv4Info, 4));
+        ipv6InfoPromise.then((ipv6Info) => setConnectivityResults(ipv6Info, 6));
+        Promise.all([ipv6InfoPromise, ping6Promise])
+            .then(([ipv6Info, ping]) => setPingResults(ipv6Info, ping));
+        Promise.all([autoInfoPromise, ipv4InfoPromise, ipv6InfoPromise])
+            .then(([autoInfo, ipv4Info, ipv6Info]) => setBrowserResults(autoInfo, ipv4Info, ipv6Info));
+        Promise.all([autoInfoPromise, ipv4InfoPromise, ipv6InfoPromise, ping6Promise])
+            .then(() => $progressBar.classList.add('paused'));
+    }
+
+    ipv6Test();
+})();

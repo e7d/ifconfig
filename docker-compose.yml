@@ -4,12 +4,23 @@ services:
       context: .
       dockerfile: docker/build/Dockerfile
       target: dev
+      network: host
     dns:
       - 1.1.1.1
       - 8.8.8.8
-    env_file: .env
+    env_file:
+      - .env
+    # network_mode: host
+    networks:
+      - ifconfig
     ports:
       - 8080:80
     tmpfs: /tmpfs
     volumes:
       - .:/var/www
+      - ./resources:${DATABASE_DIR}
+
+networks:
+  ifconfig:
+    driver: bridge
+    enable_ipv6: true

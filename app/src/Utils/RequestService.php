@@ -51,6 +51,9 @@ class RequestService
             if ($key === 'page' && in_array($value, RendererStrategy::PAGES)) {
                 $params['page'] = $value;
             }
+            if (getenv('MODE') === 'dev' && $key === 'page' && in_array($value, RendererStrategy::PAGES)) {
+                $params['page'] = $value;
+            }
             if ($key === 'format' && in_array($value, RendererStrategy::FORMATS)) {
                 $params['forcedFormat'] = true;
                 $params['format'] = $value;
@@ -81,10 +84,10 @@ class RequestService
                 return $params;
             }
             if (in_array($entry, RendererStrategy::PAGES)) {
-                return array_merge($params, ['page' =>  $entry]);
+                return array_merge($params, ['page' => $entry]);
             }
             if (getenv('MODE') === 'dev' && in_array($entry, RendererStrategy::DEV_PAGES)) {
-                return array_merge($params, ['page' =>  $entry]);
+                return array_merge($params, ['page' => $entry]);
             }
             if (preg_match(
                 '/^(?P<entry>.*)\.(?P<format>' . implode('|', RendererStrategy::FORMATS) . ')$/',

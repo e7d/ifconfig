@@ -6,7 +6,6 @@ set -e
 if test -f "$APACHE_ENVVARS"; then
 	. "$APACHE_ENVVARS"
 	echo "Apache envvars loaded."
-	export
 fi
 
 : "${APACHE_RUN_DIR:=/var/run/apache2}"

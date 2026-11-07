@@ -3,7 +3,7 @@ ARG PHP_MIN_VERSION=8.4.27
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get -qy update \
     && apt-get -qy upgrade
-RUN apt-get install -qy --no-install-recommends lsb-release apt-transport-https ca-certificates wget \
+RUN apt-get install -qy --no-install-recommends lsb-release apt-transport-https ca-certificates iputils-ping wget \
     && wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" |tee /etc/apt/sources.list.d/php.list \
     && apt-get -qy update \
@@ -17,15 +17,12 @@ RUN rm /var/www/html/index.html
 RUN a2enmod expires headers proxy_fcgi remoteip rewrite setenvif \
     && a2enconf php8.4-fpm
 
-FROM golang:1 AS geoipupdate-dependency
-RUN env GO111MODULE=on go install github.com/maxmind/geoipupdate/v4/cmd/geoipupdate@latest
-
-FROM composer:2 AS build-dependencies
+FROM --platform=$BUILDPLATFORM composer:2 AS build-dependencies
 WORKDIR /build
 COPY . /build
 RUN composer prod
 
-FROM node:lts AS build-html
+FROM --platform=$BUILDPLATFORM node:lts AS build-html
 WORKDIR /build
 COPY . /build
 RUN ./docker/build/minify.sh
@@ -48,7 +45,7 @@ ENV SHOW_FAQ=false
 ENV SHOW_SUPPORT=false
 COPY ./docker/resources /
 RUN a2enconf environment
-COPY --from=geoipupdate-dependency /go/bin/geoipupdate /usr/bin/geoipupdate
+COPY --from=maxmindinc/geoipupdate:v4.11.1@sha256:c08dab97aa1ea18a64df575d9380d459f87f8abbc54edb74d42cf73f69fe966e /usr/bin/geoipupdate /usr/bin/geoipupdate
 WORKDIR /var/www
 ENTRYPOINT [ "/entrypoint.sh" ]
 STOPSIGNAL SIGWINCH
@@ -56,14 +53,7 @@ EXPOSE 80
 
 FROM common AS dev
 ENV MODE=dev
-WORKDIR /tmp
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php -r "copy('https://composer.github.io/installer.sig', 'composer-setup.sig');" \
-    && php -r "if (hash_file('sha384', 'composer-setup.php') === file_get_contents('composer-setup.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
-    && php composer-setup.php \
-    && php -r "unlink('composer-setup.php');" \
-    && php -r "unlink('composer-setup.sig');" \
-    && mv composer.phar /usr/local/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 FROM common AS prod
 ENV MODE=prod

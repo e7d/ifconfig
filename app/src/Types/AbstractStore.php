@@ -20,13 +20,16 @@ abstract class AbstractStore
 
     public function getArrayCopy(bool $objectAsArray = false): array
     {
-        return $objectAsArray
-            ? array_map(function ($value) {
-                return $value instanceof AbstractType
-                    ? $value->toArray()
-                    : $value;
-            }, $this->store->getArrayCopy())
-            : $this->store->getArrayCopy();
+        return array_filter(
+            $objectAsArray
+                ? array_map(function ($value) {
+                    return $value instanceof AbstractType
+                        ? $value->toArray()
+                        : $value;
+                }, $this->store->getArrayCopy())
+                : $this->store->getArrayCopy(),
+            fn($value) => !is_null($value)
+        );
     }
 
     public function __toString(): string

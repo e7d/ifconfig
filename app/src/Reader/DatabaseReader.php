@@ -20,7 +20,7 @@ class DatabaseReader
 
     public static function getDbFileLatestUpdate(): ?string
     {
-        $dbTimestamp = max(AsnReader::getDbFileTimestamp(), LocationReader::getDbFileTimestamp());
+        $dbTimestamp = self::getDbFileTimestamp();
         return $dbTimestamp > 0 ? date('Y/m/d', $dbTimestamp) : null;
     }
 }
