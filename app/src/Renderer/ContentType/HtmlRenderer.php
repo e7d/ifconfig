@@ -24,8 +24,8 @@ class HtmlRenderer extends ContentTypeRenderer
 
     public function escape($value): string
     {
-        if (!is_string($value)) return '';
-        return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        if (!is_string($value) && !is_int($value) && !is_float($value)) return '';
+        return htmlspecialchars((string) $value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 
     private function getQuery(): array
