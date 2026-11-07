@@ -43,15 +43,16 @@ Find below the list of available environment variables to customize the service:
 | `HOST_AUTO`            |                  | Forces the domain name that should be use to access the service wether from an IPv4 or an IPv6. |
 | `HOST_IPV4`            |                  | Forces the domain name that should be use to access the service resolving an IPv4 only. |
 | `HOST_IPV6`            |                  | Forces the domain name that should be use to access the service resolving an IPv6 only. |
+| `MAC_VENDORS`          | `false`          | When set to `true`, download the MAC address vendors database from [maclookup.app](https://maclookup.app/) on startup, and update it daily with `DATABASE_AUTO_UPDATE`. |
 | `MAP_LINK`             | `false`          | Display a link on the info page to a third party provider to get a map from the found coordinates. Valid values are `apple-maps`, `google-maps` and `openstreetmap`. |
 | `MAXMIND_ACCOUNT_ID`   |                  | Fill with your MaxMind account ID to download the latest GeoLite2 databases on startup. |
 | `MAXMIND_LICENSE_KEY`  |                  | Fill with your MaxMind license key to download the latest GeoLite2 databases on startup. |
 | `MODE`                 |                  | Set to `dev` to activate development intended behavior. |
 | `RATE_LIMIT`           |                  | Fill with a positive integer to limit the amount of acceptable requests per `RATE_LIMIT_INTERVAL` for a given IP. |
 | `RATE_LIMIT_INTERVAL`  |                  | Fill with a positive integer to set the window in seconds  |
-| `SHOW_ABOUT`           | `false`          | |
-| `SHOW_FAQ`             | `false`          | |
-| `SHOW_SUPPORT`         | `false`          | |
+| `SHOW_ABOUT`           | `false`          | When set to `true`, add a link to the About page in the footer. |
+| `SHOW_FAQ`             | `false`          | When set to `true`, add the FAQ section to the About page. |
+| `SHOW_SUPPORT`         | `false`          | When set to `true`, add the "Support the project" section to the About page. |
 
 
 - provide geolocation [MaxMind GeoLite2 databases](#maxmind-geolite2-databases):
