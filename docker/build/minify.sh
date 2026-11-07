@@ -1,14 +1,14 @@
 #!/bin/bash
 
 echo Minify JavaScript
-npx uglify-es html/js/query.js >html/js/query.min.js
+npx uglify-es@3.3.10 html/js/query.js >html/js/query.min.js
 CHECKSUM=$(cksum html/js/query.min.js | cut -d' ' -f 1)
 mv html/js/query.min.js html/js/query.${CHECKSUM}.js
 sed -i "s/query\.js/query.${CHECKSUM}.js/g" app/src/Renderer/Templates/about.phtml
 rm html/js/query.js
 
 echo Minify HTML Templates and CSS
-npx html-minifier \
+npx html-minifier@4.0.0 \
     --collapse-boolean-attributes \
     --collapse-whitespace \
     --decode-entities \
