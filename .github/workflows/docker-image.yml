@@ -5,10 +5,10 @@ on:
   schedule:
     - cron: "0 10 * * *"
   push:
-    branches: [ "master", "develop" ]
+    branches: [ "master" ]
     tags: ["v*.*.*"]
   pull_request:
-    branches: [ "master", "develop" ]
+    branches: [ "master" ]
 
 env:
   DOCKER_HUB_IMAGE: e7db/ifconfig
