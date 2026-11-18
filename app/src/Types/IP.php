@@ -116,15 +116,11 @@ class IP extends AbstractType implements JsonSerializable
         return ord($binaryIPv6[11]) == 0xFF && ord($binaryIPv6[12]) == 0xFE;
     }
 
-    private function slaacAddressToMacAddress($ipv6)
+    private function slaacAddressToMacAddress(string $ipv6): string
     {
-        if (filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
-            return false;
-        }
-        $interfaceId = str_replace('fffe', '', implode('', array_slice(explode(':', $ipv6), -4)));
-        $hexPairs = str_split(substr($interfaceId, 0, 12), 2);
-        $hexPairs[0] = dechex(hexdec($hexPairs[0]) ^ 2);
-        return implode(':', $hexPairs);
+        $bytes = array_values(unpack('C*', inet_pton($ipv6)));
+        $macBytes = [$bytes[8] ^ 0x02, $bytes[9], $bytes[10], $bytes[13], $bytes[14], $bytes[15]];
+        return implode(':', array_map(fn($byte) => sprintf('%02x', $byte), $macBytes));
     }
 
     public function __toString(): string
