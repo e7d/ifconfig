@@ -1,5 +1,5 @@
 FROM debian:stable-slim AS dependencies
-ARG PHP_MIN_VERSION=8.4.27
+ARG PHP_MIN_VERSION=8.4.28
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get -qy update \
     && apt-get -qy upgrade
